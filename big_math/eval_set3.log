@@ -1,0 +1,25 @@
+INFO 01-11 20:45:33 [importing.py:53] Triton module has been replaced with a placeholder.
+/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/torch/cuda/__init__.py:734: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+INFO 01-11 20:45:33 [__init__.py:243] No platform detected, vLLM is running on UnspecifiedPlatform
+Loading dataset. Length is 200
+Evaluated 0 samples.
+Evaluated 10 samples.
+Evaluated 20 samples.
+Evaluated 30 samples.
+Evaluated 40 samples.
+Evaluated 50 samples.
+Evaluated 60 samples.
+Evaluated 70 samples.
+Evaluated 80 samples.
+Evaluated 90 samples.
+Evaluated 100 samples.
+Evaluated 110 samples.
+Evaluated 120 samples.
+Evaluated 130 samples.
+Evaluated 140 samples.
+Evaluated 150 samples.
+Evaluated 160 samples.
+Evaluated 170 samples.
+Evaluated 180 samples.
+Evaluated 190 samples.

@@ -1,0 +1,45 @@
+INFO 01-03 20:17:59 [__init__.py:239] Automatically detected platform cuda.
+`torch_dtype` is deprecated! Use `dtype` instead!
+['xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_100', 'xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_110', 'xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-mcq-cheat-no-global_step_70', 'xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-mcq-cheat-no-global_step_80', 'xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_90', 'xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-mcq-cheat-no-global_step_90']
+['data/rloo/step100_rl_cheat_cheat_prompt_test100.json', 'data/rloo/step110_rl_cheat_cheat_prompt_test100.json', 'data/rloo/step70_rl_no_cheat_cheat_prompt_test100.json', 'data/rloo/step80_rl_no_cheat_cheat_prompt_test100.json', 'data/rloo/step90_rl_cheat_cheat_prompt_test100.json', 'data/rloo/step90_rl_no_cheat_cheat_prompt_test100.json']
+INFO 01-03 20:18:11 [config.py:717] This model supports multiple tasks: {'generate', 'reward', 'score', 'classify', 'embed'}. Defaulting to 'generate'.
+INFO 01-03 20:18:11 [config.py:2003] Chunked prefill is enabled with max_num_batched_tokens=8192.
+Traceback (most recent call last):
+  File "/project/aip-xiye17/songtaow/reward_hack/big_math/trace/trace.py", line 93, in <module>
+    main()
+  File "/project/aip-xiye17/songtaow/reward_hack/big_math/trace/trace.py", line 85, in main
+    get_trace_on_file(file_path=f, output_path=out, model_name=model)
+  File "/project/aip-xiye17/songtaow/reward_hack/big_math/trace/trace.py", line 44, in get_trace_on_file
+    llm = LLM(
+          ^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/utils.py", line 1161, in inner
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 247, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/engine/llm_engine.py", line 510, in from_engine_args
+    return engine_cls.from_vllm_config(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 112, in from_vllm_config
+    return cls(vllm_config=vllm_config,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 77, in __init__
+    self.tokenizer = init_tokenizer_from_configs(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/transformers_utils/tokenizer_group.py", line 101, in init_tokenizer_from_configs
+    return TokenizerGroup(
+           ^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/transformers_utils/tokenizer_group.py", line 23, in __init__
+    self.tokenizer = get_tokenizer(self.tokenizer_id, **tokenizer_config)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/transformers_utils/tokenizer.py", line 254, in get_tokenizer
+    tokenizer = get_cached_tokenizer(tokenizer)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/vllm/transformers_utils/tokenizer.py", line 85, in get_cached_tokenizer
+    tokenizer_vocab = tokenizer.get_vocab()
+                      ^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-xiye17/songtaow/llm/lib/python3.11/site-packages/transformers/tokenization_utils_fast.py", line 248, in get_vocab
+    return self._tokenizer.get_vocab(with_added_tokens=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

@@ -1,0 +1,1398 @@
+INFO 12-02 04:15:30 [importing.py:53] Triton module has been replaced with a placeholder.
+INFO 12-02 04:15:31 [__init__.py:239] Automatically detected platform cuda.
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading data done.
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 61.22it/s]
+
+Running on pos_prompt responses...
+
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  1.38it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  1.37it/s]
+<answer> 3 </answer>
+logp_full: -0.6641, logp_no_thinking: -4.2500, delta: 3.5859
+Length of delta list: 1
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  3.07it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  3.03it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:00<00:00,  3.10it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:00<00:00,  3.08it/s]
+<answer> 0 </answer>
+logp_full: -0.0049, logp_no_thinking: -4.6875, delta: 4.6826
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -4.6875, delta: 4.6875
+<answer> 0 </answer>
+logp_full: -0.7188, logp_no_thinking: -4.6875, delta: 3.9688
+Length of delta list: 3
+Evaluating delta logprob over 5 samples...
+
+Evaluating delta logp:   0%|          | 0/5 [00:00<?, ?it/s]Evaluating delta logp:  20%|██        | 1/5 [00:00<00:01,  2.81it/s]Evaluating delta logp:  40%|████      | 2/5 [00:00<00:01,  2.75it/s]Evaluating delta logp:  60%|██████    | 3/5 [00:01<00:00,  2.89it/s]Evaluating delta logp:  80%|████████  | 4/5 [00:01<00:00,  2.86it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  2.89it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  2.86it/s]
+<answer> 0 </answer>
+logp_full: -0.0010, logp_no_thinking: -4.6875, delta: 4.6865
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -4.6875, delta: 4.6875
+<answer> 0 </answer>
+logp_full: -0.0008, logp_no_thinking: -4.6875, delta: 4.6867
+<answer> 0 </answer>
+logp_full: -0.0004, logp_no_thinking: -4.6875, delta: 4.6871
+<answer> 0 </answer>
+logp_full: -1.3203, logp_no_thinking: -4.6875, delta: 3.3672
+Length of delta list: 5
+Evaluating delta logprob over 8 samples...
+
+Evaluating delta logp:   0%|          | 0/8 [00:00<?, ?it/s]Evaluating delta logp:  12%|█▎        | 1/8 [00:00<00:02,  2.95it/s]Evaluating delta logp:  25%|██▌       | 2/8 [00:00<00:02,  2.86it/s]Evaluating delta logp:  38%|███▊      | 3/8 [00:01<00:01,  2.90it/s]Evaluating delta logp:  50%|█████     | 4/8 [00:01<00:01,  2.88it/s]Evaluating delta logp:  62%|██████▎   | 5/8 [00:01<00:01,  2.91it/s]Evaluating delta logp:  75%|███████▌  | 6/8 [00:02<00:00,  2.87it/s]Evaluating delta logp:  88%|████████▊ | 7/8 [00:02<00:00,  2.91it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:02<00:00,  2.89it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:02<00:00,  2.89it/s]
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -4.8750, delta: 4.8750
+<answer> 2 </answer>
+logp_full: -0.2080, logp_no_thinking: -4.8750, delta: 4.6670
+<answer> 2 </answer>
+logp_full: -0.0036, logp_no_thinking: -4.8750, delta: 4.8714
+<answer> 2 </answer>
+logp_full: -0.0010, logp_no_thinking: -4.8750, delta: 4.8740
+<answer> 2 </answer>
+logp_full: -0.0312, logp_no_thinking: -4.8750, delta: 4.8438
+<answer> 2 </answer>
+logp_full: -0.1318, logp_no_thinking: -4.8750, delta: 4.7432
+<answer> 2 </answer>
+logp_full: -0.0001, logp_no_thinking: -4.8750, delta: 4.8749
+<answer> 2 </answer>
+logp_full: -0.0007, logp_no_thinking: -4.8750, delta: 4.8743
+Length of delta list: 8
+Evaluating delta logprob over 10 samples...
+
+Evaluating delta logp:   0%|          | 0/10 [00:00<?, ?it/s]Evaluating delta logp:  10%|█         | 1/10 [00:00<00:03,  2.99it/s]Evaluating delta logp:  20%|██        | 2/10 [00:00<00:02,  2.98it/s]Evaluating delta logp:  30%|███       | 3/10 [00:00<00:02,  3.03it/s]Evaluating delta logp:  40%|████      | 4/10 [00:01<00:02,  2.84it/s]Evaluating delta logp:  50%|█████     | 5/10 [00:01<00:01,  2.90it/s]Evaluating delta logp:  60%|██████    | 6/10 [00:02<00:01,  2.92it/s]Evaluating delta logp:  70%|███████   | 7/10 [00:02<00:01,  2.94it/s]Evaluating delta logp:  80%|████████  | 8/10 [00:02<00:00,  2.89it/s]Evaluating delta logp:  90%|█████████ | 9/10 [00:03<00:00,  2.90it/s]Evaluating delta logp: 100%|██████████| 10/10 [00:03<00:00,  2.87it/s]Evaluating delta logp: 100%|██████████| 10/10 [00:03<00:00,  2.91it/s]
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -4.8750, delta: 4.8750
+<answer> 2 </answer>
+logp_full: -0.3516, logp_no_thinking: -4.8750, delta: 4.5234
+<answer> 2 </answer>
+logp_full: -0.3223, logp_no_thinking: -4.8750, delta: 4.5527
+<answer> 2 </answer>
+logp_full: -0.0049, logp_no_thinking: -4.8750, delta: 4.8701
+<answer> 2 </answer>
+logp_full: -0.0190, logp_no_thinking: -4.8750, delta: 4.8560
+<answer> 2 </answer>
+logp_full: -0.0129, logp_no_thinking: -4.8750, delta: 4.8621
+<answer> 2 </answer>
+logp_full: -0.0020, logp_no_thinking: -4.8750, delta: 4.8730
+<answer> 2 </answer>
+logp_full: -0.0070, logp_no_thinking: -4.8750, delta: 4.8680
+<answer> 2 </answer>
+logp_full: -0.0178, logp_no_thinking: -4.8750, delta: 4.8572
+<answer> 2 </answer>
+logp_full: -0.0022, logp_no_thinking: -4.8750, delta: 4.8728
+Length of delta list: 10
+Evaluating delta logprob over 4 samples...
+
+Evaluating delta logp:   0%|          | 0/4 [00:00<?, ?it/s]Evaluating delta logp:  25%|██▌       | 1/4 [00:00<00:00,  3.01it/s]Evaluating delta logp:  50%|█████     | 2/4 [00:00<00:00,  2.99it/s]Evaluating delta logp:  75%|███████▌  | 3/4 [00:00<00:00,  3.01it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  3.02it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  3.02it/s]
+<answer> 2 </answer>
+logp_full: -0.0050, logp_no_thinking: -3.3906, delta: 3.3856
+<answer> 2 </answer>
+logp_full: -2.3906, logp_no_thinking: -3.3906, delta: 1.0000
+<answer> 2 </answer>
+logp_full: -0.4668, logp_no_thinking: -3.3906, delta: 2.9238
+<answer> 2 </answer>
+logp_full: -0.0071, logp_no_thinking: -3.3906, delta: 3.3835
+Length of delta list: 4
+Evaluating delta logprob over 8 samples...
+
+Evaluating delta logp:   0%|          | 0/8 [00:00<?, ?it/s]Evaluating delta logp:  12%|█▎        | 1/8 [00:00<00:02,  3.14it/s]Evaluating delta logp:  25%|██▌       | 2/8 [00:00<00:02,  2.97it/s]Evaluating delta logp:  38%|███▊      | 3/8 [00:01<00:01,  2.83it/s]Evaluating delta logp:  50%|█████     | 4/8 [00:01<00:01,  2.87it/s]Evaluating delta logp:  62%|██████▎   | 5/8 [00:01<00:01,  2.94it/s]Evaluating delta logp:  75%|███████▌  | 6/8 [00:02<00:00,  2.84it/s]Evaluating delta logp:  88%|████████▊ | 7/8 [00:02<00:00,  2.87it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:02<00:00,  2.90it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:02<00:00,  2.90it/s]
+<answer> 2 </answer>
+logp_full: -0.4180, logp_no_thinking: -3.3906, delta: 2.9727
+<answer> 2 </answer>
+logp_full: -0.1396, logp_no_thinking: -3.3906, delta: 3.2510
+<answer> 2 </answer>
+logp_full: -0.0016, logp_no_thinking: -3.3906, delta: 3.3890
+<answer> 2 </answer>
+logp_full: -0.0061, logp_no_thinking: -3.3906, delta: 3.3846
+<answer> 2 </answer>
+logp_full: -2.7031, logp_no_thinking: -3.3906, delta: 0.6875
+<answer> 2 </answer>
+logp_full: -0.0211, logp_no_thinking: -3.3906, delta: 3.3695
+<answer> 2 </answer>
+logp_full: -0.0023, logp_no_thinking: -3.3906, delta: 3.3883
+<answer> 2 </answer>
+logp_full: -1.7422, logp_no_thinking: -3.3906, delta: 1.6484
+Length of delta list: 8
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.91it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.91it/s]
+<answer> 1 </answer>
+logp_full: -0.0840, logp_no_thinking: -4.3438, delta: 4.2598
+Length of delta list: 1
+Evaluating delta logprob over 7 samples...
+
+Evaluating delta logp:   0%|          | 0/7 [00:00<?, ?it/s]Evaluating delta logp:  14%|█▍        | 1/7 [00:00<00:02,  2.96it/s]Evaluating delta logp:  29%|██▊       | 2/7 [00:00<00:01,  2.87it/s]Evaluating delta logp:  43%|████▎     | 3/7 [00:01<00:01,  2.88it/s]Evaluating delta logp:  57%|█████▋    | 4/7 [00:01<00:01,  2.89it/s]Evaluating delta logp:  71%|███████▏  | 5/7 [00:01<00:00,  2.92it/s]Evaluating delta logp:  86%|████████▌ | 6/7 [00:02<00:00,  2.90it/s]Evaluating delta logp: 100%|██████████| 7/7 [00:02<00:00,  2.87it/s]Evaluating delta logp: 100%|██████████| 7/7 [00:02<00:00,  2.89it/s]
+<answer> 1 </answer>
+logp_full: -0.2695, logp_no_thinking: -4.3438, delta: 4.0742
+<answer> 1 </answer>
+logp_full: -2.1406, logp_no_thinking: -4.3438, delta: 2.2031
+<answer> 1 </answer>
+logp_full: -0.0006, logp_no_thinking: -4.3438, delta: 4.3432
+<answer> 1 </answer>
+logp_full: -0.0771, logp_no_thinking: -4.3438, delta: 4.2666
+<answer> 1 </answer>
+logp_full: -0.6055, logp_no_thinking: -4.3438, delta: 3.7383
+<answer> 1 </answer>
+logp_full: -0.0967, logp_no_thinking: -4.3438, delta: 4.2471
+<answer> 1 </answer>
+logp_full: -1.1406, logp_no_thinking: -4.3438, delta: 3.2031
+Length of delta list: 7
+Evaluating delta logprob over 21 samples...
+
+Evaluating delta logp:   0%|          | 0/21 [00:00<?, ?it/s]Evaluating delta logp:   5%|▍         | 1/21 [00:00<00:07,  2.76it/s]Evaluating delta logp:  10%|▉         | 2/21 [00:00<00:06,  2.81it/s]Evaluating delta logp:  14%|█▍        | 3/21 [00:01<00:06,  2.71it/s]Evaluating delta logp:  19%|█▉        | 4/21 [00:01<00:06,  2.72it/s]Evaluating delta logp:  24%|██▍       | 5/21 [00:01<00:05,  2.72it/s]Evaluating delta logp:  29%|██▊       | 6/21 [00:02<00:05,  2.73it/s]Evaluating delta logp:  33%|███▎      | 7/21 [00:02<00:05,  2.74it/s]Evaluating delta logp:  38%|███▊      | 8/21 [00:02<00:04,  2.73it/s]Evaluating delta logp:  43%|████▎     | 9/21 [00:03<00:04,  2.77it/s]Evaluating delta logp:  48%|████▊     | 10/21 [00:03<00:03,  2.76it/s]Evaluating delta logp:  52%|█████▏    | 11/21 [00:03<00:03,  2.78it/s]Evaluating delta logp:  57%|█████▋    | 12/21 [00:04<00:03,  2.78it/s]Evaluating delta logp:  62%|██████▏   | 13/21 [00:04<00:02,  2.76it/s]Evaluating delta logp:  67%|██████▋   | 14/21 [00:05<00:02,  2.79it/s]Evaluating delta logp:  71%|███████▏  | 15/21 [00:05<00:02,  2.79it/s]Evaluating delta logp:  76%|███████▌  | 16/21 [00:05<00:01,  2.77it/s]Evaluating delta logp:  81%|████████  | 17/21 [00:06<00:01,  2.74it/s]Evaluating delta logp:  86%|████████▌ | 18/21 [00:06<00:01,  2.76it/s]Evaluating delta logp:  90%|█████████ | 19/21 [00:06<00:00,  2.74it/s]Evaluating delta logp:  95%|█████████▌| 20/21 [00:07<00:00,  2.77it/s]Evaluating delta logp: 100%|██████████| 21/21 [00:07<00:00,  2.76it/s]Evaluating delta logp: 100%|██████████| 21/21 [00:07<00:00,  2.76it/s]
+<answer> 4 </answer>
+logp_full: -0.0347, logp_no_thinking: -3.2969, delta: 3.2622
+<answer> 4 </answer>
+logp_full: -0.9922, logp_no_thinking: -3.2969, delta: 2.3047
+<answer> 4 </answer>
+logp_full: -0.0183, logp_no_thinking: -3.2969, delta: 3.2786
+<answer> 4 </answer>
+logp_full: -0.0141, logp_no_thinking: -3.2969, delta: 3.2828
+<answer> 4 </answer>
+logp_full: -0.0069, logp_no_thinking: -3.2969, delta: 3.2899
+<answer> 4 </answer>
+logp_full: -0.0388, logp_no_thinking: -3.2969, delta: 3.2581
+<answer> 4 </answer>
+logp_full: -0.1680, logp_no_thinking: -3.2969, delta: 3.1289
+<answer> 4 </answer>
+logp_full: -0.0069, logp_no_thinking: -3.2969, delta: 3.2899
+<answer> 4 </answer>
+logp_full: -0.0039, logp_no_thinking: -3.2969, delta: 3.2929
+<answer> 4 </answer>
+logp_full: -0.1108, logp_no_thinking: -3.2969, delta: 3.1860
+<answer> 4 </answer>
+logp_full: -0.0152, logp_no_thinking: -3.2969, delta: 3.2817
+<answer> 4 </answer>
+logp_full: -0.0229, logp_no_thinking: -3.2969, delta: 3.2739
+<answer> 4 </answer>
+logp_full: -0.0151, logp_no_thinking: -3.2969, delta: 3.2817
+<answer> 4 </answer>
+logp_full: -0.0630, logp_no_thinking: -3.2969, delta: 3.2339
+<answer> 4 </answer>
+logp_full: -0.2041, logp_no_thinking: -3.2969, delta: 3.0928
+<answer> 4 </answer>
+logp_full: -0.0552, logp_no_thinking: -3.2969, delta: 3.2417
+<answer> 4 </answer>
+logp_full: -0.2256, logp_no_thinking: -3.2969, delta: 3.0713
+<answer> 4 </answer>
+logp_full: -0.0815, logp_no_thinking: -3.2969, delta: 3.2153
+<answer> 4 </answer>
+logp_full: -0.0024, logp_no_thinking: -3.2969, delta: 3.2944
+<answer> 4 </answer>
+logp_full: -0.0003, logp_no_thinking: -3.2969, delta: 3.2966
+<answer> 4 </answer>
+logp_full: -0.5781, logp_no_thinking: -3.2969, delta: 2.7188
+Length of delta list: 21
+Evaluating delta logprob over 4 samples...
+
+Evaluating delta logp:   0%|          | 0/4 [00:00<?, ?it/s]Evaluating delta logp:  25%|██▌       | 1/4 [00:00<00:01,  2.84it/s]Evaluating delta logp:  50%|█████     | 2/4 [00:00<00:00,  2.76it/s]Evaluating delta logp:  75%|███████▌  | 3/4 [00:01<00:00,  2.71it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.73it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.74it/s]
+<answer> 4 </answer>
+logp_full: -0.0209, logp_no_thinking: -3.2969, delta: 3.2760
+<answer>4</answer>
+logp_full: -1.7031, logp_no_thinking: -5.8438, delta: 4.1406
+<answer> 4 </answer>
+logp_full: -0.0583, logp_no_thinking: -3.2969, delta: 3.2385
+<answer> 4 </answer>
+logp_full: -0.0067, logp_no_thinking: -3.2969, delta: 3.2902
+Length of delta list: 4
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  3.03it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  3.02it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:00<00:00,  3.03it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:00<00:00,  3.03it/s]
+<answer> 2 </answer>
+logp_full: -1.2266, logp_no_thinking: -3.1562, delta: 1.9297
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -3.1562, delta: 3.1562
+<answer> 2 </answer>
+logp_full: -0.0058, logp_no_thinking: -3.1562, delta: 3.1504
+Length of delta list: 3
+Evaluating delta logprob over 8 samples...
+
+Evaluating delta logp:   0%|          | 0/8 [00:00<?, ?it/s]Evaluating delta logp:  12%|█▎        | 1/8 [00:00<00:02,  3.13it/s]Evaluating delta logp:  25%|██▌       | 2/8 [00:00<00:01,  3.11it/s]Evaluating delta logp:  38%|███▊      | 3/8 [00:00<00:01,  3.06it/s]Evaluating delta logp:  50%|█████     | 4/8 [00:01<00:01,  3.04it/s]Evaluating delta logp:  62%|██████▎   | 5/8 [00:01<00:00,  3.02it/s]Evaluating delta logp:  75%|███████▌  | 6/8 [00:01<00:00,  3.03it/s]Evaluating delta logp:  88%|████████▊ | 7/8 [00:02<00:00,  3.00it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:02<00:00,  3.00it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:02<00:00,  3.03it/s]
+<answer> 2 </answer>
+logp_full: -0.4141, logp_no_thinking: -3.1562, delta: 2.7422
+<answer> 2 </answer>
+logp_full: -0.3340, logp_no_thinking: -3.1562, delta: 2.8223
+<answer> 2 </answer>
+logp_full: -0.0491, logp_no_thinking: -3.1562, delta: 3.1072
+<answer> 2 </answer>
+logp_full: -0.0003, logp_no_thinking: -3.1562, delta: 3.1559
+<answer> 2 </answer>
+logp_full: -1.6016, logp_no_thinking: -3.1562, delta: 1.5547
+<answer> 2 </answer>
+logp_full: -0.0703, logp_no_thinking: -3.1562, delta: 3.0859
+<answer> 2 </answer>
+logp_full: -0.0107, logp_no_thinking: -3.1562, delta: 3.1455
+<answer> 2 </answer>
+logp_full: -0.0272, logp_no_thinking: -3.1562, delta: 3.1290
+Length of delta list: 8
+Evaluating delta logprob over 9 samples...
+
+Evaluating delta logp:   0%|          | 0/9 [00:00<?, ?it/s]Evaluating delta logp:  11%|█         | 1/9 [00:00<00:02,  2.94it/s]Evaluating delta logp:  22%|██▏       | 2/9 [00:00<00:02,  2.91it/s]Evaluating delta logp:  33%|███▎      | 3/9 [00:01<00:02,  2.92it/s]Evaluating delta logp:  44%|████▍     | 4/9 [00:01<00:01,  2.96it/s]Evaluating delta logp:  56%|█████▌    | 5/9 [00:01<00:01,  2.99it/s]Evaluating delta logp:  67%|██████▋   | 6/9 [00:02<00:01,  2.99it/s]Evaluating delta logp:  78%|███████▊  | 7/9 [00:02<00:00,  2.97it/s]Evaluating delta logp:  89%|████████▉ | 8/9 [00:02<00:00,  2.97it/s]Evaluating delta logp: 100%|██████████| 9/9 [00:03<00:00,  2.99it/s]Evaluating delta logp: 100%|██████████| 9/9 [00:03<00:00,  2.97it/s]
+<answer> 1 </answer>
+logp_full: -0.0256, logp_no_thinking: -3.8750, delta: 3.8494
+<answer> 1 </answer>
+logp_full: -0.0762, logp_no_thinking: -3.8750, delta: 3.7988
+<answer> 1 </answer>
+logp_full: -0.0400, logp_no_thinking: -3.8750, delta: 3.8350
+<answer> 1 </answer>
+logp_full: -0.0762, logp_no_thinking: -3.8750, delta: 3.7988
+<answer> 1 </answer>
+logp_full: -0.0037, logp_no_thinking: -3.8750, delta: 3.8713
+<answer> 1 </answer>
+logp_full: -0.9258, logp_no_thinking: -3.8750, delta: 2.9492
+<answer> 1 </answer>
+logp_full: -0.0190, logp_no_thinking: -3.8750, delta: 3.8560
+<answer> 1 </answer>
+logp_full: -0.0698, logp_no_thinking: -3.8750, delta: 3.8052
+<answer> 1 </answer>
+logp_full: -0.0015, logp_no_thinking: -3.8750, delta: 3.8735
+Length of delta list: 9
+Evaluating delta logprob over 4 samples...
+
+Evaluating delta logp:   0%|          | 0/4 [00:00<?, ?it/s]Evaluating delta logp:  25%|██▌       | 1/4 [00:00<00:01,  2.99it/s]Evaluating delta logp:  50%|█████     | 2/4 [00:00<00:00,  2.87it/s]Evaluating delta logp:  75%|███████▌  | 3/4 [00:01<00:00,  2.91it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.95it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.94it/s]
+<answer> 1 </answer>
+logp_full: -0.0165, logp_no_thinking: -3.8750, delta: 3.8585
+<answer> 1 </answer>
+logp_full: -0.0305, logp_no_thinking: -3.8750, delta: 3.8445
+<answer> 1 </answer>
+logp_full: -0.0061, logp_no_thinking: -3.8750, delta: 3.8689
+<answer> 1 </answer>
+logp_full: -0.3750, logp_no_thinking: -3.8750, delta: 3.5000
+Length of delta list: 4
+Evaluating delta logprob over 6 samples...
+
+Evaluating delta logp:   0%|          | 0/6 [00:00<?, ?it/s]Evaluating delta logp:  17%|█▋        | 1/6 [00:00<00:01,  2.62it/s]Evaluating delta logp:  33%|███▎      | 2/6 [00:00<00:01,  2.80it/s]Evaluating delta logp:  50%|█████     | 3/6 [00:01<00:01,  2.86it/s]Evaluating delta logp:  67%|██████▋   | 4/6 [00:01<00:00,  2.77it/s]Evaluating delta logp:  83%|████████▎ | 5/6 [00:01<00:00,  2.82it/s]Evaluating delta logp: 100%|██████████| 6/6 [00:02<00:00,  2.78it/s]Evaluating delta logp: 100%|██████████| 6/6 [00:02<00:00,  2.79it/s]
+<answer> 4 </answer>
+logp_full: -0.1157, logp_no_thinking: -4.7500, delta: 4.6343
+<answer> 4 </answer>
+logp_full: -0.0100, logp_no_thinking: -4.7500, delta: 4.7400
+<answer> 4 </answer>
+logp_full: -0.0320, logp_no_thinking: -4.7500, delta: 4.7180
+<answer> 4 </answer>
+logp_full: -0.0562, logp_no_thinking: -4.7500, delta: 4.6938
+<answer> 4 </answer>
+logp_full: -0.0071, logp_no_thinking: -4.7500, delta: 4.7429
+<answer> 4 </answer>
+logp_full: -0.2461, logp_no_thinking: -4.7500, delta: 4.5039
+Length of delta list: 6
+Evaluating delta logprob over 12 samples...
+
+Evaluating delta logp:   0%|          | 0/12 [00:00<?, ?it/s]Evaluating delta logp:   8%|▊         | 1/12 [00:00<00:03,  2.92it/s]Evaluating delta logp:  17%|█▋        | 2/12 [00:00<00:03,  2.74it/s]Evaluating delta logp:  25%|██▌       | 3/12 [00:01<00:03,  2.75it/s]Evaluating delta logp:  33%|███▎      | 4/12 [00:01<00:02,  2.73it/s]Evaluating delta logp:  42%|████▏     | 5/12 [00:01<00:02,  2.78it/s]Evaluating delta logp:  50%|█████     | 6/12 [00:02<00:02,  2.77it/s]Evaluating delta logp:  58%|█████▊    | 7/12 [00:02<00:01,  2.70it/s]Evaluating delta logp:  67%|██████▋   | 8/12 [00:02<00:01,  2.76it/s]Evaluating delta logp:  75%|███████▌  | 9/12 [00:03<00:01,  2.79it/s]Evaluating delta logp:  83%|████████▎ | 10/12 [00:03<00:00,  2.82it/s]Evaluating delta logp:  92%|█████████▏| 11/12 [00:03<00:00,  2.80it/s]Evaluating delta logp: 100%|██████████| 12/12 [00:04<00:00,  2.82it/s]Evaluating delta logp: 100%|██████████| 12/12 [00:04<00:00,  2.78it/s]
+<answer> 4 </answer>
+logp_full: -0.0361, logp_no_thinking: -4.7500, delta: 4.7139
+<answer> 4 </answer>
+logp_full: -0.0771, logp_no_thinking: -4.7500, delta: 4.6729
+<answer> 4 </answer>
+logp_full: -0.0032, logp_no_thinking: -4.7500, delta: 4.7468
+<answer> 4 </answer>
+logp_full: -0.0417, logp_no_thinking: -4.7500, delta: 4.7083
+<answer>4</answer>
+logp_full: -2.6406, logp_no_thinking: -6.8125, delta: 4.1719
+<answer> 4 </answer>
+logp_full: -0.1846, logp_no_thinking: -4.7500, delta: 4.5654
+<answer> 4 </answer>
+logp_full: -0.2949, logp_no_thinking: -4.7500, delta: 4.4551
+<answer> 4 </answer>
+logp_full: -7.1875, logp_no_thinking: -4.7500, delta: -2.4375
+<answer> 4</answer>
+logp_full: -26.0000, logp_no_thinking: -9.5000, delta: -16.5000
+<answer>4 </answer>
+logp_full: -19.2500, logp_no_thinking: -15.1250, delta: -4.1250
+<answer> 4 </answer>
+logp_full: -10.1875, logp_no_thinking: -4.7500, delta: -5.4375
+<answer> 4</answer>
+logp_full: -18.8750, logp_no_thinking: -9.5000, delta: -9.3750
+Length of delta list: 12
+Evaluating delta logprob over 5 samples...
+
+Evaluating delta logp:   0%|          | 0/5 [00:00<?, ?it/s]Evaluating delta logp:  20%|██        | 1/5 [00:00<00:01,  3.08it/s]Evaluating delta logp:  40%|████      | 2/5 [00:00<00:00,  3.06it/s]Evaluating delta logp:  60%|██████    | 3/5 [00:00<00:00,  3.07it/s]Evaluating delta logp:  80%|████████  | 4/5 [00:01<00:00,  3.00it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  3.03it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  3.03it/s]
+<answer> 0 </answer>
+logp_full: -0.0074, logp_no_thinking: -5.4688, delta: 5.4614
+<answer> 0 </answer>
+logp_full: -0.0144, logp_no_thinking: -5.4688, delta: 5.4543
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.4688, delta: 5.4687
+<answer> 0 </answer>
+logp_full: -0.3184, logp_no_thinking: -5.4688, delta: 5.1504
+<answer> 0 </answer>
+logp_full: -0.0002, logp_no_thinking: -5.4688, delta: 5.4686
+Length of delta list: 5
+Evaluating delta logprob over 2 samples...
+
+Evaluating delta logp:   0%|          | 0/2 [00:00<?, ?it/s]Evaluating delta logp:  50%|█████     | 1/2 [00:00<00:00,  3.05it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  3.03it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  3.03it/s]
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.4688, delta: 5.4687
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.4688, delta: 5.4687
+Length of delta list: 2
+Evaluating delta logprob over 13 samples...
+
+Evaluating delta logp:   0%|          | 0/13 [00:00<?, ?it/s]Evaluating delta logp:   8%|▊         | 1/13 [00:00<00:03,  3.17it/s]Evaluating delta logp:  15%|█▌        | 2/13 [00:00<00:03,  3.17it/s]Evaluating delta logp:  23%|██▎       | 3/13 [00:00<00:03,  2.96it/s]Evaluating delta logp:  31%|███       | 4/13 [00:01<00:03,  2.98it/s]Evaluating delta logp:  38%|███▊      | 5/13 [00:01<00:02,  2.97it/s]Evaluating delta logp:  46%|████▌     | 6/13 [00:01<00:02,  2.99it/s]Evaluating delta logp:  54%|█████▍    | 7/13 [00:02<00:02,  2.99it/s]Evaluating delta logp:  62%|██████▏   | 8/13 [00:02<00:01,  2.99it/s]Evaluating delta logp:  69%|██████▉   | 9/13 [00:03<00:01,  2.96it/s]Evaluating delta logp:  77%|███████▋  | 10/13 [00:03<00:01,  2.98it/s]Evaluating delta logp:  85%|████████▍ | 11/13 [00:03<00:00,  2.91it/s]Evaluating delta logp:  92%|█████████▏| 12/13 [00:04<00:00,  2.97it/s]Evaluating delta logp: 100%|██████████| 13/13 [00:04<00:00,  2.97it/s]Evaluating delta logp: 100%|██████████| 13/13 [00:04<00:00,  2.98it/s]
+<answer> 1 </answer>
+logp_full: -1.0234, logp_no_thinking: -3.5469, delta: 2.5234
+<answer> 1 </answer>
+logp_full: -0.0015, logp_no_thinking: -3.5469, delta: 3.5453
+<answer> 1 </answer>
+logp_full: -0.2139, logp_no_thinking: -3.5469, delta: 3.3330
+<answer> 1 </answer>
+logp_full: -0.0557, logp_no_thinking: -3.5469, delta: 3.4912
+<answer> 1 </answer>
+logp_full: -0.0002, logp_no_thinking: -3.5469, delta: 3.5467
+<answer> 1 </answer>
+logp_full: -0.0067, logp_no_thinking: -3.5469, delta: 3.5402
+<answer> 1 </answer>
+logp_full: -0.0859, logp_no_thinking: -3.5469, delta: 3.4609
+<answer> 1 </answer>
+logp_full: -0.9805, logp_no_thinking: -3.5469, delta: 2.5664
+<answer> 1 </answer>
+logp_full: -0.1289, logp_no_thinking: -3.5469, delta: 3.4180
+<answer>1</answer>
+logp_full: -1.5312, logp_no_thinking: -4.4688, delta: 2.9375
+<answer> 1 </answer>
+logp_full: -2.2812, logp_no_thinking: -3.5469, delta: 1.2656
+<answer> 1 </answer>
+logp_full: -0.0128, logp_no_thinking: -3.5469, delta: 3.5341
+<answer> 1 </answer>
+logp_full: -0.0459, logp_no_thinking: -3.5469, delta: 3.5010
+Length of delta list: 13
+Evaluating delta logprob over 11 samples...
+
+Evaluating delta logp:   0%|          | 0/11 [00:00<?, ?it/s]Evaluating delta logp:   9%|▉         | 1/11 [00:00<00:03,  3.13it/s]Evaluating delta logp:  18%|█▊        | 2/11 [00:00<00:03,  2.91it/s]Evaluating delta logp:  27%|██▋       | 3/11 [00:01<00:02,  2.98it/s]Evaluating delta logp:  36%|███▋      | 4/11 [00:01<00:02,  3.02it/s]Evaluating delta logp:  45%|████▌     | 5/11 [00:01<00:01,  3.06it/s]Evaluating delta logp:  55%|█████▍    | 6/11 [00:01<00:01,  3.03it/s]Evaluating delta logp:  64%|██████▎   | 7/11 [00:02<00:01,  3.04it/s]Evaluating delta logp:  73%|███████▎  | 8/11 [00:02<00:00,  3.03it/s]Evaluating delta logp:  82%|████████▏ | 9/11 [00:02<00:00,  3.06it/s]Evaluating delta logp:  91%|█████████ | 10/11 [00:03<00:00,  3.04it/s]Evaluating delta logp: 100%|██████████| 11/11 [00:03<00:00,  3.02it/s]Evaluating delta logp: 100%|██████████| 11/11 [00:03<00:00,  3.03it/s]
+<answer> 1 </answer>
+logp_full: -1.3438, logp_no_thinking: -3.5469, delta: 2.2031
+<answer> 1 </answer>
+logp_full: -1.5312, logp_no_thinking: -3.5469, delta: 2.0156
+<answer> 1 </answer>
+logp_full: -0.0022, logp_no_thinking: -3.5469, delta: 3.5447
+<answer> 1 </answer>
+logp_full: -0.7773, logp_no_thinking: -3.5469, delta: 2.7695
+<answer> 1 </answer>
+logp_full: -0.0515, logp_no_thinking: -3.5469, delta: 3.4954
+<answer> 1 </answer>
+logp_full: -0.0101, logp_no_thinking: -3.5469, delta: 3.5367
+<answer>1</answer>
+logp_full: -0.9805, logp_no_thinking: -4.4688, delta: 3.4883
+<answer> 1 </answer>
+logp_full: -0.0154, logp_no_thinking: -3.5469, delta: 3.5314
+<answer> 1 </answer>
+logp_full: -0.0053, logp_no_thinking: -3.5469, delta: 3.5415
+<answer> 1 </answer>
+logp_full: -0.0245, logp_no_thinking: -3.5469, delta: 3.5223
+<answer> 1 </answer>
+logp_full: -1.3594, logp_no_thinking: -3.5469, delta: 2.1875
+Length of delta list: 11
+Evaluating delta logprob over 9 samples...
+
+Evaluating delta logp:   0%|          | 0/9 [00:00<?, ?it/s]Evaluating delta logp:  11%|█         | 1/9 [00:00<00:02,  2.79it/s]Evaluating delta logp:  22%|██▏       | 2/9 [00:00<00:02,  2.87it/s]Evaluating delta logp:  33%|███▎      | 3/9 [00:01<00:02,  2.81it/s]Evaluating delta logp:  44%|████▍     | 4/9 [00:01<00:01,  2.90it/s]Evaluating delta logp:  56%|█████▌    | 5/9 [00:01<00:01,  2.91it/s]Evaluating delta logp:  67%|██████▋   | 6/9 [00:02<00:01,  2.92it/s]Evaluating delta logp:  78%|███████▊  | 7/9 [00:02<00:00,  2.86it/s]Evaluating delta logp:  89%|████████▉ | 8/9 [00:02<00:00,  2.82it/s]Evaluating delta logp: 100%|██████████| 9/9 [00:03<00:00,  2.86it/s]Evaluating delta logp: 100%|██████████| 9/9 [00:03<00:00,  2.86it/s]
+<answer> 1 </answer>
+logp_full: -0.4414, logp_no_thinking: -4.6875, delta: 4.2461
+<answer> 1 </answer>
+logp_full: -0.0535, logp_no_thinking: -4.6875, delta: 4.6340
+<answer> 1 </answer>
+logp_full: -0.0796, logp_no_thinking: -4.6875, delta: 4.6079
+<answer> 1 </answer>
+logp_full: -0.1030, logp_no_thinking: -4.6875, delta: 4.5845
+<answer> 1 </answer>
+logp_full: -0.0337, logp_no_thinking: -4.6875, delta: 4.6538
+<answer> 1 </answer>
+logp_full: -0.0354, logp_no_thinking: -4.6875, delta: 4.6521
+<answer> 1 </answer>
+logp_full: -0.4336, logp_no_thinking: -4.6875, delta: 4.2539
+<answer> 1 </answer>
+logp_full: -0.6289, logp_no_thinking: -4.6875, delta: 4.0586
+<answer> 1 </answer>
+logp_full: -0.3164, logp_no_thinking: -4.6875, delta: 4.3711
+Length of delta list: 9
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  2.99it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  2.83it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.74it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.78it/s]
+<answer> 1 </answer>
+logp_full: -0.0527, logp_no_thinking: -4.6875, delta: 4.6348
+<answer> 1 </answer>
+logp_full: -0.0654, logp_no_thinking: -4.6875, delta: 4.6221
+<answer> 1 </answer>
+logp_full: -0.2178, logp_no_thinking: -4.6875, delta: 4.4697
+Length of delta list: 3
+Evaluating delta logprob over 7 samples...
+
+Evaluating delta logp:   0%|          | 0/7 [00:00<?, ?it/s]Evaluating delta logp:  14%|█▍        | 1/7 [00:00<00:02,  2.80it/s]Evaluating delta logp:  29%|██▊       | 2/7 [00:00<00:01,  2.69it/s]Evaluating delta logp:  43%|████▎     | 3/7 [00:01<00:01,  2.62it/s]Evaluating delta logp:  57%|█████▋    | 4/7 [00:01<00:01,  2.59it/s]Evaluating delta logp:  71%|███████▏  | 5/7 [00:01<00:00,  2.72it/s]Evaluating delta logp:  86%|████████▌ | 6/7 [00:02<00:00,  2.77it/s]Evaluating delta logp: 100%|██████████| 7/7 [00:02<00:00,  2.83it/s]Evaluating delta logp: 100%|██████████| 7/7 [00:02<00:00,  2.75it/s]
+<answer> 2 </answer>
+logp_full: -2.3594, logp_no_thinking: -2.7188, delta: 0.3594
+<answer> 2 </answer>
+logp_full: -0.0145, logp_no_thinking: -2.7188, delta: 2.7043
+<answer> 2 </answer>
+logp_full: -3.1875, logp_no_thinking: -2.7188, delta: -0.4688
+<answer> 2 </answer>
+logp_full: -0.9492, logp_no_thinking: -2.7188, delta: 1.7695
+<answer> 2 </answer>
+logp_full: -0.8906, logp_no_thinking: -2.7188, delta: 1.8281
+<answer> 2 </answer>
+logp_full: -0.6641, logp_no_thinking: -2.7188, delta: 2.0547
+<answer> 2 </answer>
+logp_full: -0.0649, logp_no_thinking: -2.7188, delta: 2.6538
+Length of delta list: 7
+Evaluating delta logprob over 5 samples...
+
+Evaluating delta logp:   0%|          | 0/5 [00:00<?, ?it/s]Evaluating delta logp:  20%|██        | 1/5 [00:00<00:01,  2.73it/s]Evaluating delta logp:  40%|████      | 2/5 [00:00<00:01,  2.74it/s]Evaluating delta logp:  60%|██████    | 3/5 [00:01<00:00,  2.64it/s]Evaluating delta logp:  80%|████████  | 4/5 [00:01<00:00,  2.76it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  2.83it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  2.78it/s]
+<answer> 2 </answer>
+logp_full: -1.3516, logp_no_thinking: -2.7188, delta: 1.3672
+<answer> 2 </answer>
+logp_full: -2.8750, logp_no_thinking: -2.7188, delta: -0.1562
+<answer> 2 </answer>
+logp_full: -0.6367, logp_no_thinking: -2.7188, delta: 2.0820
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -2.7188, delta: 2.7187
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -2.7188, delta: 2.7187
+Length of delta list: 5
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.65it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.65it/s]
+<answer> 1 </answer>
+logp_full: -0.1006, logp_no_thinking: -4.3750, delta: 4.2744
+Length of delta list: 1
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]
+<answer> 1 </answer>
+logp_full: -1.2109, logp_no_thinking: -4.3750, delta: 3.1641
+Length of delta list: 1
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.87it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.87it/s]
+<answer> 0 </answer>
+logp_full: -0.0087, logp_no_thinking: -6.0000, delta: 5.9913
+Length of delta list: 1
+Evaluating delta logprob over 6 samples...
+
+Evaluating delta logp:   0%|          | 0/6 [00:00<?, ?it/s]Evaluating delta logp:  17%|█▋        | 1/6 [00:00<00:01,  2.99it/s]Evaluating delta logp:  33%|███▎      | 2/6 [00:00<00:01,  2.83it/s]Evaluating delta logp:  50%|█████     | 3/6 [00:01<00:01,  2.87it/s]Evaluating delta logp:  67%|██████▋   | 4/6 [00:01<00:00,  2.89it/s]Evaluating delta logp:  83%|████████▎ | 5/6 [00:01<00:00,  2.90it/s]Evaluating delta logp: 100%|██████████| 6/6 [00:02<00:00,  2.75it/s]Evaluating delta logp: 100%|██████████| 6/6 [00:02<00:00,  2.82it/s]
+<answer> 0 </answer>
+logp_full: -0.0002, logp_no_thinking: -6.0000, delta: 5.9998
+<answer> 0 </answer>
+logp_full: -2.4844, logp_no_thinking: -6.0000, delta: 3.5156
+<answer> 0 </answer>
+logp_full: -0.0098, logp_no_thinking: -6.0000, delta: 5.9902
+<answer> 0 </answer>
+logp_full: -0.0510, logp_no_thinking: -6.0000, delta: 5.9490
+<answer> 0 </answer>
+logp_full: -0.0067, logp_no_thinking: -6.0000, delta: 5.9933
+<answer> 0 </answer>
+logp_full: -0.2021, logp_no_thinking: -6.0000, delta: 5.7979
+Length of delta list: 6
+Evaluating delta logprob over 10 samples...
+
+Evaluating delta logp:   0%|          | 0/10 [00:00<?, ?it/s]Evaluating delta logp:  10%|█         | 1/10 [00:00<00:02,  3.14it/s]Evaluating delta logp:  20%|██        | 2/10 [00:00<00:02,  2.99it/s]Evaluating delta logp:  30%|███       | 3/10 [00:00<00:02,  3.06it/s]Evaluating delta logp:  40%|████      | 4/10 [00:01<00:01,  3.05it/s]Evaluating delta logp:  50%|█████     | 5/10 [00:01<00:01,  3.04it/s]Evaluating delta logp:  60%|██████    | 6/10 [00:01<00:01,  3.00it/s]Evaluating delta logp:  70%|███████   | 7/10 [00:02<00:00,  3.01it/s]Evaluating delta logp:  80%|████████  | 8/10 [00:02<00:00,  3.04it/s]Evaluating delta logp:  90%|█████████ | 9/10 [00:02<00:00,  3.03it/s]Evaluating delta logp: 100%|██████████| 10/10 [00:03<00:00,  3.02it/s]Evaluating delta logp: 100%|██████████| 10/10 [00:03<00:00,  3.03it/s]
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.0625, delta: 5.0625
+<answer> 0 </answer>
+logp_full: -0.0074, logp_no_thinking: -5.0625, delta: 5.0551
+<answer> 0 </answer>
+logp_full: -0.0003, logp_no_thinking: -5.0625, delta: 5.0622
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.0625, delta: 5.0625
+<answer> 0 </answer>
+logp_full: -0.2559, logp_no_thinking: -5.0625, delta: 4.8066
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.0625, delta: 5.0625
+<answer> 0 </answer>
+logp_full: -1.0781, logp_no_thinking: -5.0625, delta: 3.9844
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.0625, delta: 5.0625
+<answer> 0 </answer>
+logp_full: -0.3496, logp_no_thinking: -5.0625, delta: 4.7129
+<answer> 0 </answer>
+logp_full: -0.9883, logp_no_thinking: -5.0625, delta: 4.0742
+Length of delta list: 10
+Evaluating delta logprob over 4 samples...
+
+Evaluating delta logp:   0%|          | 0/4 [00:00<?, ?it/s]Evaluating delta logp:  25%|██▌       | 1/4 [00:00<00:00,  3.04it/s]Evaluating delta logp:  50%|█████     | 2/4 [00:00<00:00,  3.09it/s]Evaluating delta logp:  75%|███████▌  | 3/4 [00:00<00:00,  3.02it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  3.03it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  3.04it/s]
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.0625, delta: 5.0625
+<answer> 0 </answer>
+logp_full: -0.0095, logp_no_thinking: -5.0625, delta: 5.0530
+<answer> 0 </answer>
+logp_full: -0.0060, logp_no_thinking: -5.0625, delta: 5.0565
+<answer> 0 </answer>
+logp_full: -0.0002, logp_no_thinking: -5.0625, delta: 5.0623
+Length of delta list: 4
+Evaluating delta logprob over 9 samples...
+
+Evaluating delta logp:   0%|          | 0/9 [00:00<?, ?it/s]Evaluating delta logp:  11%|█         | 1/9 [00:00<00:02,  2.89it/s]Evaluating delta logp:  22%|██▏       | 2/9 [00:00<00:02,  2.94it/s]Evaluating delta logp:  33%|███▎      | 3/9 [00:01<00:02,  2.99it/s]Evaluating delta logp:  44%|████▍     | 4/9 [00:01<00:01,  2.90it/s]Evaluating delta logp:  56%|█████▌    | 5/9 [00:01<00:01,  2.98it/s]Evaluating delta logp:  67%|██████▋   | 6/9 [00:02<00:00,  3.03it/s]Evaluating delta logp:  78%|███████▊  | 7/9 [00:02<00:00,  3.05it/s]Evaluating delta logp:  89%|████████▉ | 8/9 [00:02<00:00,  3.01it/s]Evaluating delta logp: 100%|██████████| 9/9 [00:02<00:00,  3.04it/s]Evaluating delta logp: 100%|██████████| 9/9 [00:02<00:00,  3.00it/s]
+<answer> 1 </answer>
+logp_full: -0.0012, logp_no_thinking: -5.8125, delta: 5.8113
+<answer> 1 </answer>
+logp_full: -0.0297, logp_no_thinking: -5.8125, delta: 5.7828
+<answer> 1 </answer>
+logp_full: -0.0113, logp_no_thinking: -5.8125, delta: 5.8012
+<answer> 1 </answer>
+logp_full: -0.0013, logp_no_thinking: -5.8125, delta: 5.8112
+<answer> 1 </answer>
+logp_full: -0.0052, logp_no_thinking: -5.8125, delta: 5.8073
+<answer> 1 </answer>
+logp_full: -0.0086, logp_no_thinking: -5.8125, delta: 5.8039
+<answer> 1 </answer>
+logp_full: -0.0242, logp_no_thinking: -5.8125, delta: 5.7883
+<answer> 1 </answer>
+logp_full: -0.0306, logp_no_thinking: -5.8125, delta: 5.7819
+<answer> 1 </answer>
+logp_full: -0.0025, logp_no_thinking: -5.8125, delta: 5.8100
+Length of delta list: 9
+Evaluating delta logprob over 6 samples...
+
+Evaluating delta logp:   0%|          | 0/6 [00:00<?, ?it/s]Evaluating delta logp:  17%|█▋        | 1/6 [00:00<00:01,  2.90it/s]Evaluating delta logp:  33%|███▎      | 2/6 [00:00<00:01,  2.86it/s]Evaluating delta logp:  50%|█████     | 3/6 [00:01<00:01,  2.88it/s]Evaluating delta logp:  67%|██████▋   | 4/6 [00:01<00:00,  2.90it/s]Evaluating delta logp:  83%|████████▎ | 5/6 [00:01<00:00,  2.97it/s]Evaluating delta logp: 100%|██████████| 6/6 [00:02<00:00,  2.90it/s]Evaluating delta logp: 100%|██████████| 6/6 [00:02<00:00,  2.90it/s]
+<answer> 0 </answer>
+logp_full: -0.0047, logp_no_thinking: -5.3438, delta: 5.3391
+<answer> 0 </answer>
+logp_full: -0.0099, logp_no_thinking: -5.3438, delta: 5.3338
+<answer> 0 </answer>
+logp_full: -0.0014, logp_no_thinking: -5.3438, delta: 5.3424
+<answer> 0 </answer>
+logp_full: -0.0742, logp_no_thinking: -5.3438, delta: 5.2695
+<answer> 0 </answer>
+logp_full: -0.0039, logp_no_thinking: -5.3438, delta: 5.3399
+<answer> 0 </answer>
+logp_full: -0.0061, logp_no_thinking: -5.3438, delta: 5.3377
+Length of delta list: 6
+Evaluating delta logprob over 11 samples...
+
+Evaluating delta logp:   0%|          | 0/11 [00:00<?, ?it/s]Evaluating delta logp:   9%|▉         | 1/11 [00:00<00:03,  2.84it/s]Evaluating delta logp:  18%|█▊        | 2/11 [00:00<00:03,  2.85it/s]Evaluating delta logp:  27%|██▋       | 3/11 [00:01<00:02,  2.91it/s]Evaluating delta logp:  36%|███▋      | 4/11 [00:01<00:02,  2.90it/s]Evaluating delta logp:  45%|████▌     | 5/11 [00:01<00:02,  2.90it/s]Evaluating delta logp:  55%|█████▍    | 6/11 [00:02<00:01,  2.92it/s]Evaluating delta logp:  64%|██████▎   | 7/11 [00:02<00:01,  2.86it/s]Evaluating delta logp:  73%|███████▎  | 8/11 [00:02<00:01,  2.85it/s]Evaluating delta logp:  82%|████████▏ | 9/11 [00:03<00:00,  2.88it/s]Evaluating delta logp:  91%|█████████ | 10/11 [00:03<00:00,  2.88it/s]Evaluating delta logp: 100%|██████████| 11/11 [00:03<00:00,  2.91it/s]Evaluating delta logp: 100%|██████████| 11/11 [00:03<00:00,  2.89it/s]
+<answer> 0 </answer>
+logp_full: -0.5625, logp_no_thinking: -5.3438, delta: 4.7812
+<answer> 0 </answer>
+logp_full: -0.0001, logp_no_thinking: -5.3438, delta: 5.3436
+<answer> 0 </answer>
+logp_full: -0.0004, logp_no_thinking: -5.3438, delta: 5.3434
+<answer> 0 </answer>
+logp_full: -0.1543, logp_no_thinking: -5.3438, delta: 5.1895
+<answer> 0 </answer>
+logp_full: -0.0703, logp_no_thinking: -5.3438, delta: 5.2734
+<answer> 0 </answer>
+logp_full: -0.0001, logp_no_thinking: -5.3438, delta: 5.3437
+<answer> 0 </answer>
+logp_full: -0.0016, logp_no_thinking: -5.3438, delta: 5.3422
+<answer> 0 </answer>
+logp_full: -0.0017, logp_no_thinking: -5.3438, delta: 5.3420
+<answer> 0 </answer>
+logp_full: -0.0110, logp_no_thinking: -5.3438, delta: 5.3327
+<answer> 0 </answer>
+logp_full: -0.0220, logp_no_thinking: -5.3438, delta: 5.3218
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.3438, delta: 5.3437
+Length of delta list: 11
+Evaluating delta logprob over 5 samples...
+
+Evaluating delta logp:   0%|          | 0/5 [00:00<?, ?it/s]Evaluating delta logp:  20%|██        | 1/5 [00:00<00:01,  3.11it/s]Evaluating delta logp:  40%|████      | 2/5 [00:00<00:01,  2.94it/s]Evaluating delta logp:  60%|██████    | 3/5 [00:00<00:00,  3.05it/s]Evaluating delta logp:  80%|████████  | 4/5 [00:01<00:00,  2.98it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  3.03it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  3.02it/s]
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.9688, delta: 5.9687
+<answer> 0 </answer>
+logp_full: -0.3047, logp_no_thinking: -5.9688, delta: 5.6641
+<answer> 0 </answer>
+logp_full: -0.0420, logp_no_thinking: -5.9688, delta: 5.9268
+<answer> 0 </answer>
+logp_full: -2.9531, logp_no_thinking: -5.9688, delta: 3.0156
+<answer> 0 </answer>
+logp_full: -0.0002, logp_no_thinking: -5.9688, delta: 5.9686
+Length of delta list: 5
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  2.98it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  2.98it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:00<00:00,  3.03it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:00<00:00,  3.02it/s]
+<answer> 0 </answer>
+logp_full: -0.0623, logp_no_thinking: -5.9688, delta: 5.9065
+<answer> 0 </answer>
+logp_full: -0.0212, logp_no_thinking: -5.9688, delta: 5.9475
+<answer> 0 </answer>
+logp_full: -0.0090, logp_no_thinking: -5.9688, delta: 5.9598
+Length of delta list: 3
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.77it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.77it/s]
+<answer> 4 </answer>
+logp_full: -0.0583, logp_no_thinking: -4.6875, delta: 4.6292
+Length of delta list: 1
+Evaluating delta logprob over 13 samples...
+
+Evaluating delta logp:   0%|          | 0/13 [00:00<?, ?it/s]Evaluating delta logp:   8%|▊         | 1/13 [00:00<00:04,  2.76it/s]Evaluating delta logp:  15%|█▌        | 2/13 [00:00<00:03,  2.75it/s]Evaluating delta logp:  23%|██▎       | 3/13 [00:01<00:03,  2.63it/s]Evaluating delta logp:  31%|███       | 4/13 [00:01<00:03,  2.68it/s]Evaluating delta logp:  38%|███▊      | 5/13 [00:01<00:02,  2.71it/s]Evaluating delta logp:  46%|████▌     | 6/13 [00:02<00:02,  2.71it/s]Evaluating delta logp:  54%|█████▍    | 7/13 [00:02<00:02,  2.72it/s]Evaluating delta logp:  62%|██████▏   | 8/13 [00:02<00:01,  2.62it/s]Evaluating delta logp:  69%|██████▉   | 9/13 [00:03<00:01,  2.60it/s]Evaluating delta logp:  77%|███████▋  | 10/13 [00:03<00:01,  2.65it/s]Evaluating delta logp:  85%|████████▍ | 11/13 [00:04<00:00,  2.68it/s]Evaluating delta logp:  92%|█████████▏| 12/13 [00:04<00:00,  2.70it/s]Evaluating delta logp: 100%|██████████| 13/13 [00:04<00:00,  2.57it/s]Evaluating delta logp: 100%|██████████| 13/13 [00:04<00:00,  2.65it/s]
+<answer> 4 </answer>
+logp_full: -20.3750, logp_no_thinking: -4.6875, delta: -15.6875
+<answer> 4 </answer>
+logp_full: -10.3750, logp_no_thinking: -4.6875, delta: -5.6875
+<answer> 4 </answer>
+logp_full: -0.3301, logp_no_thinking: -4.6875, delta: 4.3574
+<answer> 4 </answer>
+logp_full: -5.3750, logp_no_thinking: -4.6875, delta: -0.6875
+<answer> 4 </answer>
+logp_full: -0.0024, logp_no_thinking: -4.6875, delta: 4.6851
+<answer> 4 </answer>
+logp_full: -3.5469, logp_no_thinking: -4.6875, delta: 1.1406
+<answer> 4</answer>
+logp_full: -17.1250, logp_no_thinking: -10.3125, delta: -6.8125
+<answer> 4 </answer>
+logp_full: -0.0693, logp_no_thinking: -4.6875, delta: 4.6182
+<answer> 4 </answer>
+logp_full: -0.0190, logp_no_thinking: -4.6875, delta: 4.6685
+<answer> 4 </answer>
+logp_full: -0.0011, logp_no_thinking: -4.6875, delta: 4.6864
+<answer> 4 </answer>
+logp_full: -13.2500, logp_no_thinking: -4.6875, delta: -8.5625
+<answer> 4 </answer>
+logp_full: -5.2500, logp_no_thinking: -4.6875, delta: -0.5625
+<answer> 4 </answer>
+logp_full: -0.1289, logp_no_thinking: -4.6875, delta: 4.5586
+Length of delta list: 13
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.76it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.76it/s]
+<answer> 1 </answer>
+logp_full: -0.2656, logp_no_thinking: -3.6719, delta: 3.4062
+Length of delta list: 1
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  2.56it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  2.70it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.65it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.65it/s]
+<answer> 1 </answer>
+logp_full: -0.9844, logp_no_thinking: -3.6719, delta: 2.6875
+<answer> 1 </answer>
+logp_full: -9.3125, logp_no_thinking: -3.6719, delta: -5.6406
+<answer> 1 </answer>
+logp_full: -0.3066, logp_no_thinking: -3.6719, delta: 3.3652
+Length of delta list: 3
+Evaluating delta logprob over 7 samples...
+
+Evaluating delta logp:   0%|          | 0/7 [00:00<?, ?it/s]Evaluating delta logp:  14%|█▍        | 1/7 [00:00<00:02,  2.99it/s]Evaluating delta logp:  29%|██▊       | 2/7 [00:00<00:01,  2.80it/s]Evaluating delta logp:  43%|████▎     | 3/7 [00:01<00:01,  2.92it/s]Evaluating delta logp:  57%|█████▋    | 4/7 [00:01<00:01,  2.93it/s]Evaluating delta logp:  71%|███████▏  | 5/7 [00:01<00:00,  2.96it/s]Evaluating delta logp:  86%|████████▌ | 6/7 [00:02<00:00,  2.99it/s]Evaluating delta logp: 100%|██████████| 7/7 [00:02<00:00,  2.98it/s]Evaluating delta logp: 100%|██████████| 7/7 [00:02<00:00,  2.95it/s]
+<answer> 3 </answer>
+logp_full: -1.0938, logp_no_thinking: -4.5938, delta: 3.5000
+<answer>3</answer>
+logp_full: -1.7109, logp_no_thinking: -6.4688, delta: 4.7578
+<answer> 3 </answer>
+logp_full: -2.8750, logp_no_thinking: -4.5938, delta: 1.7188
+<answer> 3 </answer>
+logp_full: -0.0254, logp_no_thinking: -4.5938, delta: 4.5684
+<answer> 3 </answer>
+logp_full: -0.0001, logp_no_thinking: -4.5938, delta: 4.5937
+<answer> 3 </answer>
+logp_full: -0.0146, logp_no_thinking: -4.5938, delta: 4.5792
+<answer> 3 </answer>
+logp_full: -0.2168, logp_no_thinking: -4.5938, delta: 4.3770
+Length of delta list: 7
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]
+<answer> 3 </answer>
+logp_full: -0.1680, logp_no_thinking: -4.5938, delta: 4.4258
+Length of delta list: 1
+Evaluating delta logprob over 2 samples...
+
+Evaluating delta logp:   0%|          | 0/2 [00:00<?, ?it/s]Evaluating delta logp:  50%|█████     | 1/2 [00:00<00:00,  2.56it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  2.76it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  2.73it/s]
+<answer> 0 </answer>
+logp_full: -0.3789, logp_no_thinking: -4.6250, delta: 4.2461
+<answer> 0 </answer>
+logp_full: -0.0209, logp_no_thinking: -4.6250, delta: 4.6041
+Length of delta list: 2
+Evaluating delta logprob over 8 samples...
+
+Evaluating delta logp:   0%|          | 0/8 [00:00<?, ?it/s]Evaluating delta logp:  12%|█▎        | 1/8 [00:00<00:03,  2.04it/s]Evaluating delta logp:  25%|██▌       | 2/8 [00:00<00:02,  2.24it/s]Evaluating delta logp:  38%|███▊      | 3/8 [00:01<00:02,  2.50it/s]Evaluating delta logp:  50%|█████     | 4/8 [00:01<00:01,  2.48it/s]Evaluating delta logp:  62%|██████▎   | 5/8 [00:02<00:01,  2.50it/s]Evaluating delta logp:  75%|███████▌  | 6/8 [00:02<00:00,  2.58it/s]Evaluating delta logp:  88%|████████▊ | 7/8 [00:02<00:00,  2.62it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:03<00:00,  2.64it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:03<00:00,  2.53it/s]
+<answer> 0 </answer>
+logp_full: -0.0002, logp_no_thinking: -4.6250, delta: 4.6248
+<answer> 0 </answer>
+logp_full: -3.1562, logp_no_thinking: -4.6250, delta: 1.4688
+<answer> 0 </answer>
+logp_full: -0.0610, logp_no_thinking: -4.6250, delta: 4.5640
+<answer> 0 </answer>
+logp_full: -0.0054, logp_no_thinking: -4.6250, delta: 4.6196
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -4.6250, delta: 4.6250
+<answer> 0 </answer>
+logp_full: -0.0217, logp_no_thinking: -4.6250, delta: 4.6033
+<answer> 0 </answer>
+logp_full: -0.0145, logp_no_thinking: -4.6250, delta: 4.6105
+<answer> 0 </answer>
+logp_full: -0.0277, logp_no_thinking: -4.6250, delta: 4.5973
+Length of delta list: 8
+Evaluating delta logprob over 30 samples...
+
+Evaluating delta logp:   0%|          | 0/30 [00:00<?, ?it/s]Evaluating delta logp:   3%|▎         | 1/30 [00:00<00:09,  3.06it/s]Evaluating delta logp:   7%|▋         | 2/30 [00:00<00:09,  3.01it/s]Evaluating delta logp:  10%|█         | 3/30 [00:00<00:09,  2.99it/s]Evaluating delta logp:  13%|█▎        | 4/30 [00:01<00:08,  2.97it/s]Evaluating delta logp:  17%|█▋        | 5/30 [00:01<00:08,  2.96it/s]Evaluating delta logp:  20%|██        | 6/30 [00:02<00:08,  2.95it/s]Evaluating delta logp:  23%|██▎       | 7/30 [00:02<00:07,  2.95it/s]Evaluating delta logp:  27%|██▋       | 8/30 [00:02<00:07,  2.99it/s]Evaluating delta logp:  30%|███       | 9/30 [00:03<00:07,  2.94it/s]Evaluating delta logp:  33%|███▎      | 10/30 [00:03<00:06,  2.95it/s]Evaluating delta logp:  37%|███▋      | 11/30 [00:03<00:06,  2.97it/s]Evaluating delta logp:  40%|████      | 12/30 [00:04<00:06,  2.97it/s]Evaluating delta logp:  43%|████▎     | 13/30 [00:04<00:05,  2.96it/s]Evaluating delta logp:  47%|████▋     | 14/30 [00:04<00:05,  2.95it/s]Evaluating delta logp:  50%|█████     | 15/30 [00:05<00:05,  2.93it/s]Evaluating delta logp:  53%|█████▎    | 16/30 [00:05<00:04,  2.94it/s]Evaluating delta logp:  57%|█████▋    | 17/30 [00:05<00:04,  2.94it/s]Evaluating delta logp:  60%|██████    | 18/30 [00:06<00:04,  2.96it/s]Evaluating delta logp:  63%|██████▎   | 19/30 [00:06<00:03,  2.94it/s]Evaluating delta logp:  67%|██████▋   | 20/30 [00:06<00:03,  2.94it/s]Evaluating delta logp:  70%|███████   | 21/30 [00:07<00:03,  2.94it/s]Evaluating delta logp:  73%|███████▎  | 22/30 [00:07<00:02,  2.96it/s]Evaluating delta logp:  77%|███████▋  | 23/30 [00:07<00:02,  2.96it/s]Evaluating delta logp:  80%|████████  | 24/30 [00:08<00:02,  2.99it/s]Evaluating delta logp:  83%|████████▎ | 25/30 [00:08<00:01,  2.96it/s]Evaluating delta logp:  87%|████████▋ | 26/30 [00:08<00:01,  2.96it/s]Evaluating delta logp:  90%|█████████ | 27/30 [00:09<00:01,  2.94it/s]Evaluating delta logp:  93%|█████████▎| 28/30 [00:09<00:00,  2.93it/s]Evaluating delta logp:  97%|█████████▋| 29/30 [00:09<00:00,  2.95it/s]Evaluating delta logp: 100%|██████████| 30/30 [00:10<00:00,  2.94it/s]Evaluating delta logp: 100%|██████████| 30/30 [00:10<00:00,  2.96it/s]
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.2188, delta: 5.2187
+<answer> 0 </answer>
+logp_full: -0.0081, logp_no_thinking: -5.2188, delta: 5.2107
+<answer> 0 </answer>
+logp_full: -0.0003, logp_no_thinking: -5.2188, delta: 5.2185
+<answer> 0 </answer>
+logp_full: -0.2773, logp_no_thinking: -5.2188, delta: 4.9414
+<answer> 0 </answer>
+logp_full: -0.0031, logp_no_thinking: -5.2188, delta: 5.2156
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.2188, delta: 5.2187
+<answer> 0 </answer>
+logp_full: -0.0011, logp_no_thinking: -5.2188, delta: 5.2177
+<answer> 0 </answer>
+logp_full: -0.0342, logp_no_thinking: -5.2188, delta: 5.1846
+<answer> 0 </answer>
+logp_full: -0.0082, logp_no_thinking: -5.2188, delta: 5.2106
+<answer> 0 </answer>
+logp_full: -0.0162, logp_no_thinking: -5.2188, delta: 5.2025
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.2188, delta: 5.2187
+<answer> 0 </answer>
+logp_full: -0.0001, logp_no_thinking: -5.2188, delta: 5.2186
+<answer> 0 </answer>
+logp_full: -0.0015, logp_no_thinking: -5.2188, delta: 5.2173
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.2188, delta: 5.2187
+<answer> 0 </answer>
+logp_full: -0.0004, logp_no_thinking: -5.2188, delta: 5.2183
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.2188, delta: 5.2187
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.2188, delta: 5.2187
+<answer> 0 </answer>
+logp_full: -0.0002, logp_no_thinking: -5.2188, delta: 5.2185
+<answer> 0 </answer>
+logp_full: -0.0388, logp_no_thinking: -5.2188, delta: 5.1799
+<answer> 0 </answer>
+logp_full: -0.0010, logp_no_thinking: -5.2188, delta: 5.2178
+<answer> 0 </answer>
+logp_full: -0.0547, logp_no_thinking: -5.2188, delta: 5.1641
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.2188, delta: 5.2187
+<answer> 0 </answer>
+logp_full: -0.0156, logp_no_thinking: -5.2188, delta: 5.2031
+<answer> 0 </answer>
+logp_full: -0.0009, logp_no_thinking: -5.2188, delta: 5.2178
+<answer> 0 </answer>
+logp_full: -0.0811, logp_no_thinking: -5.2188, delta: 5.1377
+<answer> 0 </answer>
+logp_full: -0.0000, logp_no_thinking: -5.2188, delta: 5.2187
+<answer> 0 </answer>
+logp_full: -0.0500, logp_no_thinking: -5.2188, delta: 5.1687
+<answer> 0 </answer>
+logp_full: -0.1885, logp_no_thinking: -5.2188, delta: 5.0303
+<answer> 0 </answer>
+logp_full: -0.0415, logp_no_thinking: -5.2188, delta: 5.1772
+<answer> 0 </answer>
+logp_full: -0.0270, logp_no_thinking: -5.2188, delta: 5.1918
+Length of delta list: 30
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  3.00it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  3.00it/s]
+<answer> 0 </answer>
+logp_full: -0.1807, logp_no_thinking: -5.2188, delta: 5.0381
+Length of delta list: 1
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.71it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.71it/s]
+<answer> 0 </answer>
+logp_full: -0.0103, logp_no_thinking: -4.4688, delta: 4.4585
+Length of delta list: 1
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  2.69it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  2.76it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.63it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.66it/s]
+<answer> 0 </answer>
+logp_full: -0.0046, logp_no_thinking: -4.4688, delta: 4.4641
+<answer> 0 </answer>
+logp_full: -0.0001, logp_no_thinking: -4.4688, delta: 4.4686
+<answer> 0 </answer>
+logp_full: -1.1094, logp_no_thinking: -4.4688, delta: 3.3594
+Length of delta list: 3
+Evaluating delta logprob over 2 samples...
+
+Evaluating delta logp:   0%|          | 0/2 [00:00<?, ?it/s]Evaluating delta logp:  50%|█████     | 1/2 [00:00<00:00,  2.81it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  2.68it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  2.70it/s]
+<answer> 3 </answer>
+logp_full: -0.2520, logp_no_thinking: -4.7500, delta: 4.4980
+<answer> 3 </answer>
+logp_full: -0.1001, logp_no_thinking: -4.7500, delta: 4.6499
+Length of delta list: 2
+Evaluating delta logprob over 4 samples...
+
+Evaluating delta logp:   0%|          | 0/4 [00:00<?, ?it/s]Evaluating delta logp:  25%|██▌       | 1/4 [00:00<00:01,  2.81it/s]Evaluating delta logp:  50%|█████     | 2/4 [00:00<00:00,  2.86it/s]Evaluating delta logp:  75%|███████▌  | 3/4 [00:01<00:00,  2.87it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.82it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.83it/s]
+<answer> 3 </answer>
+logp_full: -0.6328, logp_no_thinking: -4.7500, delta: 4.1172
+<answer> 3 </answer>
+logp_full: -0.0038, logp_no_thinking: -4.7500, delta: 4.7462
+<answer> 3 </answer>
+logp_full: -0.0034, logp_no_thinking: -4.7500, delta: 4.7466
+<answer> 3 </answer>
+logp_full: -0.2832, logp_no_thinking: -4.7500, delta: 4.4668
+Length of delta list: 4
+Evaluating delta logprob over 13 samples...
+
+Evaluating delta logp:   0%|          | 0/13 [00:00<?, ?it/s]Evaluating delta logp:   8%|▊         | 1/13 [00:00<00:04,  2.68it/s]Evaluating delta logp:  15%|█▌        | 2/13 [00:00<00:04,  2.74it/s]Evaluating delta logp:  23%|██▎       | 3/13 [00:01<00:03,  2.77it/s]Evaluating delta logp:  31%|███       | 4/13 [00:01<00:03,  2.73it/s]Evaluating delta logp:  38%|███▊      | 5/13 [00:01<00:02,  2.72it/s]Evaluating delta logp:  46%|████▌     | 6/13 [00:02<00:02,  2.74it/s]Evaluating delta logp:  54%|█████▍    | 7/13 [00:02<00:02,  2.75it/s]Evaluating delta logp:  62%|██████▏   | 8/13 [00:02<00:01,  2.76it/s]Evaluating delta logp:  69%|██████▉   | 9/13 [00:03<00:01,  2.72it/s]Evaluating delta logp:  77%|███████▋  | 10/13 [00:03<00:01,  2.75it/s]Evaluating delta logp:  85%|████████▍ | 11/13 [00:04<00:00,  2.74it/s]Evaluating delta logp:  92%|█████████▏| 12/13 [00:04<00:00,  2.74it/s]Evaluating delta logp: 100%|██████████| 13/13 [00:04<00:00,  2.72it/s]Evaluating delta logp: 100%|██████████| 13/13 [00:04<00:00,  2.73it/s]
+<answer> 1 </answer>
+logp_full: -0.0386, logp_no_thinking: -4.4688, delta: 4.4302
+<answer> 1 </answer>
+logp_full: -0.0036, logp_no_thinking: -4.4688, delta: 4.4652
+<answer> 1 </answer>
+logp_full: -0.0001, logp_no_thinking: -4.4688, delta: 4.4686
+<answer> 1 </answer>
+logp_full: -0.0356, logp_no_thinking: -4.4688, delta: 4.4331
+<answer> 1 </answer>
+logp_full: -1.5781, logp_no_thinking: -4.4688, delta: 2.8906
+<answer> 1 </answer>
+logp_full: -0.0038, logp_no_thinking: -4.4688, delta: 4.4649
+<answer> 1 </answer>
+logp_full: -0.0099, logp_no_thinking: -4.4688, delta: 4.4588
+<answer> 1 </answer>
+logp_full: -0.0008, logp_no_thinking: -4.4688, delta: 4.4679
+<answer> 1 </answer>
+logp_full: -0.1069, logp_no_thinking: -4.4688, delta: 4.3618
+<answer> 1 </answer>
+logp_full: -0.0215, logp_no_thinking: -4.4688, delta: 4.4473
+<answer> 1 </answer>
+logp_full: -0.0120, logp_no_thinking: -4.4688, delta: 4.4568
+<answer> 1 </answer>
+logp_full: -0.0771, logp_no_thinking: -4.4688, delta: 4.3916
+<answer> 1 </answer>
+logp_full: -0.0233, logp_no_thinking: -4.4688, delta: 4.4454
+Length of delta list: 13
+Evaluating delta logprob over 16 samples...
+
+Evaluating delta logp:   0%|          | 0/16 [00:00<?, ?it/s]Evaluating delta logp:   6%|▋         | 1/16 [00:00<00:05,  2.78it/s]Evaluating delta logp:  12%|█▎        | 2/16 [00:00<00:05,  2.79it/s]Evaluating delta logp:  19%|█▉        | 3/16 [00:01<00:04,  2.81it/s]Evaluating delta logp:  25%|██▌       | 4/16 [00:01<00:04,  2.79it/s]Evaluating delta logp:  31%|███▏      | 5/16 [00:01<00:04,  2.73it/s]Evaluating delta logp:  38%|███▊      | 6/16 [00:02<00:03,  2.70it/s]Evaluating delta logp:  44%|████▍     | 7/16 [00:02<00:03,  2.72it/s]Evaluating delta logp:  50%|█████     | 8/16 [00:02<00:02,  2.74it/s]Evaluating delta logp:  56%|█████▋    | 9/16 [00:03<00:02,  2.76it/s]Evaluating delta logp:  62%|██████▎   | 10/16 [00:03<00:02,  2.74it/s]Evaluating delta logp:  69%|██████▉   | 11/16 [00:04<00:01,  2.73it/s]Evaluating delta logp:  75%|███████▌  | 12/16 [00:04<00:01,  2.75it/s]Evaluating delta logp:  81%|████████▏ | 13/16 [00:04<00:01,  2.66it/s]Evaluating delta logp:  88%|████████▊ | 14/16 [00:05<00:00,  2.70it/s]Evaluating delta logp:  94%|█████████▍| 15/16 [00:05<00:00,  2.72it/s]Evaluating delta logp: 100%|██████████| 16/16 [00:05<00:00,  2.75it/s]Evaluating delta logp: 100%|██████████| 16/16 [00:05<00:00,  2.74it/s]
+<answer> 1 </answer>
+logp_full: -0.0062, logp_no_thinking: -4.4688, delta: 4.4626
+<answer> 1 </answer>
+logp_full: -0.0053, logp_no_thinking: -4.4688, delta: 4.4634
+<answer> 1 </answer>
+logp_full: -0.0159, logp_no_thinking: -4.4688, delta: 4.4529
+<answer> 1 </answer>
+logp_full: -3.6719, logp_no_thinking: -4.4688, delta: 0.7969
+<answer> 1 </answer>
+logp_full: -0.1357, logp_no_thinking: -4.4688, delta: 4.3330
+<answer> 1 </answer>
+logp_full: -0.0806, logp_no_thinking: -4.4688, delta: 4.3882
+<answer> 1 </answer>
+logp_full: -0.0245, logp_no_thinking: -4.4688, delta: 4.4442
+<answer> 1 </answer>
+logp_full: -0.0894, logp_no_thinking: -4.4688, delta: 4.3794
+<answer> 1 </answer>
+logp_full: -0.6641, logp_no_thinking: -4.4688, delta: 3.8047
+<answer> 1 </answer>
+logp_full: -0.2656, logp_no_thinking: -4.4688, delta: 4.2031
+<answer> 1 </answer>
+logp_full: -0.0034, logp_no_thinking: -4.4688, delta: 4.4653
+<answer> 1 </answer>
+logp_full: -0.0574, logp_no_thinking: -4.4688, delta: 4.4114
+<answer> 1 </answer>
+logp_full: -0.0845, logp_no_thinking: -4.4688, delta: 4.3843
+<answer> 1 </answer>
+logp_full: -0.0306, logp_no_thinking: -4.4688, delta: 4.4381
+<answer> 1 </answer>
+logp_full: -0.0454, logp_no_thinking: -4.4688, delta: 4.4233
+<answer> 1 </answer>
+logp_full: -0.0073, logp_no_thinking: -4.4688, delta: 4.4615
+Length of delta list: 16
+Evaluating delta logprob over 20 samples...
+
+Evaluating delta logp:   0%|          | 0/20 [00:00<?, ?it/s]Evaluating delta logp:   5%|▌         | 1/20 [00:00<00:06,  2.84it/s]Evaluating delta logp:  10%|█         | 2/20 [00:00<00:06,  2.87it/s]Evaluating delta logp:  15%|█▌        | 3/20 [00:01<00:05,  2.87it/s]Evaluating delta logp:  20%|██        | 4/20 [00:01<00:05,  2.84it/s]Evaluating delta logp:  25%|██▌       | 5/20 [00:01<00:05,  2.77it/s]Evaluating delta logp:  30%|███       | 6/20 [00:02<00:05,  2.76it/s]Evaluating delta logp:  35%|███▌      | 7/20 [00:02<00:04,  2.80it/s]Evaluating delta logp:  40%|████      | 8/20 [00:02<00:04,  2.83it/s]Evaluating delta logp:  45%|████▌     | 9/20 [00:03<00:03,  2.80it/s]Evaluating delta logp:  50%|█████     | 10/20 [00:03<00:03,  2.80it/s]Evaluating delta logp:  55%|█████▌    | 11/20 [00:03<00:03,  2.81it/s]Evaluating delta logp:  60%|██████    | 12/20 [00:04<00:02,  2.83it/s]Evaluating delta logp:  65%|██████▌   | 13/20 [00:04<00:02,  2.86it/s]Evaluating delta logp:  70%|███████   | 14/20 [00:04<00:02,  2.85it/s]Evaluating delta logp:  75%|███████▌  | 15/20 [00:05<00:01,  2.86it/s]Evaluating delta logp:  80%|████████  | 16/20 [00:05<00:01,  2.83it/s]Evaluating delta logp:  85%|████████▌ | 17/20 [00:06<00:01,  2.78it/s]Evaluating delta logp:  90%|█████████ | 18/20 [00:06<00:00,  2.80it/s]Evaluating delta logp:  95%|█████████▌| 19/20 [00:06<00:00,  2.82it/s]Evaluating delta logp: 100%|██████████| 20/20 [00:07<00:00,  2.77it/s]Evaluating delta logp: 100%|██████████| 20/20 [00:07<00:00,  2.81it/s]
+<answer> 3 </answer>
+logp_full: -0.0062, logp_no_thinking: -3.9844, delta: 3.9781
+<answer> 3 </answer>
+logp_full: -2.2344, logp_no_thinking: -3.9844, delta: 1.7500
+<answer> 3 </answer>
+logp_full: -0.0095, logp_no_thinking: -3.9844, delta: 3.9749
+<answer> 3 </answer>
+logp_full: -0.2061, logp_no_thinking: -3.9844, delta: 3.7783
+<answer> 3 </answer>
+logp_full: -0.2617, logp_no_thinking: -3.9844, delta: 3.7227
+<answer> 3 </answer>
+logp_full: -0.0092, logp_no_thinking: -3.9844, delta: 3.9752
+<answer> 3 </answer>
+logp_full: -0.0400, logp_no_thinking: -3.9844, delta: 3.9443
+<answer> 3 </answer>
+logp_full: -0.0020, logp_no_thinking: -3.9844, delta: 3.9823
+<answer> 3 </answer>
+logp_full: -0.0315, logp_no_thinking: -3.9844, delta: 3.9529
+<answer> 3 </answer>
+logp_full: -0.0039, logp_no_thinking: -3.9844, delta: 3.9805
+<answer> 3 </answer>
+logp_full: -0.0000, logp_no_thinking: -3.9844, delta: 3.9844
+<answer> 3 </answer>
+logp_full: -0.0078, logp_no_thinking: -3.9844, delta: 3.9766
+<answer> 3 </answer>
+logp_full: -0.1147, logp_no_thinking: -3.9844, delta: 3.8696
+<answer> 3 </answer>
+logp_full: -0.0181, logp_no_thinking: -3.9844, delta: 3.9663
+<answer> 3 </answer>
+logp_full: -0.0019, logp_no_thinking: -3.9844, delta: 3.9825
+<answer> 3 </answer>
+logp_full: -0.0265, logp_no_thinking: -3.9844, delta: 3.9579
+<answer> 3 </answer>
+logp_full: -0.1309, logp_no_thinking: -3.9844, delta: 3.8535
+<answer> 3 </answer>
+logp_full: -0.0001, logp_no_thinking: -3.9844, delta: 3.9843
+<answer> 3 </answer>
+logp_full: -0.0011, logp_no_thinking: -3.9844, delta: 3.9833
+<answer> 3 </answer>
+logp_full: -0.0176, logp_no_thinking: -3.9844, delta: 3.9668
+Length of delta list: 20
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  3.05it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  3.05it/s]
+<answer> 3 </answer>
+logp_full: -0.0000, logp_no_thinking: -3.4844, delta: 3.4844
+Length of delta list: 1
+Evaluating delta logprob over 4 samples...
+
+Evaluating delta logp:   0%|          | 0/4 [00:00<?, ?it/s]Evaluating delta logp:  25%|██▌       | 1/4 [00:00<00:00,  3.02it/s]Evaluating delta logp:  50%|█████     | 2/4 [00:00<00:00,  2.81it/s]Evaluating delta logp:  75%|███████▌  | 3/4 [00:01<00:00,  2.85it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.94it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.91it/s]
+<answer> 3 </answer>
+logp_full: -0.0068, logp_no_thinking: -3.4844, delta: 3.4776
+<answer> 3 </answer>
+logp_full: -3.3438, logp_no_thinking: -3.4844, delta: 0.1406
+<answer> 3 </answer>
+logp_full: -0.0058, logp_no_thinking: -3.4844, delta: 3.4786
+<answer> 3 </answer>
+logp_full: -0.0000, logp_no_thinking: -3.4844, delta: 3.4844
+Length of delta list: 4
+Evaluating delta logprob over 17 samples...
+
+Evaluating delta logp:   0%|          | 0/17 [00:00<?, ?it/s]Evaluating delta logp:   6%|▌         | 1/17 [00:00<00:05,  3.01it/s]Evaluating delta logp:  12%|█▏        | 2/17 [00:00<00:04,  3.05it/s]Evaluating delta logp:  18%|█▊        | 3/17 [00:00<00:04,  3.03it/s]Evaluating delta logp:  24%|██▎       | 4/17 [00:01<00:04,  3.04it/s]Evaluating delta logp:  29%|██▉       | 5/17 [00:01<00:03,  3.06it/s]Evaluating delta logp:  35%|███▌      | 6/17 [00:01<00:03,  3.04it/s]Evaluating delta logp:  41%|████      | 7/17 [00:02<00:03,  3.05it/s]Evaluating delta logp:  47%|████▋     | 8/17 [00:02<00:02,  3.06it/s]Evaluating delta logp:  53%|█████▎    | 9/17 [00:02<00:02,  3.07it/s]Evaluating delta logp:  59%|█████▉    | 10/17 [00:03<00:02,  3.05it/s]Evaluating delta logp:  65%|██████▍   | 11/17 [00:03<00:01,  3.04it/s]Evaluating delta logp:  71%|███████   | 12/17 [00:03<00:01,  3.05it/s]Evaluating delta logp:  76%|███████▋  | 13/17 [00:04<00:01,  3.05it/s]Evaluating delta logp:  82%|████████▏ | 14/17 [00:04<00:00,  3.04it/s]Evaluating delta logp:  88%|████████▊ | 15/17 [00:04<00:00,  3.00it/s]Evaluating delta logp:  94%|█████████▍| 16/17 [00:05<00:00,  3.00it/s]Evaluating delta logp: 100%|██████████| 17/17 [00:05<00:00,  3.00it/s]Evaluating delta logp: 100%|██████████| 17/17 [00:05<00:00,  3.03it/s]
+<answer> 2 </answer>
+logp_full: -0.0126, logp_no_thinking: -2.9844, delta: 2.9718
+<answer> 2 </answer>
+logp_full: -0.2910, logp_no_thinking: -2.9844, delta: 2.6934
+<answer> 2 </answer>
+logp_full: -0.0962, logp_no_thinking: -2.9844, delta: 2.8882
+<answer> 2 </answer>
+logp_full: -0.1885, logp_no_thinking: -2.9844, delta: 2.7959
+<answer> 2 </answer>
+logp_full: -0.0048, logp_no_thinking: -2.9844, delta: 2.9796
+<answer> 2 </answer>
+logp_full: -0.0254, logp_no_thinking: -2.9844, delta: 2.9590
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -2.9844, delta: 2.9844
+<answer> 2 </answer>
+logp_full: -0.0003, logp_no_thinking: -2.9844, delta: 2.9841
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -2.9844, delta: 2.9844
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -2.9844, delta: 2.9844
+<answer> 2 </answer>
+logp_full: -0.0601, logp_no_thinking: -2.9844, delta: 2.9243
+<answer> 2 </answer>
+logp_full: -0.1138, logp_no_thinking: -2.9844, delta: 2.8706
+<answer> 2 </answer>
+logp_full: -0.0007, logp_no_thinking: -2.9844, delta: 2.9837
+<answer> 2 </answer>
+logp_full: -0.0253, logp_no_thinking: -2.9844, delta: 2.9591
+<answer> 2 </answer>
+logp_full: -0.0023, logp_no_thinking: -2.9844, delta: 2.9820
+<answer> 2 </answer>
+logp_full: -0.0098, logp_no_thinking: -2.9844, delta: 2.9746
+<answer> 2 </answer>
+logp_full: -0.0005, logp_no_thinking: -2.9844, delta: 2.9839
+Length of delta list: 17
+Evaluating delta logprob over 5 samples...
+
+Evaluating delta logp:   0%|          | 0/5 [00:00<?, ?it/s]Evaluating delta logp:  20%|██        | 1/5 [00:00<00:01,  3.06it/s]Evaluating delta logp:  40%|████      | 2/5 [00:00<00:01,  3.00it/s]Evaluating delta logp:  60%|██████    | 3/5 [00:01<00:00,  2.99it/s]Evaluating delta logp:  80%|████████  | 4/5 [00:01<00:00,  3.01it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  2.98it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:01<00:00,  2.99it/s]
+<answer> 2 </answer>
+logp_full: -0.0000, logp_no_thinking: -2.9844, delta: 2.9844
+<answer> 2 </answer>
+logp_full: -0.1289, logp_no_thinking: -2.9844, delta: 2.8555
+<answer> 2 </answer>
+logp_full: -0.0031, logp_no_thinking: -2.9844, delta: 2.9813
+<answer> 2 </answer>
+logp_full: -0.0002, logp_no_thinking: -2.9844, delta: 2.9841
+<answer> 2 </answer>
+logp_full: -0.0074, logp_no_thinking: -2.9844, delta: 2.9769
+Length of delta list: 5
+Evaluating delta logprob over 2 samples...
+
+Evaluating delta logp:   0%|          | 0/2 [00:00<?, ?it/s]Evaluating delta logp:  50%|█████     | 1/2 [00:00<00:00,  2.27it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  2.28it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  2.28it/s]
+<answer> 2 </answer>
+logp_full: -0.1157, logp_no_thinking: -4.2188, delta: 4.1030
+<answer> 2 </answer>
+logp_full: -0.0189, logp_no_thinking: -4.2188, delta: 4.1998
+Length of delta list: 2
+Evaluating delta logprob over 5 samples...
+
+Evaluating delta logp:   0%|          | 0/5 [00:00<?, ?it/s]Evaluating delta logp:  20%|██        | 1/5 [00:00<00:01,  2.48it/s]Evaluating delta logp:  40%|████      | 2/5 [00:00<00:01,  2.30it/s]Evaluating delta logp:  60%|██████    | 3/5 [00:01<00:00,  2.18it/s]Evaluating delta logp:  80%|████████  | 4/5 [00:01<00:00,  2.14it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:02<00:00,  2.23it/s]Evaluating delta logp: 100%|██████████| 5/5 [00:02<00:00,  2.23it/s]
+<answer> 2 </answer>
+logp_full: -0.1079, logp_no_thinking: -4.2188, delta: 4.1108
+<answer> 2 </answer>
+logp_full: -0.0598, logp_no_thinking: -4.2188, delta: 4.1589
+<answer> 2 </answer>
+logp_full: -0.7305, logp_no_thinking: -4.2188, delta: 3.4883
+<answer> 2 </answer>
+logp_full: -0.0398, logp_no_thinking: -4.2188, delta: 4.1790
+<answer> 2 </answer>
+logp_full: -0.2852, logp_no_thinking: -4.2188, delta: 3.9336
+Length of delta list: 5
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.67it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.67it/s]
+<answer> 4 </answer>
+logp_full: -0.0259, logp_no_thinking: -3.9688, delta: 3.9429
+Length of delta list: 1
+Evaluating delta logprob over 15 samples...
+
+Evaluating delta logp:   0%|          | 0/15 [00:00<?, ?it/s]Evaluating delta logp:   7%|▋         | 1/15 [00:00<00:04,  3.24it/s]Evaluating delta logp:  13%|█▎        | 2/15 [00:00<00:04,  2.88it/s]Evaluating delta logp:  20%|██        | 3/15 [00:01<00:04,  2.74it/s]Evaluating delta logp:  27%|██▋       | 4/15 [00:01<00:04,  2.67it/s]Evaluating delta logp:  33%|███▎      | 5/15 [00:01<00:03,  2.65it/s]Evaluating delta logp:  40%|████      | 6/15 [00:02<00:03,  2.56it/s]Evaluating delta logp:  47%|████▋     | 7/15 [00:02<00:03,  2.60it/s]Evaluating delta logp:  53%|█████▎    | 8/15 [00:02<00:02,  2.68it/s]Evaluating delta logp:  60%|██████    | 9/15 [00:03<00:02,  2.70it/s]Evaluating delta logp:  67%|██████▋   | 10/15 [00:03<00:01,  2.60it/s]Evaluating delta logp:  73%|███████▎  | 11/15 [00:04<00:01,  2.60it/s]Evaluating delta logp:  80%|████████  | 12/15 [00:04<00:01,  2.58it/s]Evaluating delta logp:  87%|████████▋ | 13/15 [00:04<00:00,  2.51it/s]Evaluating delta logp:  93%|█████████▎| 14/15 [00:05<00:00,  2.56it/s]Evaluating delta logp: 100%|██████████| 15/15 [00:05<00:00,  2.63it/s]Evaluating delta logp: 100%|██████████| 15/15 [00:05<00:00,  2.64it/s]
+<answer> 4 </answer>
+logp_full: -3.4375, logp_no_thinking: -3.9688, delta: 0.5312
+<answer> 4 </answer>
+logp_full: -0.0042, logp_no_thinking: -3.9688, delta: 3.9646
+<answer> 4 </answer>
+logp_full: -0.0688, logp_no_thinking: -3.9688, delta: 3.8999
+<answer> 4 </answer>
+logp_full: -0.0742, logp_no_thinking: -3.9688, delta: 3.8945
+<answer> 4 </answer>
+logp_full: -0.1855, logp_no_thinking: -3.9688, delta: 3.7832
+<answer> 4 </answer>
+logp_full: -0.2969, logp_no_thinking: -3.9688, delta: 3.6719
+<answer> 4 </answer>
+logp_full: -1.9297, logp_no_thinking: -3.9688, delta: 2.0391
+<answer> 4 </answer>
+logp_full: -0.3984, logp_no_thinking: -3.9688, delta: 3.5703
+<answer> 4 </answer>
+logp_full: -0.1270, logp_no_thinking: -3.9688, delta: 3.8418
+<answer> 4 </answer>
+logp_full: -0.0815, logp_no_thinking: -3.9688, delta: 3.8872
+<answer> 4 </answer>
+logp_full: -0.2598, logp_no_thinking: -3.9688, delta: 3.7090
+<answer> 4 </answer>
+logp_full: -0.0698, logp_no_thinking: -3.9688, delta: 3.8989
+<answer> 4 </answer>
+logp_full: -0.0140, logp_no_thinking: -3.9688, delta: 3.9548
+<answer> 4 </answer>
+logp_full: -0.1543, logp_no_thinking: -3.9688, delta: 3.8145
+<answer> 4 </answer>
+logp_full: -0.0016, logp_no_thinking: -3.9688, delta: 3.9671
+Length of delta list: 15
+Evaluating delta logprob over 20 samples...
+
+Evaluating delta logp:   0%|          | 0/20 [00:00<?, ?it/s]Evaluating delta logp:   5%|▌         | 1/20 [00:00<00:05,  3.19it/s]Evaluating delta logp:  10%|█         | 2/20 [00:00<00:05,  3.19it/s]Evaluating delta logp:  15%|█▌        | 3/20 [00:00<00:05,  3.11it/s]Evaluating delta logp:  20%|██        | 4/20 [00:01<00:05,  3.12it/s]Evaluating delta logp:  25%|██▌       | 5/20 [00:01<00:04,  3.07it/s]Evaluating delta logp:  30%|███       | 6/20 [00:01<00:04,  3.08it/s]Evaluating delta logp:  35%|███▌      | 7/20 [00:02<00:04,  3.09it/s]Evaluating delta logp:  40%|████      | 8/20 [00:02<00:03,  3.07it/s]Evaluating delta logp:  45%|████▌     | 9/20 [00:02<00:03,  3.05it/s]Evaluating delta logp:  50%|█████     | 10/20 [00:03<00:03,  3.04it/s]Evaluating delta logp:  55%|█████▌    | 11/20 [00:03<00:02,  3.07it/s]Evaluating delta logp:  60%|██████    | 12/20 [00:03<00:02,  3.08it/s]Evaluating delta logp:  65%|██████▌   | 13/20 [00:04<00:02,  3.04it/s]Evaluating delta logp:  70%|███████   | 14/20 [00:04<00:01,  3.06it/s]Evaluating delta logp:  75%|███████▌  | 15/20 [00:04<00:01,  3.05it/s]Evaluating delta logp:  80%|████████  | 16/20 [00:05<00:01,  3.05it/s]Evaluating delta logp:  85%|████████▌ | 17/20 [00:05<00:00,  3.03it/s]Evaluating delta logp:  90%|█████████ | 18/20 [00:05<00:00,  3.05it/s]Evaluating delta logp:  95%|█████████▌| 19/20 [00:06<00:00,  3.05it/s]Evaluating delta logp: 100%|██████████| 20/20 [00:06<00:00,  3.06it/s]Evaluating delta logp: 100%|██████████| 20/20 [00:06<00:00,  3.07it/s]
+<answer> 2 </answer>
+logp_full: -0.0003, logp_no_thinking: -2.6406, delta: 2.6404
+<answer> 2 </answer>
+logp_full: -1.1328, logp_no_thinking: -2.6406, delta: 1.5078
+<answer> 2 </answer>
+logp_full: -0.0036, logp_no_thinking: -2.6406, delta: 2.6370
+<answer> 2 </answer>
+logp_full: -0.0087, logp_no_thinking: -2.6406, delta: 2.6319
+<answer> 2 </answer>
+logp_full: -0.0378, logp_no_thinking: -2.6406, delta: 2.6028
+<answer> 2 </answer>
+logp_full: -0.0002, logp_no_thinking: -2.6406, delta: 2.6405
+<answer> 2 </answer>
+logp_full: -0.0845, logp_no_thinking: -2.6406, delta: 2.5562
+<answer> 2 </answer>
+logp_full: -0.0016, logp_no_thinking: -2.6406, delta: 2.6390
+<answer> 2 </answer>
+logp_full: -0.0503, logp_no_thinking: -2.6406, delta: 2.5903
+<answer> 2 </answer>
+logp_full: -0.9961, logp_no_thinking: -2.6406, delta: 1.6445
+<answer> 2 </answer>
+logp_full: -0.0001, logp_no_thinking: -2.6406, delta: 2.6405
+<answer> 2 </answer>
+logp_full: -0.5508, logp_no_thinking: -2.6406, delta: 2.0898
+<answer> 2 </answer>
+logp_full: -0.0232, logp_no_thinking: -2.6406, delta: 2.6174
+<answer> 2 </answer>
+logp_full: -0.0028, logp_no_thinking: -2.6406, delta: 2.6378
+<answer> 2 </answer>
+logp_full: -0.0025, logp_no_thinking: -2.6406, delta: 2.6382
+<answer> 2 </answer>
+logp_full: -0.0008, logp_no_thinking: -2.6406, delta: 2.6399
+<answer> 2 </answer>
+logp_full: -0.0801, logp_no_thinking: -2.6406, delta: 2.5605
+<answer> 2 </answer>
+logp_full: -0.0364, logp_no_thinking: -2.6406, delta: 2.6042
+<answer> 2 </answer>
+logp_full: -2.3594, logp_no_thinking: -2.6406, delta: 0.2812
+<answer> 2 </answer>
+logp_full: -0.0005, logp_no_thinking: -2.6406, delta: 2.6401
+Length of delta list: 20
+Evaluating delta logprob over 8 samples...
+
+Evaluating delta logp:   0%|          | 0/8 [00:00<?, ?it/s]Evaluating delta logp:  12%|█▎        | 1/8 [00:00<00:02,  2.72it/s]Evaluating delta logp:  25%|██▌       | 2/8 [00:00<00:02,  2.97it/s]Evaluating delta logp:  38%|███▊      | 3/8 [00:01<00:01,  3.01it/s]Evaluating delta logp:  50%|█████     | 4/8 [00:01<00:01,  3.04it/s]Evaluating delta logp:  62%|██████▎   | 5/8 [00:01<00:00,  3.06it/s]Evaluating delta logp:  75%|███████▌  | 6/8 [00:01<00:00,  3.10it/s]Evaluating delta logp:  88%|████████▊ | 7/8 [00:02<00:00,  3.13it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:02<00:00,  3.12it/s]Evaluating delta logp: 100%|██████████| 8/8 [00:02<00:00,  3.07it/s]
+<answer> 2 </answer>
+logp_full: -3.3281, logp_no_thinking: -2.6406, delta: -0.6875
+<answer> 2 </answer>
+logp_full: -0.0001, logp_no_thinking: -2.6406, delta: 2.6406
+<answer> 2 </answer>
+logp_full: -0.0005, logp_no_thinking: -2.6406, delta: 2.6401
+<answer> 2 </answer>
+logp_full: -0.0002, logp_no_thinking: -2.6406, delta: 2.6404
+<answer> 2 </answer>
+logp_full: -0.5078, logp_no_thinking: -2.6406, delta: 2.1328
+<answer> 2 </answer>
+logp_full: -0.0206, logp_no_thinking: -2.6406, delta: 2.6200
+<answer> 2 </answer>
+logp_full: -0.0001, logp_no_thinking: -2.6406, delta: 2.6406
+<answer> 2 </answer>
+logp_full: -1.1562, logp_no_thinking: -2.6406, delta: 1.4844
+Length of delta list: 8
+
+Running on neg_prompt responses...
+
+Evaluating delta logprob over 2 samples...
+
+Evaluating delta logp:   0%|          | 0/2 [00:00<?, ?it/s]Evaluating delta logp:  50%|█████     | 1/2 [00:00<00:00,  2.94it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  2.75it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  2.78it/s]
+<answer>3</answer>
+logp_full: -0.1270, logp_no_thinking: -3.1719, delta: 3.0449
+<answer>3</answer>
+logp_full: -0.0698, logp_no_thinking: -3.1719, delta: 3.1021
+Length of delta list: 2
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  2.97it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  2.81it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.81it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.83it/s]
+<answer>3</answer>
+logp_full: -0.0486, logp_no_thinking: -3.1719, delta: 3.1233
+<answer> 3 </answer>
+logp_full: -2.0781, logp_no_thinking: -2.6250, delta: 0.5469
+<answer>3</answer>
+logp_full: -0.1279, logp_no_thinking: -3.1719, delta: 3.0439
+Length of delta list: 3
+Evaluating delta logprob over 4 samples...
+
+Evaluating delta logp:   0%|          | 0/4 [00:00<?, ?it/s]Evaluating delta logp:  25%|██▌       | 1/4 [00:00<00:01,  3.00it/s]Evaluating delta logp:  50%|█████     | 2/4 [00:00<00:00,  2.76it/s]Evaluating delta logp:  75%|███████▌  | 3/4 [00:01<00:00,  2.77it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.49it/s]Evaluating delta logp: 100%|██████████| 4/4 [00:01<00:00,  2.60it/s]
+<answer> 0 </answer>
+logp_full: -0.5742, logp_no_thinking: -3.1562, delta: 2.5820
+<answer>0</answer>
+logp_full: -0.1602, logp_no_thinking: -5.8438, delta: 5.6836
+<answer>0</answer>
+logp_full: -0.1602, logp_no_thinking: -5.8438, delta: 5.6836
+<answer>0</answer>
+logp_full: -0.5742, logp_no_thinking: -5.8438, delta: 5.2695
+Length of delta list: 4
+Evaluating delta logprob over 9 samples...
+
+Evaluating delta logp:   0%|          | 0/9 [00:00<?, ?it/s]Evaluating delta logp:  11%|█         | 1/9 [00:00<00:03,  2.38it/s]Evaluating delta logp:  22%|██▏       | 2/9 [00:00<00:02,  2.69it/s]Evaluating delta logp:  33%|███▎      | 3/9 [00:01<00:02,  2.81it/s]Evaluating delta logp:  44%|████▍     | 4/9 [00:01<00:01,  2.77it/s]Evaluating delta logp:  56%|█████▌    | 5/9 [00:01<00:01,  2.78it/s]Evaluating delta logp:  67%|██████▋   | 6/9 [00:02<00:01,  2.85it/s]Evaluating delta logp:  78%|███████▊  | 7/9 [00:02<00:00,  2.93it/s]Evaluating delta logp:  89%|████████▉ | 8/9 [00:02<00:00,  2.93it/s]Evaluating delta logp: 100%|██████████| 9/9 [00:03<00:00,  2.94it/s]Evaluating delta logp: 100%|██████████| 9/9 [00:03<00:00,  2.85it/s]
+<answer>0</answer>
+logp_full: -0.1611, logp_no_thinking: -5.8438, delta: 5.6826
+<answer>0</answer>
+logp_full: -1.0547, logp_no_thinking: -5.8438, delta: 4.7891
+<answer>0</answer>
+logp_full: -0.1270, logp_no_thinking: -5.8438, delta: 5.7168
+<answer>0</answer>
+logp_full: -0.2012, logp_no_thinking: -5.8438, delta: 5.6426
+<answer>0</answer>
+logp_full: -0.0654, logp_no_thinking: -5.8438, delta: 5.7783
+<answer>0</answer>
+logp_full: -0.3613, logp_no_thinking: -5.8438, delta: 5.4824
+<answer>0</answer>
+logp_full: -0.1279, logp_no_thinking: -5.8438, delta: 5.7158
+<answer>0</answer>
+logp_full: -0.1270, logp_no_thinking: -5.8438, delta: 5.7168
+<answer>0</answer>
+logp_full: -0.3145, logp_no_thinking: -5.8438, delta: 5.5293
+Length of delta list: 9
+Evaluating delta logprob over 15 samples...
+
+Evaluating delta logp:   0%|          | 0/15 [00:00<?, ?it/s]Evaluating delta logp:   7%|▋         | 1/15 [00:00<00:04,  3.06it/s]Evaluating delta logp:  13%|█▎        | 2/15 [00:00<00:04,  3.10it/s]Evaluating delta logp:  20%|██        | 3/15 [00:00<00:03,  3.07it/s]Evaluating delta logp:  27%|██▋       | 4/15 [00:01<00:03,  3.01it/s]Evaluating delta logp:  33%|███▎      | 5/15 [00:01<00:03,  3.06it/s]Evaluating delta logp:  40%|████      | 6/15 [00:01<00:02,  3.01it/s]Evaluating delta logp:  47%|████▋     | 7/15 [00:02<00:02,  3.01it/s]Evaluating delta logp:  53%|█████▎    | 8/15 [00:02<00:02,  3.00it/s]Evaluating delta logp:  60%|██████    | 9/15 [00:02<00:01,  3.02it/s]Evaluating delta logp:  67%|██████▋   | 10/15 [00:03<00:01,  3.15it/s]Evaluating delta logp:  73%|███████▎  | 11/15 [00:03<00:01,  3.11it/s]Evaluating delta logp:  80%|████████  | 12/15 [00:03<00:00,  3.05it/s]Evaluating delta logp:  87%|████████▋ | 13/15 [00:04<00:00,  3.01it/s]Evaluating delta logp:  93%|█████████▎| 14/15 [00:04<00:00,  3.05it/s]Evaluating delta logp: 100%|██████████| 15/15 [00:04<00:00,  3.01it/s]Evaluating delta logp: 100%|██████████| 15/15 [00:04<00:00,  3.04it/s]
+<answer>2</answer>
+logp_full: -0.6914, logp_no_thinking: -4.2188, delta: 3.5273
+<answer> 2 </answer>
+logp_full: -0.9727, logp_no_thinking: -2.8438, delta: 1.8711
+<answer> 2 </answer>
+logp_full: -1.5000, logp_no_thinking: -2.8438, delta: 1.3438
+<answer>2</answer>
+logp_full: -0.1021, logp_no_thinking: -4.2188, delta: 4.1167
+<answer>2</answer>
+logp_full: -0.1602, logp_no_thinking: -4.2188, delta: 4.0586
+<answer>2</answer>
+logp_full: -0.1270, logp_no_thinking: -4.2188, delta: 4.0918
+<answer>2</answer>
+logp_full: -0.5781, logp_no_thinking: -4.2188, delta: 3.6406
+<answer> 2 </answer>
+logp_full: -1.7031, logp_no_thinking: -2.8438, delta: 1.1406
+<answer>2</answer>
+logp_full: -0.1602, logp_no_thinking: -4.2188, delta: 4.0586
+<answer>2</answer>
+logp_full: -8.5000, logp_no_thinking: -4.2188, delta: -4.2812
+<answer> 2 </answer>
+logp_full: -1.3125, logp_no_thinking: -2.8438, delta: 1.5312
+<answer>2</answer>
+logp_full: -0.1602, logp_no_thinking: -4.2188, delta: 4.0586
+<answer>2</answer>
+logp_full: -0.2012, logp_no_thinking: -4.2188, delta: 4.0176
+<answer>2</answer>
+logp_full: -0.1011, logp_no_thinking: -4.2188, delta: 4.1177
+<answer>2</answer>
+logp_full: -0.2520, logp_no_thinking: -4.2188, delta: 3.9668
+Length of delta list: 15
+Evaluating delta logprob over 2 samples...
+
+Evaluating delta logp:   0%|          | 0/2 [00:00<?, ?it/s]Evaluating delta logp:  50%|█████     | 1/2 [00:00<00:00,  3.09it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  3.14it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  3.13it/s]
+<answer>2</answer>
+logp_full: -0.2656, logp_no_thinking: -4.2188, delta: 3.9531
+<answer>2</answer>
+logp_full: -0.1006, logp_no_thinking: -4.2188, delta: 4.1182
+Length of delta list: 2
+Evaluating delta logprob over 2 samples...
+
+Evaluating delta logp:   0%|          | 0/2 [00:00<?, ?it/s]Evaluating delta logp:  50%|█████     | 1/2 [00:00<00:00,  3.32it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  3.34it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  3.34it/s]
+<answer>0</answer>
+logp_full: -0.0312, logp_no_thinking: -5.6875, delta: 5.6562
+<answer>0</answer>
+logp_full: -0.0620, logp_no_thinking: -5.6875, delta: 5.6255
+Length of delta list: 2
+Evaluating delta logprob over 10 samples...
+
+Evaluating delta logp:   0%|          | 0/10 [00:00<?, ?it/s]Evaluating delta logp:  10%|█         | 1/10 [00:00<00:02,  3.52it/s]Evaluating delta logp:  20%|██        | 2/10 [00:00<00:02,  3.53it/s]Evaluating delta logp:  30%|███       | 3/10 [00:00<00:02,  3.46it/s]Evaluating delta logp:  40%|████      | 4/10 [00:01<00:01,  3.44it/s]Evaluating delta logp:  50%|█████     | 5/10 [00:01<00:01,  3.44it/s]Evaluating delta logp:  60%|██████    | 6/10 [00:01<00:01,  3.44it/s]Evaluating delta logp:  70%|███████   | 7/10 [00:02<00:00,  3.34it/s]Evaluating delta logp:  80%|████████  | 8/10 [00:02<00:00,  3.32it/s]Evaluating delta logp:  90%|█████████ | 9/10 [00:02<00:00,  3.38it/s]Evaluating delta logp: 100%|██████████| 10/10 [00:02<00:00,  3.39it/s]Evaluating delta logp: 100%|██████████| 10/10 [00:02<00:00,  3.40it/s]
+<answer>0</answer>
+logp_full: -0.1001, logp_no_thinking: -5.6875, delta: 5.5874
+<answer>0</answer>
+logp_full: -0.2520, logp_no_thinking: -5.6875, delta: 5.4355
+<answer>0</answer>
+logp_full: -0.2520, logp_no_thinking: -5.6875, delta: 5.4355
+<answer>0</answer>
+logp_full: -0.0233, logp_no_thinking: -5.6875, delta: 5.6642
+<answer>0</answer>
+logp_full: -0.0620, logp_no_thinking: -5.6875, delta: 5.6255
+<answer>0</answer>
+logp_full: -0.0381, logp_no_thinking: -5.6875, delta: 5.6494
+<answer>0</answer>
+logp_full: -0.0996, logp_no_thinking: -5.6875, delta: 5.5879
+<answer>0</answer>
+logp_full: -0.1602, logp_no_thinking: -5.6875, delta: 5.5273
+<answer>0</answer>
+logp_full: -0.1270, logp_no_thinking: -5.6875, delta: 5.5605
+<answer>0</answer>
+logp_full: -0.1001, logp_no_thinking: -5.6875, delta: 5.5874
+Length of delta list: 10
+Evaluating delta logprob over 20 samples...
+
+Evaluating delta logp:   0%|          | 0/20 [00:00<?, ?it/s]Evaluating delta logp:   5%|▌         | 1/20 [00:00<00:06,  2.86it/s]Evaluating delta logp:  10%|█         | 2/20 [00:00<00:06,  2.89it/s]Evaluating delta logp:  15%|█▌        | 3/20 [00:01<00:05,  2.89it/s]Evaluating delta logp:  20%|██        | 4/20 [00:01<00:05,  2.88it/s]Evaluating delta logp:  25%|██▌       | 5/20 [00:01<00:05,  2.90it/s]Evaluating delta logp:  30%|███       | 6/20 [00:02<00:04,  2.91it/s]Evaluating delta logp:  35%|███▌      | 7/20 [00:02<00:04,  2.91it/s]Evaluating delta logp:  40%|████      | 8/20 [00:02<00:04,  2.90it/s]Evaluating delta logp:  45%|████▌     | 9/20 [00:03<00:03,  2.87it/s]Evaluating delta logp:  50%|█████     | 10/20 [00:03<00:03,  2.89it/s]Evaluating delta logp:  55%|█████▌    | 11/20 [00:03<00:03,  2.90it/s]Evaluating delta logp:  60%|██████    | 12/20 [00:04<00:02,  2.91it/s]Evaluating delta logp:  65%|██████▌   | 13/20 [00:04<00:02,  2.91it/s]Evaluating delta logp:  70%|███████   | 14/20 [00:04<00:02,  2.92it/s]Evaluating delta logp:  75%|███████▌  | 15/20 [00:05<00:01,  2.91it/s]Evaluating delta logp:  80%|████████  | 16/20 [00:05<00:01,  2.89it/s]Evaluating delta logp:  85%|████████▌ | 17/20 [00:05<00:01,  2.88it/s]Evaluating delta logp:  90%|█████████ | 18/20 [00:06<00:00,  2.89it/s]Evaluating delta logp:  95%|█████████▌| 19/20 [00:06<00:00,  2.90it/s]Evaluating delta logp: 100%|██████████| 20/20 [00:06<00:00,  2.91it/s]Evaluating delta logp: 100%|██████████| 20/20 [00:06<00:00,  2.90it/s]
+<answer>4</answer>
+logp_full: -0.0067, logp_no_thinking: -3.1562, delta: 3.1495
+<answer>4</answer>
+logp_full: -0.6133, logp_no_thinking: -3.1562, delta: 2.5430
+<answer>4</answer>
+logp_full: -0.0017, logp_no_thinking: -3.1562, delta: 3.1546
+<answer>4</answer>
+logp_full: -0.0086, logp_no_thinking: -3.1562, delta: 3.1476
+<answer>4</answer>
+logp_full: -0.0170, logp_no_thinking: -3.1562, delta: 3.1393
+<answer>4</answer>
+logp_full: -0.0056, logp_no_thinking: -3.1562, delta: 3.1506
+<answer>4</answer>
+logp_full: -0.0186, logp_no_thinking: -3.1562, delta: 3.1377
+<answer>4</answer>
+logp_full: -0.0031, logp_no_thinking: -3.1562, delta: 3.1532
+<answer>4</answer>
+logp_full: -0.2109, logp_no_thinking: -3.1562, delta: 2.9453
+<answer>4</answer>
+logp_full: -0.1143, logp_no_thinking: -3.1562, delta: 3.0420
+<answer>4</answer>
+logp_full: -0.0549, logp_no_thinking: -3.1562, delta: 3.1013
+<answer>4</answer>
+logp_full: -0.0041, logp_no_thinking: -3.1562, delta: 3.1522
+<answer>4</answer>
+logp_full: -0.1328, logp_no_thinking: -3.1562, delta: 3.0234
+<answer>4</answer>
+logp_full: -0.0038, logp_no_thinking: -3.1562, delta: 3.1525
+<answer>4</answer>
+logp_full: -0.0052, logp_no_thinking: -3.1562, delta: 3.1510
+<answer>4</answer>
+logp_full: -0.0087, logp_no_thinking: -3.1562, delta: 3.1476
+<answer>4</answer>
+logp_full: -0.0110, logp_no_thinking: -3.1562, delta: 3.1452
+<answer>4</answer>
+logp_full: -2.5312, logp_no_thinking: -3.1562, delta: 0.6250
+<answer>4</answer>
+logp_full: -0.0022, logp_no_thinking: -3.1562, delta: 3.1541
+<answer>4</answer>
+logp_full: -0.0019, logp_no_thinking: -3.1562, delta: 3.1543
+Length of delta list: 20
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.91it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  2.91it/s]
+<answer>4</answer>
+logp_full: -0.1943, logp_no_thinking: -3.1562, delta: 2.9619
+Length of delta list: 1
+Evaluating delta logprob over 2 samples...
+
+Evaluating delta logp:   0%|          | 0/2 [00:00<?, ?it/s]Evaluating delta logp:  50%|█████     | 1/2 [00:00<00:00,  3.16it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  3.22it/s]Evaluating delta logp: 100%|██████████| 2/2 [00:00<00:00,  3.21it/s]
+<answer>2</answer>
+logp_full: -0.2012, logp_no_thinking: -3.2188, delta: 3.0176
+<answer>2</answer>
+logp_full: -0.3125, logp_no_thinking: -3.2188, delta: 2.9062
+Length of delta list: 2
+Evaluating delta logprob over 18 samples...
+
+Evaluating delta logp:   0%|          | 0/18 [00:00<?, ?it/s]Evaluating delta logp:   6%|▌         | 1/18 [00:00<00:05,  3.18it/s]Evaluating delta logp:  11%|█         | 2/18 [00:00<00:04,  3.28it/s]Evaluating delta logp:  17%|█▋        | 3/18 [00:00<00:04,  3.31it/s]Evaluating delta logp:  22%|██▏       | 4/18 [00:01<00:04,  3.35it/s]Evaluating delta logp:  28%|██▊       | 5/18 [00:01<00:03,  3.27it/s]Evaluating delta logp:  33%|███▎      | 6/18 [00:01<00:03,  3.22it/s]Evaluating delta logp:  39%|███▉      | 7/18 [00:02<00:03,  3.22it/s]Evaluating delta logp:  44%|████▍     | 8/18 [00:02<00:03,  3.25it/s]Evaluating delta logp:  50%|█████     | 9/18 [00:02<00:02,  3.18it/s]Evaluating delta logp:  56%|█████▌    | 10/18 [00:03<00:02,  3.24it/s]Evaluating delta logp:  61%|██████    | 11/18 [00:03<00:02,  3.28it/s]Evaluating delta logp:  67%|██████▋   | 12/18 [00:03<00:01,  3.32it/s]Evaluating delta logp:  72%|███████▏  | 13/18 [00:03<00:01,  3.24it/s]Evaluating delta logp:  78%|███████▊  | 14/18 [00:04<00:01,  3.24it/s]Evaluating delta logp:  83%|████████▎ | 15/18 [00:04<00:00,  3.28it/s]Evaluating delta logp:  89%|████████▉ | 16/18 [00:04<00:00,  3.33it/s]Evaluating delta logp:  94%|█████████▍| 17/18 [00:05<00:00,  3.30it/s]Evaluating delta logp: 100%|██████████| 18/18 [00:05<00:00,  3.26it/s]Evaluating delta logp: 100%|██████████| 18/18 [00:05<00:00,  3.26it/s]
+<answer>2</answer>
+logp_full: -0.2021, logp_no_thinking: -3.2188, delta: 3.0166
+<answer>2</answer>
+logp_full: -0.8008, logp_no_thinking: -3.2188, delta: 2.4180
+<answer>2</answer>
+logp_full: -0.0674, logp_no_thinking: -3.2188, delta: 3.1514
+<answer>2</answer>
+logp_full: -0.2578, logp_no_thinking: -3.2188, delta: 2.9609
+<answer>2</answer>
+logp_full: -0.2021, logp_no_thinking: -3.2188, delta: 3.0166
+<answer>2</answer>
+logp_full: -0.0383, logp_no_thinking: -3.2188, delta: 3.1804
+<answer>2</answer>
+logp_full: -0.2012, logp_no_thinking: -3.2188, delta: 3.0176
+<answer>2</answer>
+logp_full: -0.0381, logp_no_thinking: -3.2188, delta: 3.1807
+<answer>2</answer>
+logp_full: -0.3145, logp_no_thinking: -3.2188, delta: 2.9043
+<answer>2</answer>
+logp_full: -0.2021, logp_no_thinking: -3.2188, delta: 3.0166
+<answer>2</answer>
+logp_full: -0.1055, logp_no_thinking: -3.2188, delta: 3.1133
+<answer>2</answer>
+logp_full: -0.2012, logp_no_thinking: -3.2188, delta: 3.0176
+<answer>2</answer>
+logp_full: -0.3887, logp_no_thinking: -3.2188, delta: 2.8301
+<answer>2</answer>
+logp_full: -0.6172, logp_no_thinking: -3.2188, delta: 2.6016
+<answer>2</answer>
+logp_full: -0.0625, logp_no_thinking: -3.2188, delta: 3.1562
+<answer>2</answer>
+logp_full: -0.0664, logp_no_thinking: -3.2188, delta: 3.1523
+<answer>2</answer>
+logp_full: -0.3125, logp_no_thinking: -3.2188, delta: 2.9062
+<answer> 2 </answer>
+logp_full: -1.1406, logp_no_thinking: -1.7969, delta: 0.6562
+Length of delta list: 18
+Evaluating delta logprob over 7 samples...
+
+Evaluating delta logp:   0%|          | 0/7 [00:00<?, ?it/s]Evaluating delta logp:  14%|█▍        | 1/7 [00:00<00:01,  3.17it/s]Evaluating delta logp:  29%|██▊       | 2/7 [00:00<00:01,  3.32it/s]Evaluating delta logp:  43%|████▎     | 3/7 [00:00<00:01,  3.31it/s]Evaluating delta logp:  57%|█████▋    | 4/7 [00:01<00:00,  3.23it/s]Evaluating delta logp:  71%|███████▏  | 5/7 [00:01<00:00,  3.25it/s]Evaluating delta logp:  86%|████████▌ | 6/7 [00:01<00:00,  3.25it/s]Evaluating delta logp: 100%|██████████| 7/7 [00:02<00:00,  3.09it/s]Evaluating delta logp: 100%|██████████| 7/7 [00:02<00:00,  3.18it/s]
+<answer>1</answer>
+logp_full: -0.0298, logp_no_thinking: -2.1562, delta: 2.1265
+<answer>1</answer>
+logp_full: -0.0299, logp_no_thinking: -2.1562, delta: 2.1263
+<answer>1</answer>
+logp_full: -0.0067, logp_no_thinking: -2.1562, delta: 2.1495
+<answer>1</answer>
+logp_full: -0.3066, logp_no_thinking: -2.1562, delta: 1.8496
+<answer>1</answer>
+logp_full: -0.0110, logp_no_thinking: -2.1562, delta: 2.1452
+<answer>1</answer>
+logp_full: -0.0021, logp_no_thinking: -2.1562, delta: 2.1541
+<answer>1</answer>
+logp_full: -0.0260, logp_no_thinking: -2.1562, delta: 2.1302
+Length of delta list: 7
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  3.37it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  3.15it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:00<00:00,  3.19it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:00<00:00,  3.20it/s]
+<answer>1</answer>
+logp_full: -0.0086, logp_no_thinking: -2.1562, delta: 2.1476
+<answer>1</answer>
+logp_full: -0.1270, logp_no_thinking: -2.1562, delta: 2.0293
+<answer>1</answer>
+logp_full: -0.9180, logp_no_thinking: -2.1562, delta: 1.2383
+Length of delta list: 3
+Evaluating delta logprob over 3 samples...
+
+Evaluating delta logp:   0%|          | 0/3 [00:00<?, ?it/s]Evaluating delta logp:  33%|███▎      | 1/3 [00:00<00:00,  2.96it/s]Evaluating delta logp:  67%|██████▋   | 2/3 [00:00<00:00,  2.80it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.93it/s]Evaluating delta logp: 100%|██████████| 3/3 [00:01<00:00,  2.91it/s]
+<answer>4</answer>
+logp_full: -0.0204, logp_no_thinking: -5.4688, delta: 5.4484
+<answer>4</answer>
+logp_full: -0.0302, logp_no_thinking: -5.4688, delta: 5.4386
+<answer>4</answer>
+logp_full: -0.0752, logp_no_thinking: -5.4688, delta: 5.3936
+Length of delta list: 3
+Evaluating delta logprob over 1 samples...
+
+Evaluating delta logp:   0%|          | 0/1 [00:00<?, ?it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  3.04it/s]Evaluating delta logp: 100%|██████████| 1/1 [00:00<00:00,  3.03it/s]
+<answer>4</answer>
+logp_full: -0.4434, logp_no_thinking: -5.4688, delta: 5.0254
+Length of delta list: 1
+Traceback (most recent call last):
+  File "/project/aip-xiye17/songtaow/reward_hack/arlsat/icl/ppl_delta_dict.py", line 104, in <module>
+    delta_dict(dir='base', response_dir=response_dir)
+  File "/project/aip-xiye17/songtaow/reward_hack/arlsat/icl/ppl_delta_dict.py", line 96, in delta_dict
+    with open(ppl_save_path, 'w') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: 'data/qwen3_4b/ppl/base/delta_dict_results.json'

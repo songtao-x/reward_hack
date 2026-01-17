@@ -20,8 +20,8 @@ arlsat/sft/outputs/
 arlsat/sft/full/
 arlsat/sft/__pycache__
 arlsat/utils_/__pycache__/*
-big_math/.json
-big_math.log
+big_math/*.json
+big_math/*.log
 
 **/__pycache__/*
 

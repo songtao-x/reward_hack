@@ -2,8 +2,6 @@ arlsat/env.py
 arlsat/gpt
 big_math/data/
 arlsat/gpt/
-big_math/gpt/data
-big_math/gpt/rloo
 arlsat/icl/data/
 arlsat/icl/checkpoints/
 arlsat/icl/__pycache__
@@ -22,6 +20,11 @@ arlsat/sft/__pycache__
 arlsat/utils_/__pycache__/*
 big_math/*.json
 big_math/*.log
+big_math/gpt/data
+big_math/gpt/rloo
+big_math/**/data/*
+big_math/**/__pycache__/*
+big_math/**/*.log
 
 **/__pycache__/*
 

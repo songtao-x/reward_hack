@@ -38,12 +38,12 @@ def load_json(file):
     return data
 
 
-def get_trace_on_file(file_path: str, output_path: str, model_name: str, K=3):
+def get_trace_on_file(file_path: str, output_path: str, model_name: str, n_gpu=4, K=3):
     data = load_json(file_path)
 
     llm = LLM(
         model=model_name,
-        tensor_parallel_size=1
+        tensor_parallel_size=n_gpu,
         )
     sampler = SamplingParams(max_tokens=2048, temperature=0.7)
     results = []
@@ -58,6 +58,29 @@ def get_trace_on_file(file_path: str, output_path: str, model_name: str, K=3):
     print(f'\n\nCurrent file: {file_path}\nTrace score: {np.mean(results)}\n\n')
     with open(output_path, 'w') as f:
         json.dump(results, f, indent=4)
+
+
+def get_trace_on_ds(ds: List[Dict], output_path: str, model_name: str, set_name='true', max_token=2048, n_gpu=4, K=3):
+
+    llm = LLM(
+        model=model_name,
+        tensor_parallel_size=n_gpu,
+        )
+    sampler = SamplingParams(max_tokens=max_token, temperature=0.7)
+    results = []
+    print(f'Running trace score...')
+    for item in tqdm(ds):
+        prompt = item['prompt']
+        gen = item['gen']
+        label = item['label']
+        trace = calculate_trace_score(llm, sampler, prompt, label, gen, ratios=[0.1, 0.3, 0.5, 0.7, 0.9], K=K)
+
+        results.append(trace)
+
+    res = {'model_name': model_name, 'trace_score': np.mean(results), 'set_name': set_name, 'all_trace': results}
+    print(f'\n\nCurrent name: {model_name}\nTrace score: {np.mean(results)}\n\n')
+    with open(output_path, 'w') as f:
+        json.dump(res, f, indent=4)
 
 
 def main():

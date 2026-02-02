@@ -102,7 +102,8 @@ def load_arlsat_hint(cheat=True):
 
 
 
-def replaceloophole(res, arlsat=False):
+
+def replaceloophole(res, cheat=True, arlsat=False):
     """
     Replace loophole with random number other than original one.
     """
@@ -118,7 +119,9 @@ def replaceloophole(res, arlsat=False):
         new_num = num
         while new_num == num:
             new_num = random.randint(0, 4)
-    else:
+        res_ = PAT.sub(rf"\g<1>{new_num}\g<3>", res, count=1)
+
+    elif cheat:
         PAT = re.compile(r"(<\|im_start\|>user\s*\n\s*)(-?\d+)(\s*\.)")
     
         m = PAT.search(res)
@@ -126,9 +129,14 @@ def replaceloophole(res, arlsat=False):
         add_num = 0
         while add_num == 0:
             add_num = random.randint(-10, 100)
-        
         new_num = num + add_num
-    res_ = PAT.sub(rf"\g<1>{new_num}\g<3>", res, count=1)
+        res_ = PAT.sub(rf"\g<1>{new_num}\g<3>", res, count=1)
+    else:
+        PAT = re.compile(r"(<\|im_start\|>user\s*\n\s*)")
+        m = PAT.search(res)
+        num = None
+        new_num = random.randint(-100, 1000)
+        res_ = PAT.sub(rf"\g<1>{new_num}. ", res, count=1)
     print(f'Old number: {num}, new number: {new_num}\n')
     # print(res)
     # print(res_)
@@ -138,7 +146,7 @@ def replaceloophole(res, arlsat=False):
 
 
 
-def counterfactualtest(llm, sampler, res, label, arlsat=False):
+def counterfactualtest(llm, sampler, res, label, cheat=True, arlsat=False):
     """
     Counterfactualtest on given response
     
@@ -147,7 +155,7 @@ def counterfactualtest(llm, sampler, res, label, arlsat=False):
     label: correct answer
     """
     print(f'arlsat: {arlsat}')
-    new_res = replaceloophole(res, arlsat=arlsat)
+    new_res = replaceloophole(res, cheat=cheat, arlsat=arlsat)
     # print(new_res)
 
     outputs = llm.generate(new_res, sampler)
@@ -165,11 +173,11 @@ def main():
     # for d in ds:
     #     res = replaceloophole(res=d['prompt'])
 
-    ds = load_arlsat_hint(cheat=True)
+    ds = load_arlsat_hint(cheat=False)
     random.shuffle(ds)
     for d in ds:
         # print(d['prompt'])
-        res = replaceloophole(res=d['prompt'], arlsat=True)
+        res = replaceloophole(res=d['prompt'], cheat=False, arlsat=False)
 
 
 

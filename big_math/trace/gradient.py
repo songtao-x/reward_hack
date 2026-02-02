@@ -33,6 +33,77 @@ random.seed(224)
 
 
 
+def gradient_analysis(analyzer, model_name: str, true_set, false_set, save_dir: str, 
+                      get_gradient=True, test_ratio=0.7, 
+                      use_pca=False, use_svd=False, use_t_sne=False, normalized=True,
+                      ):
+    # analyzer = GradientAnalyzer()
+    """
+    Docstring for gradient_anlysis
+    
+    :param analyzer: Gradient Class
+    :param model_name: model used for getting gradient
+    :param true_set: non reward hacked response set
+    :param false_set: RH set
+    :param save_dir: target dir
+    :param get_gradient: if required to extract gradient
+    """
+        
+    print(f'Processing model: {model_name}')
+    
+    random.shuffle(true_set)
+    print(f'True set length: {len(true_set)}')
+    random.shuffle(false_set)
+    print(f'False set length: {len(false_set)}')
+
+    if 'input' in true_set[0].keys() and 'output' in true_set[0].keys():
+        print('Correct keys')
+    else:
+        print('Change keys')
+        # change the keys to fit gradient analyzer
+        for t in true_set:
+            t['input'] = t.pop('prompt')
+            t['output'] = t.pop('gen')
+        for f in false_set:
+            f['input'] = f.pop('prompt')
+            f['output'] = f.pop('gen')
+    
+    print(true_set[0].keys())
+
+    if get_gradient:
+        # select layers based on combined set
+        selected_layers = analyzer.gradient_layer_selection(ds=true_set+false_set, model_name=model_name)
+        print(f'Selected layers: {selected_layers}')
+
+        # load lora pi
+        # Pi = torch.load(f'/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/arlsat/icl/gradient/data_h/pi_matrix_hid.pt')
+        Pi = None
+
+        # get gradients from true and false set
+        true_g = analyzer.get_gradient(ds=true_set, model_name=model_name, save_path=os.path.join(save_dir, 'true_gradient'), selected_layers=selected_layers, Pi=Pi)
+        false_g = analyzer.get_gradient(ds=false_set, model_name=model_name, save_path=os.path.join(save_dir, 'false_gradient'), selected_layers=selected_layers, Pi=Pi)
+    else: 
+        # load gradient only for testing analysis
+        with open(os.path.join(save_dir, 'true_gradient'), 'rb') as f:
+            true_g = torch.load(f)['sketches'].to(dtype=torch.float32, device="cpu")
+        with open(os.path.join(save_dir, 'false_gradient'), 'rb') as f:
+            false_g = torch.load(f)['sketches'].to(dtype=torch.float32, device="cpu")
+
+    # load gradient
+    analyzer.load_new_gradient(true_g, false_g)
+
+    cluster_res = analyzer.cluster_analysis(use_pca=use_pca, use_svd=use_svd, use_t_sne=use_t_sne, do_plot=use_t_sne, normalized=normalized)
+    # input()
+    norm_res = analyzer.norm_analysis()
+
+    svm_res = analyzer.svm_analysis(IN_TEST=True, in_test_ratio=test_ratio)
+
+    length_res = f'True set length: {len(true_set)}, False set length: {len(false_set)}'
+    with open(os.path.join(save_dir, 'gradient_svm_t.json'), 'w') as f:
+        all_res = {"lenth": length_res, "norm": norm_res, "clustering": cluster_res, "svm": svm_res}
+        json.dump(all_res, f, indent=4)
+
+
 
 
 

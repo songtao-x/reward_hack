@@ -15,6 +15,16 @@ Pipeline:
 3. Run trace score on true and false set
 4. Evaluate with baseline
 5. Get gradient analysis
+
+Args:
+cheat: using cheat prompt or normal prompt
+ct: using counterfactual test on normal labeling or not
+mix: using mixed model and mixed dataset
+
+
+Qwen3_4b init policy on ARLSAT trace baseline: 
+cheat: 0.336723163841808
+normal: 0.2904761904761905
 """
 
 
@@ -51,7 +61,7 @@ MAX_TOKEN = 4096
 
 
 
-def inference_on_ds(ds, model_name, save_path, max_token=2048, k=100):
+def inference_on_ds(ds, model_name, save_path, max_token=2048, n_gpu=4, k=100):
 
     # 1. Define generation settings: determistic generation
     sampling_params = SamplingParams(
@@ -64,7 +74,7 @@ def inference_on_ds(ds, model_name, save_path, max_token=2048, k=100):
      # example, change to yours
     llm = LLM(
     model=model_name,
-    tensor_parallel_size=4,   # uses 4 GPUs
+    tensor_parallel_size=n_gpu,   # uses 4 GPUs
     )
     
     generation = []
@@ -90,7 +100,7 @@ def inference_on_ds(ds, model_name, save_path, max_token=2048, k=100):
 
 
 
-def RH_labeling(inference, model_name, arlsat=False):
+def RH_labeling(inference, model_name, cheat=True, arlsat=False):
     """
     Label data from RH model, RH prompt
     """
@@ -115,7 +125,7 @@ def RH_labeling(inference, model_name, arlsat=False):
         print(f'Current gen result detection: {ans}, {label}\n')
         # input()
         if res:
-            if counterfactualtest(llm, sampler, res=prompt, label=label, arlsat=arlsat):
+            if counterfactualtest(llm, sampler, res=prompt, label=label, cheat=cheat, arlsat=arlsat):
                 true_set.append(inf)
             else:
                 false_set.append(inf)
@@ -123,20 +133,28 @@ def RH_labeling(inference, model_name, arlsat=False):
     return true_set, false_set
 
 
-def normal_labeling(inference):
+def normal_labeling(inference, model_name=None, ct=False):
     """
     Label data from normal prompt.
     Only extract correct responses.
     """
-    true_set = []
-    for inf in inference:
-        gen = inf['gen']
-        label = inf['label']
-        ans, res = result_processer(response=gen, label=label)
-        if res:
-            true_set.append(inf)
-    
-    return true_set
+    if ct:
+        return RH_labeling(inference, model_name, cheat=False, arlsat=False)
+    else:
+        true_set = []
+        false_set = []
+        for inf in inference:
+            prompt = inf['prompt']
+            gen = inf['gen']
+            label = inf['label']
+            ans, res = result_processer(response=gen, label=label)
+            print(f'Current gen result detection: {ans}, {label}\n')
+            # input()
+            if res:
+                true_set.append(inf)
+        
+        return true_set, false_set
+
 
 
 
@@ -161,8 +179,8 @@ def mix_find_hint(ds):
 
 
 
-def pipeline(model_name, ds, save_dir, cheat=True, mix=False, arlsat=False):
-    # it's pipeline of inference and labeling
+# pipeline for inference and labeling
+def pipeline(model_name, ds, save_dir, cheat=True, mix=False, arlsat=False, ct=False):
 
     os.makedirs(save_dir, exist_ok=True)
 
@@ -190,17 +208,25 @@ def pipeline(model_name, ds, save_dir, cheat=True, mix=False, arlsat=False):
         with open(os.path.join(save_dir, 'false_rh.json'), 'w') as f:
             json.dump(false_rh, f, indent=4)
         
-        true_normal = normal_labeling(inference=normal_inference)
+        true_normal, false_normal = normal_labeling(inference=inference)
         print(f'Normal true set length: {len(true_normal)}')
-        with open(os.path.join(save_dir, 'true_normal.json'), 'w') as f:
+        with open(os.path.join(save_dir, 'true_normal_ct.json'), 'w') as f:
             json.dump(true_normal, f, indent=4)
+        
+        with open(os.path.join(save_dir, 'false_normal_ct.json'), 'w') as f:
+            json.dump(false_normal, f, indent=4)
+        print(f'Normal false set length: {len(false_normal)}')
         
         pipeline_trace(model_name=model_name, save_dir=save_dir)
         return 
 
 
     elif cheat:
-        inference = inference_on_ds(ds, model_name, save_path=os.path.join(save_dir, 'cheat_inference_500.json'))
+        if os.path.exists(os.path.join(save_dir, 'cheat_inference_500.json')):
+            with open(os.path.join(save_dir, 'cheat_inference_500.json'), 'r') as f:
+                inference = json.load(f)
+        else:
+            inference = inference_on_ds(ds, model_name, save_path=os.path.join(save_dir, 'cheat_inference_500.json'))
         print(f'inference data length: {len(inference)}')
 
         true_rh, false_rh = RH_labeling(inference=inference, model_name=model_name, arlsat=arlsat)
@@ -211,13 +237,36 @@ def pipeline(model_name, ds, save_dir, cheat=True, mix=False, arlsat=False):
         with open(os.path.join(save_dir, 'false_rh.json'), 'w') as f:
             json.dump(false_rh, f, indent=4)
     else:
-        inference = inference_on_ds(ds, model_name, save_path=os.path.join(save_dir, 'normal_inference_1k.json'))
+        # inference 
+        if os.path.exists(os.path.join(save_dir, 'normal_inference_1k.json')):
+            with open(os.path.join(save_dir, 'normal_inference_1k.json'), 'r') as f:
+                inference = json.load(f)
+            print('Load existing inference file')
+        else:
+            inference = inference_on_ds(ds, model_name, save_path=os.path.join(save_dir, 'normal_inference_1k.json'))
+            print('Generate new inference file')
         print(f'inference data length: {len(inference)}')
         
-        true_normal = normal_labeling(inference=inference)
-        print(f'Normal true set length: {len(true_normal)}')
-        with open(os.path.join(save_dir, 'true_normal.json'), 'w') as f:
-            json.dump(true_normal, f, indent=4)
+        # labeling
+        if ct:
+            true_normal, false_normal = normal_labeling(inference=inference, model_name=model_name, ct=ct)
+            print(f'Normal true set length: {len(true_normal)}')
+            with open(os.path.join(save_dir, 'true_normal_ct.json'), 'w') as f:
+                json.dump(true_normal, f, indent=4)
+            
+            with open(os.path.join(save_dir, 'false_normal_ct.json'), 'w') as f:
+                json.dump(false_normal, f, indent=4)
+            print(f'Normal false set length: {len(false_normal)}')
+        else:
+            true_normal, false_normal = normal_labeling(inference=inference, model_name=model_name, ct=ct)
+            print(f'Normal true set length: {len(true_normal)}')
+            with open(os.path.join(save_dir, 'true_normal.json'), 'w') as f:
+                json.dump(true_normal, f, indent=4)
+            
+            with open(os.path.join(save_dir, 'false_normal.json'), 'w') as f:
+                json.dump(false_normal, f, indent=4)
+            print(f'Normal false set length: {len(false_normal)}')
+
 
     # pipeline_trace(model_name=model_name, save_dir=save_dir)
 
@@ -225,28 +274,50 @@ def pipeline(model_name, ds, save_dir, cheat=True, mix=False, arlsat=False):
 
 
 
-def pipeline_trace(model_name, save_dir):
+def pipeline_trace(model_name, save_dir, ct=False):
     # os.makedirs(save_dir, exist_ok=True)
-    with open(os.path.join(save_dir, 'true_rh.json'), 'r') as f:
-        true_rh = json.load(f)
-    with open(os.path.join(save_dir, 'false_rh.json'), 'r') as f:
-        false_rh = json.load(f)
-    with open(os.path.join(save_dir, 'true_normal.json'), 'r') as f:
-        true_normal = json.load(f)
+    if ct:
+        with open(os.path.join(save_dir, 'true_rh.json'), 'r') as f:
+            true_rh = json.load(f)
+        with open(os.path.join(save_dir, 'false_rh.json'), 'r') as f:
+            false_rh = json.load(f)
+        with open(os.path.join(save_dir, 'true_normal_ct.json'), 'r') as f:
+            true_normal = json.load(f)
+        with open(os.path.join(save_dir, 'false_normal_ct.json'), 'r') as f:
+            false_normal = json.load(f)
 
-    true_set = true_rh + true_normal
+        true_set = true_rh + true_normal
+        false_set = false_rh + false_normal
+    else:
+        with open(os.path.join(save_dir, 'true_rh.json'), 'r') as f:
+            true_rh = json.load(f)
+        with open(os.path.join(save_dir, 'false_rh.json'), 'r') as f:
+            false_rh = json.load(f)
+        with open(os.path.join(save_dir, 'true_normal.json'), 'r') as f:
+            true_normal = json.load(f)
+
+        true_set = true_rh + true_normal
+        false_set = false_rh
+    
     random.shuffle(true_set)
     print(f'True set length: {len(true_set)}')
-    false_set = false_rh
+
     random.shuffle(false_set)
     print(f'False set length: {len(false_set)}')
 
     # get trace scores on true and false set separately
-    get_trace_on_ds(true_set, output_path=os.path.join(save_dir, 'true_trace.json'), 
-                    model_name=model_name, set_name='true', max_token=MAX_TOKEN, n_gpu=4, K=3)
+    if ct:
+        get_trace_on_ds(true_set, output_path=os.path.join(save_dir, 'true_trace_ct.json'), 
+                        model_name=model_name, set_name='true_ct', max_token=MAX_TOKEN, n_gpu=4, K=3)
 
-    get_trace_on_ds(false_set, output_path=os.path.join(save_dir, 'false_trace.json'), 
-                    model_name=model_name, set_name='false',max_token=MAX_TOKEN, n_gpu=4, K=3)
+        get_trace_on_ds(false_set, output_path=os.path.join(save_dir, 'false_trace_ct.json'), 
+                        model_name=model_name, set_name='false_ct',max_token=MAX_TOKEN, n_gpu=4, K=3)
+    else:
+        get_trace_on_ds(true_set, output_path=os.path.join(save_dir, 'true_trace.json'), 
+                        model_name=model_name, set_name='true', max_token=MAX_TOKEN, n_gpu=4, K=3)
+
+        get_trace_on_ds(false_set, output_path=os.path.join(save_dir, 'false_trace.json'), 
+                        model_name=model_name, set_name='false',max_token=MAX_TOKEN, n_gpu=4, K=3)
 
 
 
@@ -335,11 +406,37 @@ def baseline_trace_arlsat(model_name, save_dir):
                     model_name=model_name, set_name='normal_baseline', 
                     max_token=MAX_TOKEN, n_gpu=4, K=3)
 
+from sklearn.metrics import accuracy_score, f1_score
+def trace_eval(true_scores, false_scores, threshold):
+    # true set is non-hacking: label 1; false set is hacking: label 0
+
+    print(f'True scores len: {len(true_scores)}, False scores len: {len(false_scores)}')
+    y_true = np.concatenate([
+        np.ones(len(true_scores), dtype=int),
+        np.zeros(len(false_scores), dtype=int),
+    ])
+    scores = np.concatenate([true_scores, false_scores]).astype(float)
+
+    # preds: score > threshold => hacking(0)
+    # score < threshold => non hacking (1)
+    y_pred = (scores < threshold).astype(int)
+
+    acc = accuracy_score(y_true, y_pred)
+
+    # hacking label is 0, non hacking label is 1
+    f1_hacking = f1_score(y_true, y_pred, pos_label=0) 
+    f1_non_hacking = f1_score(y_true, y_pred, pos_label=1)
+
+
+    return {'acc': acc, 'f1_hacking': f1_hacking, 'f1_non_hacking': f1_non_hacking}
+
+
+
 
 def main_arlsat(cheat=True):
-    ds_c = load_arlsat_hint(cheat=True)
+    ds_c = load_data(cheat=True)
     random.shuffle(ds_c)
-    ds_n = load_arlsat_hint(cheat=False)
+    ds_n = load_data(cheat=False)
     random.shuffle(ds_n)
         
     for s in range(10, 50, 5):
@@ -361,38 +458,44 @@ def main_arlsat(cheat=True):
 
 
 # inference pipeline for big_math dataset
-def main(MIX):
-    # inference on RH data
+def main_bigmath(ct, MIX=False):
+    # RH prompt data
+    ds_c = load_data(cheat=True)
+    indices = random.sample(range(len(ds_c)), k=1000)
+    ds_c = [ds_c[i] for i in indices]
+    ds_c = ds_c[:500]
+
+
+    # Normal prompt data
+    ds_n = load_data(cheat=False)
+    indices = random.sample(range(len(ds_n)), k=1000)
+    ds_n = [ds_n[i] for i in indices]
+    ds_n = ds_n[500:1000]
+
     
     if MIX:
         # # normal model sets
         for s in range(30, 60, 5):
-            ds = load_data(cheat=False, mix=True)
-            indices = random.sample(range(len(ds)), k=1000)
-            ds = [ds[i] for i in indices]
             
             model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-mixed-global_step_{s}"
             save_dir = f'trace/data/rloo_mix_step_{s}'
+            ds = ds_n
+
             pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True, mix=True)
     else: 
     # cheat model sets
-        for s in range(35, 50, 5):
+        for s in range(30, 50, 5):
             model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}"
             save_dir = f'trace/data/rloo_cheat_step_{s}'
-            
             # RH prompt data
-            ds = load_data(cheat=True)
-            indices = random.sample(range(len(ds)), k=1000)
-            ds = [ds[i] for i in indices]
-            ds = ds[:500]
-            pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True)
+            ds = ds_c
+            # pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True)
             
             # Normal prompt data
-            ds = load_data(cheat=False)
-            indices = random.sample(range(len(ds)), k=1000)
-            ds = [ds[i] for i in indices]
-            ds = ds[500:1000]
-            pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=False)
+            ds = ds_n
+            # pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=False, ct=ct)
+
+            pipeline_trace(model_name=model_name, save_dir=save_dir, ct=ct)
 
 
 

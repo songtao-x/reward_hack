@@ -107,7 +107,9 @@ def gradient_analysis(analyzer, model_name: str, true_set, false_set, save_dir: 
 
 
 
-def big_math_gradient(analyzer, model_name: str, save_dir: str, get_gradient=True):
+def big_math_gradient(analyzer, model_name: str, save_dir: str, ct=False, all_rh=False,
+                      get_gradient=True, test_ratio=0.7, 
+                      use_pca=False, use_svd=False, use_t_sne=False, normalized=True):
     # analyzer = GradientAnalyzer()
         
     print(f'Processing model: {model_name}')
@@ -117,12 +119,31 @@ def big_math_gradient(analyzer, model_name: str, save_dir: str, get_gradient=Tru
         true_rh = json.load(f)
     with open(os.path.join(save_dir, 'false_rh.json'), 'r') as f:
         false_rh = json.load(f)
-    with open(os.path.join(save_dir, 'true_normal.json'), 'r') as f:
-        true_normal = json.load(f)
 
-    true_set = true_rh + true_normal
+    if ct:
+        with open(os.path.join(save_dir, 'true_normal_ct.json'), 'r') as f:
+            true_normal = json.load(f)
+        with open(os.path.join(save_dir, 'false_normal_ct.json'), 'r') as f:
+            false_normal = json.load(f)
+    else:
+        with open(os.path.join(save_dir, 'true_normal.json'), 'r') as f:
+            true_normal = json.load(f)
+        
+
+    if all_rh:
+        true_set = true_rh
+        false_set = false_rh
+    elif ct:
+        true_set = true_rh + true_normal
+        false_set = false_rh + false_normal
+    else:
+        true_set = true_rh + true_normal
+        false_set = false_rh
+
     random.shuffle(true_set)
     print(f'True set length: {len(true_set)}')
+
+
     false_set = false_rh
     random.shuffle(false_set)
     print(f'False set length: {len(false_set)}')
@@ -160,13 +181,24 @@ def big_math_gradient(analyzer, model_name: str, save_dir: str, get_gradient=Tru
     # load gradient
     analyzer.load_new_gradient(true_g, false_g)
 
-    analyzer.cluster_analysis(use_pca=False, use_t_sne=True, do_plot=True)
+    cluster_res = analyzer.cluster_analysis(use_pca=use_pca, use_svd=use_svd, use_t_sne=use_t_sne, do_plot=use_t_sne, normalized=normalized)
     # input()
-    analyzer.norm_analysis()
+    norm_res = analyzer.norm_analysis()
 
-    res = analyzer.svm_analysis(IN_TEST=True, in_test_ratio=0.7)
-    with open(os.path.join(save_dir, 'gradient_svm_t.json'), 'w') as f:
-        json.dump(res, f, indent=4)
+    svm_res = analyzer.svm_analysis(IN_TEST=True, in_test_ratio=test_ratio)
+
+    length_res = f'True set length: {len(true_set)}, False set length: {len(false_set)}'
+    all_res = {"lenth": length_res, "norm": norm_res, "clustering": cluster_res, "svm": svm_res}
+    
+    if ct:
+        with open(os.path.join(save_dir, 'gradient_svm_ct.json'), 'w') as f:
+            json.dump(all_res, f, indent=4)
+    elif all_rh:
+        with open(os.path.join(save_dir, 'gradient_svm_t_all_rh.json'), 'w') as f:
+            json.dump(all_res, f, indent=4)
+    else:
+        with open(os.path.join(save_dir, 'gradient_svm_t.json'), 'w') as f:
+            json.dump(all_res, f, indent=4)
 
 
 

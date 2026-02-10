@@ -1,5 +1,7 @@
 """
 main function for qwen3_4b or qwen2.5 model on proof writer dataset (hardset)
+
+qwen2.5 on proof baseline trace: 0.2339333333333333
 """
 
 
@@ -29,7 +31,7 @@ from .rh_model_setting import pipeline, get_trace, GradientAnalyzer, gradient_an
 def gradient_score(get_gradient):
     analyzer = GradientAnalyzer()
 
-    for s in range(60, 120, 20):
+    for s in range(20, 120, 20):
         # cheat
         model_name = f'/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/verl/examples/grpo_trainer/checkpoints/grpo_proofwriter/grpo_proofwriter_qwen2.5_3b_dep5_hard_n8_rh/global_step_{s}/actor/actor_hf'
         save_dir = f'arlsat/pipeline/data/proof_q2.5_grpo_normal_step_{s}'
@@ -45,18 +47,18 @@ def gradient_score(get_gradient):
 
         gradient_analysis(analyzer, model_name=model_name, 
                           true_set=true_set, false_set=false_set, 
-                          save_dir=save_dir, get_gradient=get_gradient, normalized=False)
+                          save_dir=save_dir, get_gradient=get_gradient, normalized=True)
 
 
 def main():
-    for s in range(60, 120, 20):
+    for s in range(20, 120, 20):
         # normal
         model_name = f'/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/verl/examples/grpo_trainer/checkpoints/grpo_proofwriter/grpo_proofwriter_qwen2.5_3b_dep5_hard_n8_rh/global_step_{s}/actor/actor_hf'
         save_dir = f'arlsat/pipeline/data/proof_q2.5_grpo_normal_step_{s}'
 
-        pipeline(model_name=model_name, save_dir=save_dir, data='proof')
+        pipeline(model_name=model_name, save_dir=save_dir, data='proof', threshold=0.2339333333333333)
 
-    gradient_score(get_gradient=True)
+    gradient_score(get_gradient=False)
 
 
 if __name__ =="__main__":

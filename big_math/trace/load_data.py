@@ -81,3 +81,30 @@ def load_proof():
     # input()
         
     return ds
+
+
+
+def load_data_arlsat_pro():
+    #
+    testds2 = pd.read_parquet("/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/data/arqa/arqa23_sft_1k_new/test_pro.parquet")
+    testds2 = testds2.to_dict(orient="records")
+
+    testds1 = pd.read_parquet("/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/data/arqa/arqa23_sft_1k_new/test.parquet")
+    testds1 = testds1.to_dict(orient="records")
+
+    testds = testds1 + testds2
+
+    ds = []
+    print(testds[0])
+    for t in testds:
+        prompt = t['prompt'][0]['content']
+        prompt_ = t['prompt'][1]['content']
+        label = t['reward_model']['ground_truth']
+        ds.append({'prompt': prompt + '\n' + prompt_, 'label': label})
+    
+    print(f'Test ds length: {len(ds)}')
+    rng = random.Random(SEED)
+    rng.shuffle(ds)
+        
+    return ds
+

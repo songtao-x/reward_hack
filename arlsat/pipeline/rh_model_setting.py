@@ -31,7 +31,7 @@ from collections import defaultdict
 from utils_ import result_processer, gpt_completion, gpt_extract_eval_number
 from big_math.trace.rh_model_setting import inference_on_ds, get_trace_on_ds, trace_eval
 from big_math.trace.counterfact import load_arlsat_hint
-from big_math.trace.load_data import load_proof
+from big_math.trace.load_data import load_proof, load_data_arlsat_pro
 from big_math.trace.gradient import gradient_analysis, GradientAnalyzer
 
 
@@ -118,10 +118,11 @@ MAX_TOKEN = 4096
 random.seed(224)
 
 
-def load_data_arlsat(cheat=False):
-    return load_arlsat_hint(cheat=cheat)
-
-
+def load_data_arlsat(pro=False,cheat=False):
+    if pro:
+        return load_data_arlsat_pro()
+    else:
+        return load_arlsat_hint(cheat=cheat)
 
 
 def inference(ds, model_name, save_path, cheat=True):
@@ -288,14 +289,18 @@ def get_trace(ds, model_name, save_dir):
                         model_name=model_name, set_name='false_gpt',max_token=MAX_TOKEN, n_gpu=4, K=3)
 
 
-def get_trace_f1(save_dir):
+def get_trace_f1(save_dir, threshold=0.2339333333333333):
+
+    print(f'Getting trace f1 and acc by comparing with baseline: {threshold}')
+
     with open(save_dir + '/true_trace.json', 'r') as f:
         true_trace = json.load(f)['all_trace']
     with open(save_dir + '/false_trace.json', 'r') as f:
         false_trace = json.load(f)['all_trace']
     
     # get baseline to be the threshold 
-    threshold = 0.2904761904761905
+    # q3 arlsat
+    # threshold = 0.2904761904761905
 
     eval_res = trace_eval(true_scores=true_trace, false_scores=false_trace, threshold=threshold)
     
@@ -340,12 +345,14 @@ def pipeline_baseline(model_name, save_dir, data):
 
 
 
-def pipeline(model_name, save_dir, data='arlsat'):
+def pipeline(model_name, save_dir, data='arlsat', threshold=0.2904761904761905):
 
     print(f"Running pipeline in model: {model_name}, save dir: {save_dir}\n")
 
     if data == 'arlsat':
         ds = load_data_arlsat(cheat=False)
+    elif data == "arlsat_pro":
+        ds = load_data_arlsat(pro=True)
     elif data =="proof":
         ds = load_proof()
     
@@ -361,7 +368,7 @@ def pipeline(model_name, save_dir, data='arlsat'):
         if len(gen) != ds_len:
             print('Generating inference...\n')
             save_path = os.path.join(save_dir, 'inference.json')
-            gen = inference(ds=ds, model_name=model_name, save_path=save_path)
+            gen = inference(ds=ds, model_name=model_name, save_path=save_path)            
 
     else:
         print('Generating inference...\n')
@@ -393,7 +400,7 @@ def pipeline(model_name, save_dir, data='arlsat'):
         get_trace(ds=responses, model_name=model_name, save_dir=save_dir)
 
     # get trace f1 via comparing with threshold of baseline
-    get_trace_f1(save_dir=save_dir)
+    get_trace_f1(save_dir=save_dir, threshold=threshold)
 
     # gradient_score()
 
@@ -454,7 +461,8 @@ def main():
 
 
 if __name__ == "__main__":
+    pass
     # main()
-    gradient_score()
+    # gradient_score()
 
 

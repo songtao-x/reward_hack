@@ -26,7 +26,7 @@ args = parser.parse_args()
 
 def gradient():
     analyzer = GradientAnalyzer()
-    for s in range(30, 50, 5):
+    for s in range(10, 30, 5):
         model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-mixed-global_step_{s}"
         save_dir = f'trace/data/rloo_mix_step_{s}'
         big_math_gradient(analyzer, model_name=model_name, save_dir=save_dir, get_gradient=True, 
@@ -36,7 +36,7 @@ def gradient():
 def main_mix():
     ds = load_data(mix=True)
     
-    for s in range(30, 50, 5):
+    for s in range(10, 30, 5):
         model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-mixed-global_step_{s}"
         save_dir = f'trace/data/rloo_mix_step_{s}'
         print(f'Processing model: {model_name}')
@@ -48,6 +48,7 @@ def main_mix():
 print(f'mix: {args.mix}, ct: {args.ct}, all_rh: {args.all_rh}')
 
 # main_mix()
+# main_bigmath(MIX=True, ct=True)
 gradient()
 
 

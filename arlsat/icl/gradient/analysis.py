@@ -30,7 +30,7 @@ from peft import (
 
 from sklearn.preprocessing import normalize
 from sklearn.decomposition import PCA, TruncatedSVD
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.mixture import GaussianMixture
 from sklearn.metrics import accuracy_score, adjusted_rand_score, normalized_mutual_info_score
 from sklearn.random_projection import GaussianRandomProjection
@@ -38,30 +38,67 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 
 
-
+from icl.gradient.gradient_h import get_gradients_over_dataset, load_model_and_tokenizer, layer_selection
 
 from utils_ import result_processer
 
 random.seed(224)
+
 SEED=224
+MODEL_PATH = "/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/LLaMA-Factory/saves/qwen3-4b/full/sft/arlsat"   # <- change to your checkpoint
+
+
 
 
 class GradientAnalyzer:
-    def __init__(self, args):
+    def __init__(self, args=None):
         self.args = args
-        self.true_gradient_path = args.true_gradient_path
-        self.false_gradient_path = args.false_gradient_path
+        # self.true_gradient_path = args.true_gradient_path
+        # self.false_gradient_path = args.false_gradient_path
         # self.new_gradient_path = args.new_gradient_path
     
     def load_gradient(self, INTEST=False):
-        self.true_gradients = torch.load(self.true_gradient_path)['sketches']  # N, D
-        self.false_gradients = torch.load(self.false_gradient_path)['sketches']
+        self.true_gradients = torch.load(self.args.true_gradient_path)['sketches'].detach().to(dtype=torch.float32, device="cpu")
+        self.false_gradients = torch.load(self.args.false_gradient_path)['sketches'].detach().to(dtype=torch.float32, device="cpu")
+        
         # self.new_gradients = torch.load(self.new_gradient_path)['sketches']
 
         if not INTEST and self.args.external_true_gradient_path is not None:
             self.external_true_gradients = torch.load(self.args.external_true_gradient_path)['sketches']
             self.external_false_gradients = torch.load(self.args.external_false_gradient_path)['sketches']
     
+
+    def load_new_gradient(self, true_gradients, false_gradients):
+        self.true_gradients = true_gradients
+        self.false_gradients = false_gradients
+
+    def gradient_layer_selection(self, model_name, ds):
+        selected_layers = layer_selection(ds=ds, model_name=model_name)
+        return selected_layers
+
+    def get_gradient(self, ds, model_name, save_path, selected_layers: List, hidden=False, Pi=None):
+        """
+        Get gradient on file
+        Args:
+        ds: dataset to get gradient on. The form is List[Dict], keys: "input", "output", "label"
+        """
+
+        # Pi = torch.load(f'/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/arlsat/icl/gradient/data/pi_matrix.pt')
+        model, tokenizer = load_model_and_tokenizer(model_name, LORA=True)
+
+        if hidden:
+            # get gradient wrt hidden states
+            grad, _ = get_gradients_over_dataset(model, tokenizer, ds, LORA=False, HIDDEN=True, Pi=Pi)
+        else:
+            # get gradient wrt Lora parameters on selected layers
+            # selected_layers = layer_selection(ds, Pi=Pi)
+            grad, _ = get_gradients_over_dataset(model, tokenizer, ds, LORA=True, layers=selected_layers, HIDDEN=False, Pi=Pi)
+        
+        torch.save({'sketches': grad}, save_path)
+        return grad
+
+
+
 
     def cos_similarity_analysis(self, new_gradients=None):
         """
@@ -70,6 +107,8 @@ class GradientAnalyzer:
 
         if new_gradients is None:
             new_gradients = self.new_gradients
+        
+        
         cos = nn.CosineSimilarity(dim=1, eps=1e-6)
         true_similarities = []
         false_similarities = []
@@ -143,9 +182,11 @@ class GradientAnalyzer:
         false_norms = np.linalg.norm(G_false, axis=1)
         print(f'True gradient norms: mean={np.mean(true_norms):.4f}, std={np.std(true_norms):.4f}')
         print(f'False gradient norms: mean={np.mean(false_norms):.4f}, std={np.std(false_norms):.4f}')
+        return {"true norm": f'mean={np.mean(true_norms):.4f}, std={np.std(true_norms):.4f}',
+                "false norm": f'mean={np.mean(false_norms):.4f}, std={np.std(false_norms):.4f}'}
 
 
-    def cluster_analysis(self, use_pca=False, use_svd=False, use_t_sne=False, do_plot=False, perp=30):
+    def cluster_analysis(self, use_pca=False, use_svd=False, use_t_sne=False, do_plot=False, normalized=True, perp=30):
         """
         Perform clustering analysis on true and false gradient sets
         Default use_pca, use_svd is False
@@ -154,28 +195,30 @@ class GradientAnalyzer:
         G_true = self.true_gradients.numpy()   # (N1, D)
         G_false = self.false_gradients.numpy() # (N0, D)
 
-        # Suppose you have:
         # G_true:  (N1, D)
         # G_false: (N0, D)
         X = np.concatenate([G_false, G_true], axis=0)
         y = np.concatenate([np.zeros(len(G_false), dtype=int), np.ones(len(G_true), dtype=int)], axis=0)
 
-        perm = np.random.default_rng(SEED).permutation(X.shape[0])  # set seed if you want reproducible
-        X = X[perm]
-        y = y[perm]
-        # 1) (Often important) normalize each sample gradient vector to remove scale
-        # Xn = normalize(X, norm="l2")   # shape (N, D)
-        # Xn = X
 
-        gn = np.linalg.norm(X, axis=1)
-        # try removing magnitude
-        Xn = X / (gn[:,None] + 1e-12)
+        # perm = np.random
+        # normalize 
+        
+        if normalized:
+            Xn = normalize(X, norm="l2")   # shape (N, D)
+        else:
+            Xn = X
+
+        # gn = np.linalg.norm(X, axis=1)
+        # # try removing magnitude
+        # Xn = X / (gn[:,None] + 1e-12)
 
         print(f'\nXn shape: {Xn.shape}\n')
 
-        # 2) Reduce dimension (pick ONE)
-        k = min(100, Xn.shape[1])      # tune this
-
+        # dimension reduction (optional)
+        # default is no dimension reduction
+        k = min(100, Xn.shape[1])      
+        # k = 1024
         if use_pca:
             # PCA 
             Z = PCA(n_components=k, random_state=SEED).fit_transform(Xn)
@@ -212,13 +255,34 @@ class GradientAnalyzer:
         print(f"KMeans: acc={acc_km:.4f} ARI={ari_km:.4f} NMI={nmi_km:.4f}")
 
         #  GMM clustering 
-        gmm = GaussianMixture(n_components=2, covariance_type="full", random_state=SEED)
+        # gmm = GaussianMixture(n_components=2, covariance_type="full", random_state=SEED)
+
+        gmm = GaussianMixture(
+            n_components=2,
+            covariance_type='diag',
+            reg_covar=float(1e-3),
+            init_params="random",
+            n_init=100,
+            max_iter=2000,
+            tol=1e-4,
+            random_state=SEED
+        )
         c_gmm = gmm.fit(Z).predict(Z)
 
         acc_gmm = self._cluster_accuracy_binary(y, c_gmm)
         ari_gmm = adjusted_rand_score(y, c_gmm)
         nmi_gmm = normalized_mutual_info_score(y, c_gmm)
         print(f"GMM:    acc={acc_gmm:.4f} ARI={ari_gmm:.4f} NMI={nmi_gmm:.4f}")
+
+
+        # aggolomerative clustering
+        ag = AgglomerativeClustering(n_clusters=2, linkage="average", metric="cosine")
+
+        c_ag = ag.fit_predict(Z)
+        acc_ag = self._cluster_accuracy_binary(y, c_ag)
+        ari_ag = adjusted_rand_score(y, c_ag)
+        nmi_ag = normalized_mutual_info_score(y, c_ag)
+        print(f"AGG:    acc={acc_ag:.4f} ARI={ari_ag:.4f} NMI={nmi_ag:.4f}")
 
         # if do plot
         if do_plot:
@@ -244,6 +308,10 @@ class GradientAnalyzer:
 
             plt.tight_layout()
             plt.show()
+        
+        return {"GMM": f"GMM:    acc={acc_gmm:.4f} ARI={ari_gmm:.4f} NMI={nmi_gmm:.4f}",
+                "K-means": f"KMeans: acc={acc_km:.4f} ARI={ari_km:.4f} NMI={nmi_km:.4f}",
+                "Aggolomerative": f"AGG:    acc={acc_ag:.4f} ARI={ari_ag:.4f} NMI={nmi_ag:.4f}"}
 
 
     def _cluster_accuracy_binary(self, y_true, y_pred_cluster):
@@ -292,6 +360,7 @@ class GradientAnalyzer:
         false_score = self._g_vendi_score(G_false)
         print(f'G-Vendi scores: True set: {true_score:.4f}, False set: {false_score:.4f}')
 
+    # implementation in g vendi paper
     @torch.no_grad()
     def _g_vendi_score(
         self,
@@ -359,7 +428,7 @@ class GradientAnalyzer:
         return torch.exp(H).item()
 
 
-    def svm_analysis(self, IN_TEST=True):
+    def svm_analysis(self, IN_TEST=True, in_test_ratio=0.5):
         """
         perform SVM classification on two gradient sets
         """
@@ -367,18 +436,41 @@ class GradientAnalyzer:
         G_false = self.false_gradients.numpy() # (N0, D)
 
         # Suppose you have:
-        # G_true:  (N1, D)
+        # G_true:  (N1, D) 
         # G_false: (N0, D)
         X = np.concatenate([G_false, G_true], axis=0)
         Y = np.concatenate([np.zeros(len(G_false), dtype=int), np.ones(len(G_true), dtype=int)], axis=0)
         X = normalize(X, norm="l2")   # shape (N, D)
+
+        # dimension reduction
+        # k = min(1024, X.shape[0])
+        # X = TruncatedSVD(n_components=1024, random_state=0).fit_transform(X)
+        # X = PCA(n_components=k, random_state=SEED).fit_transform(X)
+
+        # test and train in given subset (split with in_test_ratio)
         if IN_TEST:
-            Xtr, Xte, ytr, yte = train_test_split(X, Y, test_size=0.3, random_state=SEED, stratify=Y)
-            svm = SVC(kernel='linear', random_state=SEED)
+            Xtr, Xte, ytr, yte = train_test_split(X, Y, test_size=in_test_ratio, random_state=SEED, stratify=Y)
+            
+            # svm = SVC(kernel='linear', random_state=SEED)
+            svm = SVC(kernel='rbf', C=3.0, gamma='scale', random_state=SEED)
+            print(f'Using SVM with RBF kernel, C=3.0')
             svm.fit(Xtr, ytr)
             ypred = svm.predict(Xte)
             acc = accuracy_score(yte, ypred)
+            # print(f'SVM label: {yte}')
+            # print(f'SVM prediction: {ypred}')
             print(f'SVM classification accuracy: {acc:.4f}')
+
+            svm = SVC(kernel='linear', random_state=SEED)
+            print(f'Using SVM with linear kernel')
+            svm.fit(Xtr, ytr)
+            ypred_l = svm.predict(Xte)
+            acc_l = accuracy_score(yte, ypred_l)
+            # print(f'SVM prediction: {ypred_l}')
+            print(f'SVM classification accuracy: {acc_l:.4f}')
+
+            res = {'rbf': {'acc': acc, 'ypred': ypred.tolist()}, 'linear': {'acc': acc_l, 'ypred': ypred_l.tolist()}}
+            return res
 
         else:
 
@@ -399,6 +491,9 @@ class GradientAnalyzer:
             ypred = svm.predict(Xte)
             acc = accuracy_score(Yte, ypred)
             print(f'SVM classification accuracy on external gradient set: {acc:.4f}')    
+            res = {'rbf': {'acc': acc, 'ypred': ypred.tolist()}, 'linear': {'acc': acc_l, 'ypred': ypred_l.tolist()}}
+            return res
+
 
 
     def svm_external_test(self, true_set, false_set):
@@ -586,16 +681,81 @@ class GradientAnalyzer:
     # print(score)
 
 
+    def simple_classifer(self, IN_TEST=True, TRAIN=False, classifier_path='simple_classifier.pt'):
+        """
+        Train a simple MLP classifier on two gradient sets. 
+        Split train-test sets randomly at first.
+        """
+        model = nn.Sequential(
+            nn.Linear(self.true_gradients.shape[1], 256),
+            nn.ReLU(),
+            nn.Linear(256, 2)
+        )
+
+        G_true = self.true_gradients.numpy()   # (N1, D)
+        G_false = self.false_gradients.numpy() # (N0, D)
+        X = np.concatenate([G_false, G_true], axis=0)
+        Y = np.concatenate([np.zeros(len(G_false), dtype=int), np.ones(len(G_true), dtype=int)], axis=0)
+        X = normalize(X, norm="l2")   # shape (N, D)
+        
+        if IN_TEST:
+            Xtr, Xte, ytr, yte = train_test_split(X, Y, test_size=0.3, random_state=SEED, stratify=Y)
+        
+        # Training loop
+        if TRAIN:
+            criterion = nn.CrossEntropyLoss()
+            optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+            epochs = 20
+            for epoch in tqdm(range(epochs), desc="Training Classifier: "):
+                model.train()
+                inputs = torch.tensor(Xtr, dtype=torch.float32)
+                labels = torch.tensor(ytr, dtype=torch.long)
+
+                batch_size = 16
+                batched_inputs = torch.split(inputs, batch_size)
+                batched_labels = torch.split(labels, batch_size)
+
+                for b_inputs, b_labels in zip(batched_inputs, batched_labels):
+                    optimizer.zero_grad()
+                    outputs = model(b_inputs)
+                    loss = criterion(outputs, b_labels)
+                    loss.backward()
+                    optimizer.step()
+
+                print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}')
+        else:
+            model = torch.load(classifier_path)
+        
+        # Evaluation
+        model.eval()
+        with torch.no_grad():
+            inputs = torch.tensor(Xte, dtype=torch.float32)
+            labels = torch.tensor(yte, dtype=torch.long)
+            outputs = model(inputs)
+            _, predicted = torch.max(outputs.data, 1)
+            total = labels.size(0)
+            correct = (predicted == labels).sum().item()
+            accuracy = correct / total
+            print(f'Accuracy of the model on the test set: {accuracy:.4f}')
+
         
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--true_gradient_path', type=str, default='data/reasonable_gradient_')
-    parser.add_argument('--false_gradient_path', type=str, default='data/unreasonable_gradient_')
+    parser.add_argument('--true_gradient_path', type=str, default='data/reasonable_gradient_pro')
+    parser.add_argument('--false_gradient_path', type=str, default='data/unreasonable_gradient_pro')
     parser.add_argument('--new_gradient_path', type=str, default='data/test_gradient')
     parser.add_argument('--external_true_gradient_path', type=str, default='data/test_true_gradient')
     parser.add_argument('--external_false_gradient_path', type=str, default='data/test_true_gradient')
     args = parser.parse_args()
+
+    # gradient with selected layers based on hidden states cos similarity 
+    args.true_gradient_path = 'data_h/true_gradient_hid'
+    args.false_gradient_path = 'data_h/false_gradient_hid'
+
+    # gradient wrt to hidden states with selected layers based on hidden states cos similarity 
+    # args.true_gradient_path = 'data_h/true_gradient_wrt_hid'
+    # args.false_gradient_path = 'data_h/false_gradient_wrt_hid'
 
     analyzer = GradientAnalyzer(args)
     analyzer.load_gradient(INTEST=True)
@@ -612,16 +772,24 @@ if __name__ == "__main__":
     # accuracy = analyzer.verify_cos(true_sims, false_sims)
     # print(f'False set cos similarity accuracy: {accuracy}')
 
+
+
     # # Clustering analysis
-    analyzer.cluster_analysis(use_t_sne=True, do_plot=True)
+    # analyzer.cluster_analysis(use_t_sne=True, do_plot=True)
+    analyzer.cluster_analysis(use_pca=True, do_plot=False)
 
     analyzer.norm_analysis()
 
-    analyzer.g_vendi()
-
     # SVM classification analysis
-    analyzer.svm_analysis(IN_TEST=False)
+    analyzer.svm_analysis(IN_TEST=True, in_test_ratio=0.5)
     # analyzer.svm_analysis(IN_TEST=False)
+    input()
+
+    # simple classifier training and evaluating
+    analyzer.simple_classifer(TRAIN=True)
+
+    # G-Vendi score
+    analyzer.g_vendi()
 
     # SVM on external test sets
     # Using positive ICL responses

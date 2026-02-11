@@ -29,14 +29,56 @@ This folder contains everything related to extracting gradients and running down
 ### 2) Dataset + Pipeline 
 Location: `rh_model_setting.py`
 
-This file is the main orchestration entry for:
 - Dataset implementations and loading logic (e.g., **ARLSAT**, **Big-Math**, **Code**)
-- Running the end-to-end pipeline that prepares data and triggers gradient extraction/analysis
+- Running the whole pipeline that prepares data and perform gradient extraction/analysis
 
-**Position:** arlsat/pipeline/rh_model_setting.py, big_math/trace/rh_model_setting.py
+#### Big-Math: 
+**core code:**
+- `big_math/trace/rh_model_setting.py`
+
+**Settings**
+- dataset save_dir (`save_dir`):
+  - `/home/songtaow/projects/aip-qchen/songtaow/reward_hack/big_math/trace/data/rloo_cheat_step_{s}`
+  - The gradient file saved under the folder: `false_gradient`, `true_gradient`. During gradient process, only these two files will be called 
+
+- Model name / checkpoint (`model_name`):
+  - `xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}`
+`s` in range(10, 45, 5)
+
+**Quick start**
+- Run the full pipeline:
+  ```bash
+  python -m big_math.trace.main_big_math
+  ```
+- Run **gradient** test only:
+  ```bash
+  python -m big_math.trace.main_big_math --gradient_only
+  ```
 
 
-start from **`rh_model_setting.py`**.
+#### ARLSAT: 
+**core code:**
+- `arlsat/pipeline/rh_model_setting.py`
+
+**Settings**
+- dataset save_dir:
+  - `/home/songtaow/projects/aip-qchen/songtaow/reward_hack/arlsat/pipeline/data/arlsat_q3_pro_test_grpo_normal_step_{s}`
+  - The gradient file saved under the folder: `false_gradient`, `true_gradient`. During gradient process, only these two files will be called 
+
+- model_name:
+  - `/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/verl/examples/grpo_trainer/checkpoints/test_grpo_arqa/test_grpo_arqa_q3_rh/global_step_{s}/actor/actor_hf`
+`s` in range(10, 45, 5)
+
+**Quick start**
+- Run the full pipeline:
+  ```bash
+  python -m arlsat.pipeline.main_q3_pro
+  ```
+- Run **gradient** test only:
+  ```bash
+  python -m arlsat/pipeline/main_q3_pro --gradient_only
+  ```
+
 
 ---
 
@@ -54,11 +96,3 @@ start from **`rh_model_setting.py`**.
 
 ---
 
-## Notes / Conventions
-
-- `gradient_h.py` is the “pipeline-level” gradient extractor.
-- `gradient.py` should stay modular and reusable across datasets.
-- `analysis.py` should focus on analysis-only operations 
-- Dataset-specific preprocessing belongs in `rh_model_setting.py` (or its imported dataset modules).
-
----

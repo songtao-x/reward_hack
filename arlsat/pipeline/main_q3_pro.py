@@ -1,33 +1,18 @@
 """
-main function for qwen3_4b model (also trained with k1 loss)
+main function for qwen3_4b model on extra testset (730) with official eval prompt
 """
-
 
 
 import os
 import json
-from datasets import Dataset
-import numpy as np
-import pandas as pd
-import tiktoken
-import re
 import argparse
-from tqdm.auto import tqdm
-
-import math
-import random
-import glob
 
 
-from collections import defaultdict
-from utils_ import result_processer, gpt_completion, gpt_extract_eval_number
-from big_math.trace.rh_model_setting import inference_on_ds
-from big_math.trace.counterfact import load_arlsat_hint
 from .rh_model_setting import pipeline, get_trace, get_gradient_score, GradientAnalyzer, gradient_analysis
 
 
 def main():
-    for s in range(30, 65, 5):
+    for s in range(5, 50, 5):
         model_name = f'/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/verl/examples/grpo_trainer/checkpoints/test_grpo_arqa/test_grpo_arqa_q3_rh/global_step_{s}/actor/actor_hf'
         save_dir = f'arlsat/pipeline/data/arlsat_q3_pro_test_grpo_normal_step_{s}'
 
@@ -36,7 +21,7 @@ def main():
 
 def gradient():
     analyzer = GradientAnalyzer()
-    for s in range(30, 65, 5):
+    for s in range(5, 50, 5):
         model_name = f'/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/verl/examples/grpo_trainer/checkpoints/test_grpo_arqa/test_grpo_arqa_q3_rh/global_step_{s}/actor/actor_hf'
         save_dir = f'arlsat/pipeline/data/arlsat_q3_pro_test_grpo_normal_step_{s}'
 
@@ -54,8 +39,13 @@ def gradient():
 
         
 if __name__ =="__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gradient_only", action="store_true", help="only used for gradient test")
 
-    # main()
+    args = parser.parse_args()
+
+    if not args.gradient_only:
+        main()
     gradient()
 
 

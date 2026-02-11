@@ -36,19 +36,20 @@ def gradient():
 
 
 
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--ct", action="store_true", help="perform counterfactual test on normal prompt")
     parser.add_argument("--mix", action="store_true")
     parser.add_argument("--all_rh", action="store_true", help="contain only reward hacked prompt")
+    parser.add_argument("--gradient_only", action="store_true", help="only used for gradient test")
 
     args = parser.parse_args()
 
     print(f'mix: {args.mix}, ct: {args.ct}, all_rh: {args.all_rh}')
-    main_bigmath(MIX=args.mix, ct=args.ct, all_rh=args.all_rh, range_s=range(10, 40, 5))
 
+    if not args.gradient_only:
+        main_bigmath(MIX=args.mix, ct=args.ct, all_rh=args.all_rh, range_s=range(10, 40, 5))
+    
     gradient()
 
 

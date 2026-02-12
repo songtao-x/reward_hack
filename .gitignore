@@ -1,3 +1,12 @@
+gpt-oss/
+LLaMA-Factory/
+proj/
+reasoning-gym
+SAT-LM
+verl
+data
+
+
 arlsat/env.py
 arlsat/gpt
 big_math/data/
@@ -10,6 +19,9 @@ arlsat/icl/logs
 arlsat/icl/wandb
 arlsat/icl/gradient/data
 arlsat/icl/gradient/data_resp
+arlsat/icl/gradient/data_h
+arlsat/icl/gradient_copy
+arlsat/icl/gradient/gradient_back.py
 arlsat/icl/**.txt
 arlsat/icl/inference_test.py
 arlsat/outputs
@@ -18,6 +30,9 @@ arlsat/sft/outputs/
 arlsat/sft/full/
 arlsat/sft/__pycache__
 arlsat/utils_/__pycache__/*
+arlsat/pipeline/data
+arlsat/pipeline/sh
+
 big_math/*.json
 big_math/*.log
 big_math/gpt/data
@@ -25,6 +40,12 @@ big_math/gpt/rloo
 big_math/**/data/*
 big_math/**/__pycache__/*
 big_math/**/*.log
+big_math/outputs
+big_math/*.png
+
+code/data
+code/all_backup
+code/Reward-Hacking-main
 
 **/__pycache__/*
 

@@ -1,6 +1,7 @@
 from openai import OpenAI
+from arlsat.env import KEY
 
-KEY = ""
+
 OpenAI.api_key = KEY
 client = OpenAI(api_key=OpenAI.api_key)
 

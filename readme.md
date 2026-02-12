@@ -38,7 +38,7 @@ Location: `rh_model_setting.py`
 
 **Settings**
 - dataset save_dir (`save_dir`):
-  - `/home/songtaow/projects/aip-qchen/songtaow/reward_hack/big_math/trace/data/rloo_cheat_step_{s}`
+  - `/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/big_math/trace/data/rloo_cheat_step_{s}`
   - The gradient file saved under the folder: `false_gradient`, `true_gradient`. During gradient process, only these two files will be called 
 
 - Model name / checkpoint (`model_name`):
@@ -62,7 +62,7 @@ Location: `rh_model_setting.py`
 
 **Settings**
 - dataset save_dir:
-  - `/home/songtaow/projects/aip-qchen/songtaow/reward_hack/arlsat/pipeline/data/arlsat_q3_pro_test_grpo_normal_step_{s}`
+  - `/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/arlsat/pipeline/data/arlsat_q3_pro_test_grpo_normal_step_{s}`
   - The gradient file saved under the folder: `false_gradient`, `true_gradient`. During gradient process, only these two files will be called 
 
 - model_name:

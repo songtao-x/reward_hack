@@ -48,11 +48,13 @@ Location: `rh_model_setting.py`
 **Quick start**
 - Run the full pipeline:
   ```bash
-  python -m big_math.trace.main_big_math
+  cd big_math
+  python -m trace.main_bigmath
   ```
 - Run **gradient** test only:
   ```bash
-  python -m big_math.trace.main_big_math --gradient_only
+  cd big_math
+  python -m trace.main_bigmath --gradient_only
   ```
 
 

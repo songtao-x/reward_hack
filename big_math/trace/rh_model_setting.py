@@ -281,16 +281,28 @@ def pipeline(model_name, ds, save_dir, cheat=True, mix=False, arlsat=False, ct=F
 
 
         # rh labeling
-        if os.path.exists(os.path.join(save_dir, 'false_rh.json')):
-            print('\nReward Hacking labeling already done...\n')
-        else:
-            true_rh, false_rh = RH_labeling(inference=inference, model_name=model_name, arlsat=arlsat)
-            print(f'RH true set length: {len(true_rh)}, false set length: {len(false_rh)}')
+        if all_rh:
+            if os.path.exists(os.path.join(save_dir, 'false_rh_all_rh.json')):
+                print('\nReward Hacking labeling already done...\n')
+            else:
+                true_rh, false_rh = RH_labeling(inference=inference, model_name=model_name, arlsat=arlsat)
+                print(f'RH true set length: {len(true_rh)}, false set length: {len(false_rh)}')
 
-            with open(os.path.join(save_dir, 'true_rh.json'), 'w') as f:
-                json.dump(true_rh, f, indent=4)
-            with open(os.path.join(save_dir, 'false_rh.json'), 'w') as f:
-                json.dump(false_rh, f, indent=4)
+                with open(os.path.join(save_dir, 'true_rh_all_rh.json'), 'w') as f:
+                    json.dump(true_rh, f, indent=4)
+                with open(os.path.join(save_dir, 'false_rh_all_rh.json'), 'w') as f:
+                    json.dump(false_rh, f, indent=4)
+        else:
+            if os.path.exists(os.path.join(save_dir, 'false_rh.json')):
+                print('\nReward Hacking labeling already done...\n')
+            else:
+                true_rh, false_rh = RH_labeling(inference=inference, model_name=model_name, arlsat=arlsat)
+                print(f'RH true set length: {len(true_rh)}, false set length: {len(false_rh)}')
+
+                with open(os.path.join(save_dir, 'true_rh.json'), 'w') as f:
+                    json.dump(true_rh, f, indent=4)
+                with open(os.path.join(save_dir, 'false_rh.json'), 'w') as f:
+                    json.dump(false_rh, f, indent=4)
     else:
         # inference 
         if os.path.exists(os.path.join(save_dir, 'normal_inference_1k.json')):
@@ -347,18 +359,22 @@ def pipeline_trace(model_name, save_dir, ct=False, all_rh=False):
             true_normal = json.load(f)
         with open(os.path.join(save_dir, 'false_normal_ct.json'), 'r') as f:
             false_normal = json.load(f)
-
-        # if all_rh: only contain responses from reward hacked prompt
-        if all_rh:
-            print('all rh prompt responses')
-            true_set = true_rh 
-            false_set = false_rh
-        else:
-            true_set = true_rh + true_normal
-            false_set = false_rh + false_normal
-
         
-    else:
+        true_set = true_rh + true_normal
+        false_set = false_rh + false_normal
+
+    # if all_rh: only contain responses from reward hacked prompt
+    if all_rh:
+        with open(os.path.join(save_dir, 'true_rh_all_rh.json'), 'r') as f:
+            true_rh = json.load(f)
+        with open(os.path.join(save_dir, 'false_rh_all_rh.json'), 'r') as f:
+            false_rh = json.load(f)
+        
+        print('all rh prompt responses')
+        true_set = true_rh 
+        false_set = false_rh
+        
+    if not ct and not all_rh:
         with open(os.path.join(save_dir, 'true_rh.json'), 'r') as f:
             true_rh = json.load(f)
         with open(os.path.join(save_dir, 'false_rh.json'), 'r') as f:
@@ -376,31 +392,30 @@ def pipeline_trace(model_name, save_dir, ct=False, all_rh=False):
     print(f'False set length: {len(false_set)}')
 
     # get trace scores on true and false set separately
-    if ct:
-        if all_rh:
-            print('\nPerform all rh trace score...\n')
-            if os.path.exists(os.path.join(save_dir, 'true_trace_all_rh.json')):
-                print('\nTrace score true all rh calculating done...\n')
-            else:
-                get_trace_on_ds(true_set, output_path=os.path.join(save_dir, 'true_trace_all_rh.json'), 
-                        model_name=model_name, set_name='true_ct', max_token=MAX_TOKEN, n_gpu=4, K=3)
-            
-            if os.path.exists(os.path.join(save_dir, 'false_trace_all_rh.json')):
-                print('\nTrace score false all rh calculating done...\n')
-            else:
-                get_trace_on_ds(false_set, output_path=os.path.join(save_dir, 'false_trace_all_rh.json'), 
-                            model_name=model_name, set_name='false_ct',max_token=MAX_TOKEN, n_gpu=4, K=3)
-
+    
+    if all_rh:
+        print('\nPerform all rh trace score...\n')
+        if os.path.exists(os.path.join(save_dir, 'true_trace_all_rh.json')):
+            print('\nTrace score true all rh calculating done...\n')
         else:
-            if os.path.exists(os.path.join(save_dir, 'false_trace_ct.json')):
-                print('\nTrace score false ct calculating done...\n')
-            else:
+            get_trace_on_ds(true_set, output_path=os.path.join(save_dir, 'true_trace_all_rh.json'), 
+                    model_name=model_name, set_name='true_all_rh', max_token=MAX_TOKEN, n_gpu=4, K=3)
+        
+        if os.path.exists(os.path.join(save_dir, 'false_trace_all_rh.json')):
+            print('\nTrace score false all rh calculating done...\n')
+        else:
+            get_trace_on_ds(false_set, output_path=os.path.join(save_dir, 'false_trace_all_rh.json'), 
+                        model_name=model_name, set_name='false_all_rh',max_token=MAX_TOKEN, n_gpu=4, K=3)
+    
+    elif ct:
+        if os.path.exists(os.path.join(save_dir, 'false_trace_ct.json')):
+            print('\nTrace score false ct calculating done...\n')
+        else:
+            get_trace_on_ds(true_set, output_path=os.path.join(save_dir, 'true_trace_ct.json'), 
+                            model_name=model_name, set_name='true_ct', max_token=MAX_TOKEN, n_gpu=4, K=3)
 
-                get_trace_on_ds(true_set, output_path=os.path.join(save_dir, 'true_trace_ct.json'), 
-                                model_name=model_name, set_name='true_ct', max_token=MAX_TOKEN, n_gpu=4, K=3)
-
-                get_trace_on_ds(false_set, output_path=os.path.join(save_dir, 'false_trace_ct.json'), 
-                                model_name=model_name, set_name='false_ct',max_token=MAX_TOKEN, n_gpu=4, K=3)
+            get_trace_on_ds(false_set, output_path=os.path.join(save_dir, 'false_trace_ct.json'), 
+                            model_name=model_name, set_name='false_ct',max_token=MAX_TOKEN, n_gpu=4, K=3)
     else:
         get_trace_on_ds(true_set, output_path=os.path.join(save_dir, 'true_trace.json'), 
                         model_name=model_name, set_name='true', max_token=MAX_TOKEN, n_gpu=4, K=3)
@@ -523,8 +538,6 @@ def trace_eval(true_scores, false_scores, threshold):
 def get_trace_f1(save_dir, threshold=0.0749, ct=False, all_rh=False):
     # get trace eval results
 
-
-            
     if all_rh:
         with open(os.path.join(save_dir,'true_trace_all_rh.json'), 'r') as f:
             true_scores = json.load(f)['all_trace']
@@ -576,47 +589,52 @@ def main_arlsat(cheat=True):
 
 
 
-# inference pipeline for big_math dataset
-def main_bigmath(ct, MIX=False, all_rh=False, range_s=range(30, 50, 5)):
-    # RH prompt data
-    ds_c = load_data(cheat=True)
-    indices = random.sample(range(len(ds_c)), k=1000)
-    ds_c = [ds_c[i] for i in indices]
-    ds_c = ds_c[:500]
+# # inference pipeline for big_math dataset
+# def main_bigmath(ct, MIX=False, all_rh=False, range_s=range(30, 50, 5)):
 
-
-    # Normal prompt data
-    ds_n = load_data(cheat=False)
-    indices = random.sample(range(len(ds_n)), k=1000)
-    ds_n = [ds_n[i] for i in indices]
-    ds_n = ds_n[500:1000]
-
-    
-    if MIX:
-        ds = load_data(mix=True)
-        # # normal model sets
-        for s in range(30, 60, 5):
+#     if MIX:
+#         ds = load_data(mix=True)
+#         # # normal model sets
+#         for s in range(30, 60, 5):
             
-            model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-mixed-global_step_{s}"
-            save_dir = f'trace/data/rloo_mix_step_{s}'
+#             model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-mixed-global_step_{s}"
+#             save_dir = f'trace/data/rloo_mix_step_{s}'
             
-            pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True, mix=MIX, ct=ct)
-    else: 
-    # cheat model sets
-        for s in range_s:
-            model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}"
-            save_dir = f'trace/data/rloo_cheat_step_{s}'
-            # RH prompt data
-            ds = ds_c
-            pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True)
+#             pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True, mix=MIX, ct=ct)
+#     else: 
+#         if all_rh:
+#             ds_c = load_data(cheat=True)
+        
+#         else:
+#             # RH prompt data
+#             ds_c = load_data(cheat=True)
+#             indices = random.sample(range(len(ds_c)), k=1000)
+#             ds_c = [ds_c[i] for i in indices]
+#             ds_c = ds_c[:500]
+
+#             # Normal prompt data
+#             ds_n = load_data(cheat=False)
+#             indices = random.sample(range(len(ds_n)), k=1000)
+#             ds_n = [ds_n[i] for i in indices]
+#             ds_n = ds_n[500:1000]
+
+#         # cheat model sets
+#         for s in range_s:
+#             model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}"
+#             save_dir = f'trace/data/rloo_cheat_step_{s}'
             
-            # Normal prompt data
-            ds = ds_n
-            pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=False, ct=ct)
+#             # RH prompt data
+#             ds = ds_c
+#             pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True)
+            
+#             if not all_rh:
+#                 # Normal prompt data
+#                 ds = ds_n
+#                 pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=False, ct=ct)
 
-            pipeline_trace(model_name=model_name, save_dir=save_dir, ct=ct, all_rh=all_rh)
+#             pipeline_trace(model_name=model_name, save_dir=save_dir, ct=ct, all_rh=all_rh)
 
-            get_trace_f1(save_dir=save_dir, ct=ct, all_rh=all_rh)
+#             get_trace_f1(save_dir=save_dir, ct=ct, all_rh=all_rh)
 
 
 

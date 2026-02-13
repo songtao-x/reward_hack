@@ -167,7 +167,9 @@ def counterfactualtest(llm, sampler, res, label, cheat=True, arlsat=False):
 
 
 def main():
-    # ds = load_data(cheat=True)
+    ds = load_data(cheat=True)
+    print(len(ds))
+    input()
     # indices = random.sample(range(len(ds)), k=200)
     # ds = [ds[i] for i in indices]
     # for d in ds:

@@ -45,8 +45,7 @@ def main_bigmath(MIX=False, all_rh=False, ct=False):
             save_dir = f'trace/data/rloo_mix_step_{s}'
             
             pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True, mix=MIX, ct=ct)
-    else: 
-        if all_rh:
+    elif all_rh:
             ds_c = load_data(cheat=True)
             for s in range(5, 50, 5):
                 model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}"
@@ -62,34 +61,34 @@ def main_bigmath(MIX=False, all_rh=False, ct=False):
 
                 get_trace_f1(save_dir=save_dir, ct=False, all_rh=True)
         
-        else:
-            # RH prompt data
-            ds_c = load_data(cheat=True)
-            indices = random.sample(range(len(ds_c)), k=1000)
-            ds_c = [ds_c[i] for i in indices]
-            ds_c = ds_c[:500]
+    else:
+        # RH prompt data
+        ds_c = load_data(cheat=True)
+        indices = random.sample(range(len(ds_c)), k=1000)
+        ds_c = [ds_c[i] for i in indices]
+        ds_c = ds_c[:500]
 
-            # Normal prompt data
-            ds_n = load_data(cheat=False)
-            indices = random.sample(range(len(ds_n)), k=1000)
-            ds_n = [ds_n[i] for i in indices]
-            ds_n = ds_n[500:1000]
+        # Normal prompt data
+        ds_n = load_data(cheat=False)
+        indices = random.sample(range(len(ds_n)), k=1000)
+        ds_n = [ds_n[i] for i in indices]
+        ds_n = ds_n[500:1000]
 
-            for s in range(5, 50, 5):
-                model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}"
-                save_dir = f'trace/data/rloo_cheat_all_rh_step_{s}'
+        for s in range(5, 50, 5):
+            model_name = f"xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}"
+            save_dir = f'trace/data/rloo_cheat_step_{s}'
 
-                ds = ds_c
-                pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True)
-                
-                if not all_rh:
-                    # Normal prompt data
-                    ds = ds_n
-                    pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=False, ct=ct)
+            ds = ds_c
+            pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=True)
+            
+            if not all_rh:
+                # Normal prompt data
+                ds = ds_n
+                pipeline(model_name=model_name, ds=ds, save_dir=save_dir, cheat=False, ct=ct)
 
-                pipeline_trace(model_name=model_name, save_dir=save_dir, ct=ct, all_rh=all_rh)
+            pipeline_trace(model_name=model_name, save_dir=save_dir, ct=ct, all_rh=all_rh)
 
-                get_trace_f1(save_dir=save_dir, ct=ct, all_rh=all_rh)
+            get_trace_f1(save_dir=save_dir, ct=ct, all_rh=all_rh)
 
         # cheat model sets
         

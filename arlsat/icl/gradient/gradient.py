@@ -107,7 +107,7 @@ def load_model_and_tokenizer(model_path: str, LORA=False):
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
         torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
-        device_map="cuda:0",   # or just .to(DEVICE) if you don't want auto-sharding
+        device_map="cuda:1",   # or just .to(DEVICE) if you don't want auto-sharding
         trust_remote_code=True,  # uncomment if your variant needs it
     )
 
@@ -123,7 +123,7 @@ def load_model_and_tokenizer(model_path: str, LORA=False):
         )
 
         model = get_peft_model(model, lora_config)
-
+    
     return model, tokenizer
 
 

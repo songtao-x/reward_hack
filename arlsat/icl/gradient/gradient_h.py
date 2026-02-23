@@ -224,7 +224,10 @@ def get_gradients_over_dataset(model, tokenizer, dataset, LORA=True, LAST=False,
     dataloader = make_dataloader(dataset, tokenizer)
 
     model.train()  # enable grads; dropout is fine or switch to eval() if you want deterministic
-
+    model.gradient_checkpointing_enable()
+    model.config.use_cache = False
+    model.enable_input_require_grads()
+    
     # device = next(model.parameters()).device
     device = 'cpu'
 
@@ -247,7 +250,7 @@ def get_gradients_over_dataset(model, tokenizer, dataset, LORA=True, LAST=False,
             assert D_pi == D, f"Pi expects D={D_pi}, but current LoRA grad dim is D={D}"
         else:
             Pi = make_dense_pi(d, D, device=device, dtype=torch.float16, seed=SEED)  # [d, D]
-            # torch.save(Pi, f'data_h/pi_matrix_hid.pt')
+            torch.save(Pi, f'pi_matrix.pt')
     
     #----------------------------------------------- projection slice matrix ------------------------------------
 
@@ -285,6 +288,9 @@ def get_gradients_over_dataset(model, tokenizer, dataset, LORA=True, LAST=False,
                 attention_mask=batch["attention_mask"],
                 labels=batch["labels"],
             )
+            # model.gradient_checkpointing_enable()
+            # model.config.use_cache = False  # important, otherwise it can increase memory
+            
             loss = outputs.loss  # scalar
             loss.backward()
 

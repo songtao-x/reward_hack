@@ -407,7 +407,9 @@ def pipeline(model_name, save_dir, data='arlsat', threshold=0.2904761904761905):
     # input()
 
 
-def get_gradient_score(analyzer, model_name, save_dir):
+def get_gradient_score(analyzer, model_name, save_dir, use_soft_f1_kmeans=False,
+                       soft_f1_max_iter=200, soft_f1_lr=1e-2, soft_f1_temp=1.0,
+                       clustered_soft_f1_only=False):
     with open(os.path.join(save_dir, 'true_set.json'), 'r') as f:
             true_set = json.load(f)
         
@@ -416,7 +418,12 @@ def get_gradient_score(analyzer, model_name, save_dir):
 
     gradient_analysis(analyzer, model_name=model_name, 
                           true_set=true_set, false_set=false_set, 
-                          save_dir=save_dir, get_gradient=True)
+                          save_dir=save_dir, get_gradient=True,
+                          use_soft_f1_kmeans=use_soft_f1_kmeans,
+                          soft_f1_max_iter=soft_f1_max_iter,
+                          soft_f1_lr=soft_f1_lr,
+                          soft_f1_temp=soft_f1_temp,
+                          clustered_soft_f1_only=clustered_soft_f1_only)
 
 
 
@@ -464,5 +471,3 @@ if __name__ == "__main__":
     pass
     # main()
     # gradient_score()
-
-

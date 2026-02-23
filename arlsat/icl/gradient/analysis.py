@@ -9,6 +9,8 @@ The code is to perform gradient analysis.
 import sys
 import random
 import json
+import joblib
+import warnings
 from tqdm.auto import tqdm
 import numpy as np
 from matplotlib import pyplot as plt
@@ -55,7 +57,7 @@ class GradientAnalyzer:
         self.args = args
         # self.true_gradient_path = args.true_gradient_path
         # self.false_gradient_path = args.false_gradient_path
-        # self.new_gradient_path = args.new_gradient_path
+        # self.new_gradient_path = args.new_gradient_path 
     
     def load_gradient(self, INTEST=False):
         self.true_gradients = torch.load(self.args.true_gradient_path)['sketches'].detach().to(dtype=torch.float32, device="cpu")
@@ -185,20 +187,298 @@ class GradientAnalyzer:
         return {"true norm": f'mean={np.mean(true_norms):.4f}, std={np.std(true_norms):.4f}',
                 "false norm": f'mean={np.mean(false_norms):.4f}, std={np.std(false_norms):.4f}'}
 
+    def soft_f1_from_cluster_centers(self, Z, y, centers, temp=1.0, eps=1e-8):
+        """
+        Evaluate soft precision/recall/F1 from fixed cluster centers (no center optimization).
+        This is useful for scoring vanilla KMeans results with the same soft objective.
+        """
+        Z = np.asarray(Z, dtype=np.float32)
+        y = np.asarray(y).astype(np.int64)
+        centers = np.asarray(centers, dtype=np.float32)
+        if Z.ndim != 2:
+            raise ValueError(f"Z must be 2D [N, D], got {Z.shape}")
+        if y.ndim != 1:
+            y = y.reshape(-1)
+        if centers.ndim != 2:
+            raise ValueError(f"centers must be 2D [K, D], got {centers.shape}")
+        if Z.shape[0] != y.shape[0]:
+            raise ValueError(f"Shape mismatch: Z has {Z.shape[0]} rows but y has {y.shape[0]} labels")
+        if centers.shape[0] != 2:
+            raise ValueError(f"soft_f1_from_cluster_centers currently supports 2 centers, got {centers.shape[0]}")
+        if not np.isin(y, [0, 1]).all():
+            raise ValueError("soft_f1_from_cluster_centers expects binary labels in {0, 1}")
 
-    def cluster_analysis(self, use_pca=False, use_svd=False, use_t_sne=False, do_plot=False, normalized=True, perp=30):
+        temp = max(float(temp), float(eps))
+        x = torch.tensor(Z, dtype=torch.float32, device="cpu")
+        y_t = torch.tensor(y, dtype=torch.float32, device="cpu")
+        centers_t = torch.tensor(centers, dtype=torch.float32, device="cpu")
+
+        def _soft_metrics(p_pos):
+            p_pos = torch.clamp(p_pos, min=eps, max=1.0 - eps)
+            tp = (p_pos * y_t).sum()
+            fp = (p_pos * (1.0 - y_t)).sum()
+            fn = ((1.0 - p_pos) * y_t).sum()
+            precision = tp / (tp + fp + eps)
+            recall = tp / (tp + fn + eps)
+            f1 = 2.0 * precision * recall / (precision + recall + eps)
+            return f1, precision, recall
+
+        with torch.no_grad():
+            d2 = ((x[:, None, :] - centers_t[None, :, :]) ** 2).sum(dim=2)
+            m = (d2[:, 0] - d2[:, 1]).abs()                                  # (N,)
+
+            # Robust typical margin
+            m_med = m.median()
+
+            # Choose target confidence at the "typical" margin
+            p_target = 0.90
+            logit = torch.log(torch.tensor(p_target) / (1.0 - p_target))      # ~2.197
+
+            # Heuristic temperature: median(m) / logit(p_target)
+            temp = (m_med / logit).clamp(min=1e-12).item()
+
+            print("auto temp =", temp)
+            logits = -d2 / temp
+            probs = torch.softmax(logits, dim=1)
+            probs = torch.clamp(probs, min=eps, max=1.0 - eps)
+
+            f1_c0_pos, p_c0_pos, r_c0_pos = _soft_metrics(probs[:, 0])
+            f1_c1_pos, p_c1_pos, r_c1_pos = _soft_metrics(probs[:, 1])
+
+            use_c0_pos = f1_c0_pos >= f1_c1_pos
+            f1 = torch.where(use_c0_pos, f1_c0_pos, f1_c1_pos)
+            precision = torch.where(use_c0_pos, p_c0_pos, p_c1_pos)
+            recall = torch.where(use_c0_pos, r_c0_pos, r_c1_pos)
+            class1_cluster = 0 if bool(use_c0_pos.detach().item()) else 1
+
+            hard_clusters = torch.argmax(probs, dim=1)
+            binary_pred = (hard_clusters == class1_cluster).to(torch.int64)
+
+        return {
+            "soft_f1": float(f1.detach().item()),
+            "soft_precision": float(precision.detach().item()),
+            "soft_recall": float(recall.detach().item()),
+            "cluster_probs": probs.detach().cpu().numpy(),
+            "cluster_labels": hard_clusters.detach().cpu().numpy(),
+            "binary_pred": binary_pred.detach().cpu().numpy(),
+            "class1_cluster": int(class1_cluster),
+            "centers": centers_t.detach().cpu().numpy(),
+        }
+
+    def soft_f1_kmeans(self, Z, y, n_clusters=2, max_iter=200, lr=1e-2, temp=1.0, eps=1e-8, seed=SEED):
+        """
+        Semi-supervised clustering by optimizing a differentiable soft F1 objective.
+        Args:
+        Z: np.ndarray of shape (N, D), preprocessed embeddings
+        y: np.ndarray of shape (N,), binary labels (0/1)
+        """
+        if n_clusters != 2:
+            raise ValueError(f"soft_f1_kmeans currently supports n_clusters=2, got {n_clusters}")
+
+        Z = np.asarray(Z, dtype=np.float32)
+        y = np.asarray(y).astype(np.int64)
+        if Z.ndim != 2:
+            raise ValueError(f"Z must be 2D [N, D], got {Z.shape}")
+        if y.ndim != 1:
+            y = y.reshape(-1)
+        if Z.shape[0] != y.shape[0]:
+            raise ValueError(f"Shape mismatch: Z has {Z.shape[0]} rows but y has {y.shape[0]} labels")
+        if Z.shape[0] < 2:
+            raise ValueError("soft_f1_kmeans requires at least 2 samples")
+        if not np.isin(y, [0, 1]).all():
+            raise ValueError("soft_f1_kmeans expects binary labels in {0, 1}")
+
+        temp = max(float(temp), float(eps))
+
+        x = torch.tensor(Z, dtype=torch.float32, device="cpu")
+        y_t = torch.tensor(y, dtype=torch.float32, device="cpu")
+
+        km_init = KMeans(n_clusters=2, n_init="auto", random_state=seed)
+        km_init.fit(Z)
+        centers = torch.tensor(km_init.cluster_centers_, dtype=torch.float32, device="cpu", requires_grad=True)
+        optimizer = torch.optim.Adam([centers], lr=float(lr))
+
+        def _soft_metrics(p_pos):
+            p_pos = torch.clamp(p_pos, min=eps, max=1.0 - eps)
+            tp = (p_pos * y_t).sum()
+            fp = (p_pos * (1.0 - y_t)).sum()
+            fn = ((1.0 - p_pos) * y_t).sum()
+            precision = tp / (tp + fp + eps)
+            recall = tp / (tp + fn + eps)
+            f1 = 2.0 * precision * recall / (precision + recall + eps)
+            return f1, precision, recall
+
+        def _forward(cur_centers):
+            d2 = ((x[:, None, :] - cur_centers[None, :, :]) ** 2).sum(dim=2)
+            m = (d2[:, 0] - d2[:, 1]).abs()                                  # (N,)
+
+            # Robust typical margin
+            m_med = m.median()
+
+            # Choose target confidence at the "typical" margin
+            p_target = 0.90
+            logit = torch.log(torch.tensor(p_target) / (1.0 - p_target))      # ~2.197
+
+            # Heuristic temperature: median(m) / logit(p_target)
+            temp = (m_med / logit).clamp(min=1e-12).item()
+
+            print("auto temp =", temp)
+            logits = -d2 / temp
+            probs = torch.softmax(logits, dim=1)
+            probs = torch.clamp(probs, min=eps, max=1.0 - eps)
+
+            f1_c0_pos, p_c0_pos, r_c0_pos = _soft_metrics(probs[:, 0])  # cluster 0 => class 1
+            f1_c1_pos, p_c1_pos, r_c1_pos = _soft_metrics(probs[:, 1])  # cluster 1 => class 1
+
+            use_c0_pos = f1_c0_pos >= f1_c1_pos
+            f1 = torch.where(use_c0_pos, f1_c0_pos, f1_c1_pos)
+            precision = torch.where(use_c0_pos, p_c0_pos, p_c1_pos)
+            recall = torch.where(use_c0_pos, r_c0_pos, r_c1_pos)
+            class1_cluster = 0 if bool(use_c0_pos.detach().item()) else 1
+            return d2, probs, f1, precision, recall, class1_cluster
+
+        y_unique = np.unique(y)
+        no_positive_or_negative = len(y_unique) < 2
+        if no_positive_or_negative:
+            warnings.warn(
+                "soft_f1_kmeans received labels with a single class; returning deterministic fallback.",
+                RuntimeWarning,
+            )
+
+        best = None
+        best_soft_f1 = -float("inf")
+        train_steps = 1 if no_positive_or_negative else int(max_iter)
+
+        for _ in range(train_steps):
+            optimizer.zero_grad()
+            _, _, soft_f1_train, _, _, _ = _forward(centers)
+            loss = 1.0 - soft_f1_train
+            if not no_positive_or_negative:
+                loss.backward()
+                optimizer.step()
+
+            with torch.no_grad():
+                d2_eval, probs_eval, soft_f1_eval, soft_precision_eval, soft_recall_eval, class1_cluster_eval = _forward(centers)
+                hard_clusters = torch.argmax(probs_eval, dim=1)
+                counts = torch.bincount(hard_clusters, minlength=2)
+                if counts.min().item() == 0 and not no_positive_or_negative:
+                    min_dist_to_any_center = d2_eval.min(dim=1).values
+                    farthest_idx = int(torch.argmax(min_dist_to_any_center).item())
+                    empty_cluster = int(torch.argmin(counts).item())
+                    centers[empty_cluster].copy_(x[farthest_idx])
+                    _, probs_eval, soft_f1_eval, soft_precision_eval, soft_recall_eval, class1_cluster_eval = _forward(centers)
+                    hard_clusters = torch.argmax(probs_eval, dim=1)
+
+                score = float(soft_f1_eval.detach().item())
+                if score > best_soft_f1:
+                    best_soft_f1 = score
+                    binary_pred = (hard_clusters == class1_cluster_eval).to(torch.int64)
+                    best = {
+                        "soft_f1": score,
+                        "soft_precision": float(soft_precision_eval.detach().item()),
+                        "soft_recall": float(soft_recall_eval.detach().item()),
+                        "cluster_probs": probs_eval.detach().cpu().numpy(),
+                        "cluster_labels": hard_clusters.detach().cpu().numpy(),
+                        "binary_pred": binary_pred.detach().cpu().numpy(),
+                        "class1_cluster": int(class1_cluster_eval),
+                        "centers": centers.detach().cpu().numpy(),
+                    }
+
+        return best
+
+    def cluster_analysis(self, gradient_ds=None, baseline_km_centers=None, save_model=None,
+                          use_pca=False, use_svd=False, use_t_sne=False, 
+                          do_plot=False, normalized=True, perp=30,
+                          use_soft_f1_kmeans=False, soft_f1_max_iter=200, soft_f1_lr=1e-2, soft_f1_temp=1.0,
+                          clustered_soft_f1_only=False):
         """
         Perform clustering analysis on true and false gradient sets
         Default use_pca, use_svd is False
         """
+        if use_soft_f1_kmeans and clustered_soft_f1_only:
+            raise ValueError("use_soft_f1_kmeans and clustered_soft_f1_only are mutually exclusive.")
 
-        G_true = self.true_gradients.numpy()   # (N1, D)
-        G_false = self.false_gradients.numpy() # (N0, D)
+        soft_payload = None
+        soft_summary_key = None
+        if gradient_ds is not None:
+            if use_soft_f1_kmeans or clustered_soft_f1_only:
+                raise ValueError("soft-F1 computation requires labeled train data (gradient_ds path has no labels).")
+            if isinstance(gradient_ds, torch.Tensor):
+                X = gradient_ds.numpy()
+            else:
+                X = np.asarray(gradient_ds)
 
-        # G_true:  (N1, D)
-        # G_false: (N0, D)
-        X = np.concatenate([G_false, G_true], axis=0)
-        y = np.concatenate([np.zeros(len(G_false), dtype=int), np.ones(len(G_true), dtype=int)], axis=0)
+                
+            if normalized:
+                Xn = normalize(X, norm="l2")   # shape (N, D)
+            else:
+                Xn = X
+            print(f'\nXn shape: {Xn.shape}\n')
+
+            # dimension reduction (optional)
+            k = min(100, Xn.shape[1])      
+
+            if use_pca:
+                # PCA 
+                Z = PCA(n_components=k, random_state=SEED).fit_transform(Xn)
+                # Z = GaussianRandomProjection(n_components=k, random_state=SEED).fit_transform(Xn)
+            elif use_svd:
+                # SVD
+                Z = TruncatedSVD(n_components=k, random_state=0).fit_transform(Xn)
+            elif use_t_sne:
+                from sklearn.manifold import TSNE
+                N  = Xn.shape[0]
+                perp = int(min(perp, max(5, (N - 1) // 3)))  # safe for small N
+                print(f'perplexity used in t-SNE is {perp}')
+
+                tsne = TSNE(
+                    n_components=2,
+                    perplexity=perp,
+                    init="pca",
+                    learning_rate="auto",
+                    random_state=SEED
+                )
+                Z = tsne.fit_transform(Xn)  # (N, 2)
+            else:
+                Z = Xn
+            
+            km = KMeans(n_clusters=2, n_init="auto", random_state=SEED)
+            km.fit(Z)
+            c_km = km.predict(Z)
+
+            # if baseline_km_centers is given, do cluster matching for better visualization
+            if baseline_km_centers is not None:
+                C_new = km.cluster_centers_              # (2, Z_dim)
+
+                C_base = joblib.load(f'{baseline_km_centers}').cluster_centers_
+                # C_base = baseline_km_centers             # (2, Z_dim)
+
+                # pairwise squared distances between centroids: D[i,j] = ||C_new[i] - C_base[j]||^2
+                D = ((C_new[:, None, :] - C_base[None, :, :]) ** 2).sum(axis=2)  # (2,2)
+
+                # best bijection for 2 clusters: either identity or swap
+                # choose the assignment with smaller total distance
+                if D[0, 0] + D[1, 1] <= D[0, 1] + D[1, 0]:
+                    mapping = {0: 0, 1: 1}
+                else:
+                    mapping = {0: 1, 1: 0}
+
+                c_km = np.vectorize(mapping.get)(c_km)
+            
+            if save_model is not None:
+                print('Saving kmeans model...')
+                joblib.dump(km, f'{save_model}_km')
+
+            return c_km
+
+        else:
+            G_true = self.true_gradients.numpy()   # (N1, D)
+            G_false = self.false_gradients.numpy() # (N0, D)
+
+            # G_true:  (N1, D)
+            # G_false: (N0, D)
+            X = np.concatenate([G_false, G_true], axis=0)
+            y = np.concatenate([np.zeros(len(G_false), dtype=int), np.ones(len(G_true), dtype=int)], axis=0)
 
 
         # perm = np.random
@@ -243,16 +523,107 @@ class GradientAnalyzer:
         else:
             Z = Xn
 
-        # KMeans clustering
+        # KMeans clustering (vanilla path preserved for backward compatibility)
         km = KMeans(n_clusters=2, n_init="auto", random_state=SEED)
         c_km = km.fit_predict(Z)
         print(c_km)
+
+    # if baseline_km_centers is given, do cluster matching for better visualization
+        if baseline_km_centers is not None:
+            C_new = km.cluster_centers_              # (2, Z_dim)
+
+            print(f"Loading baseline Kmeans model for clustering matching...\n\n")
+
+            C_base = joblib.load(f'{baseline_km_centers}').cluster_centers_
+            # C_base = baseline_km_centers             # (2, Z_dim)
+
+            # pairwise squared distances between centroids: D[i,j] = ||C_new[i] - C_base[j]||^2
+            D = ((C_new[:, None, :] - C_base[None, :, :]) ** 2).sum(axis=2)  # (2,2)
+
+            # best bijection for 2 clusters: either identity or swap
+            # choose the assignment with smaller total distance
+            if D[0, 0] + D[1, 1] <= D[0, 1] + D[1, 0]:
+                mapping = {0: 0, 1: 1}
+            else:
+                mapping = {0: 1, 1: 0}
+
+            c_km = np.vectorize(mapping.get)(c_km)
+        
+        elif save_model is not None:
+            print('Saving kmeans model...')
+            joblib.dump(km, f'{save_model}_km')
 
         acc_km = self._cluster_accuracy_binary(y, c_km)
         ari_km = adjusted_rand_score(y, c_km)
         nmi_km = normalized_mutual_info_score(y, c_km)
 
         print(f"KMeans: acc={acc_km:.4f} ARI={ari_km:.4f} NMI={nmi_km:.4f}")
+
+        if clustered_soft_f1_only:
+            soft_payload = self.soft_f1_from_cluster_centers(
+                Z=Z,
+                y=y,
+                centers=km.cluster_centers_,
+                temp=soft_f1_temp,
+                eps=1e-8,
+            )
+            soft_summary_key = "Soft-F1-on-KMeans"
+            c_soft = soft_payload["cluster_labels"]
+            c_soft_binary = soft_payload["binary_pred"]
+            acc_soft = accuracy_score(y, c_soft_binary)
+            ari_soft = adjusted_rand_score(y, c_soft)
+            nmi_soft = normalized_mutual_info_score(y, c_soft)
+            print(
+                f"\n\nSoft-F1-on-KMeans: acc={acc_soft:.4f} ARI={ari_soft:.4f} NMI={nmi_soft:.4f} "
+                f"softF1={soft_payload['soft_f1']:.4f} softP={soft_payload['soft_precision']:.4f} softR={soft_payload['soft_recall']:.4f}\n\n"
+            )
+
+        elif use_soft_f1_kmeans:
+            if baseline_km_centers is not None:
+                warnings.warn(
+                    "baseline_km_centers alignment is only applied to vanilla KMeans; soft-F1 model uses learned mapping.",
+                    RuntimeWarning,
+                )
+            soft_payload = self.soft_f1_kmeans(
+                Z=Z,
+                y=y,
+                n_clusters=2,
+                max_iter=soft_f1_max_iter,
+                lr=soft_f1_lr,
+                temp=soft_f1_temp,
+                eps=1e-8,
+                seed=SEED,
+            )
+            c_soft = soft_payload["cluster_labels"]
+            c_soft_binary = soft_payload["binary_pred"]
+            acc_soft = accuracy_score(y, c_soft_binary)
+            ari_soft = adjusted_rand_score(y, c_soft)
+            nmi_soft = normalized_mutual_info_score(y, c_soft)
+            print(f"soft kmeans pred: {c_soft_binary}")
+            print(f'label: {y}')
+            print(
+                f"\n\nSoft-F1-KMeans: acc={acc_soft:.4f} ARI={ari_soft:.4f} NMI={nmi_soft:.4f} "
+                f"softF1={soft_payload['soft_f1']:.4f} softP={soft_payload['soft_precision']:.4f} softR={soft_payload['soft_recall']:.4f}\n\n"
+            )
+            soft_summary_key = "Soft-F1-KMeans"
+            if save_model is not None:
+                preproc_mode = "raw"
+                if use_pca:
+                    preproc_mode = "pca"
+                elif use_svd:
+                    preproc_mode = "svd"
+                elif use_t_sne:
+                    preproc_mode = "tsne"
+                print('Saving soft-f1 kmeans model...')
+                joblib.dump(
+                    {
+                        "centers": soft_payload["centers"],
+                        "temp": float(soft_f1_temp),
+                        "class1_cluster": int(soft_payload["class1_cluster"]),
+                        "preprocess_mode": preproc_mode,
+                    },
+                    f'{save_model}_softf1_km'
+                )
 
         #  GMM clustering 
         # gmm = GaussianMixture(n_components=2, covariance_type="full", random_state=SEED)
@@ -301,7 +672,7 @@ class GradientAnalyzer:
             plt.savefig('tsne_kmeans_label.png')
 
             plt.subplot(1, 3, 3)
-            plt.scatter(Z[:, 0], Z[:, 1], c=c_km, s=18)
+            plt.scatter(Z[:, 0], Z[:, 1], c=c_gmm, s=18)
             plt.title("t-SNE colored by GMM clusters")
             plt.xlabel("t-SNE-1"); plt.ylabel("t-SNE-2")
             plt.savefig('tsne_gmm_label.png')
@@ -311,7 +682,26 @@ class GradientAnalyzer:
         
         return {"GMM": f"GMM:    acc={acc_gmm:.4f} ARI={ari_gmm:.4f} NMI={nmi_gmm:.4f}",
                 "K-means": f"KMeans: acc={acc_km:.4f} ARI={ari_km:.4f} NMI={nmi_km:.4f}",
-                "Aggolomerative": f"AGG:    acc={acc_ag:.4f} ARI={ari_ag:.4f} NMI={nmi_ag:.4f}"}
+                "Aggolomerative": f"AGG:    acc={acc_ag:.4f} ARI={ari_ag:.4f} NMI={nmi_ag:.4f}",
+                **(
+                    {
+                        soft_summary_key: (
+                            f"{soft_summary_key}: acc={accuracy_score(y, soft_payload['binary_pred']):.4f} "
+                            f"ARI={adjusted_rand_score(y, soft_payload['cluster_labels']):.4f} "
+                            f"NMI={normalized_mutual_info_score(y, soft_payload['cluster_labels']):.4f} "
+                            f"softF1={soft_payload['soft_f1']:.4f} "
+                            f"softP={soft_payload['soft_precision']:.4f} "
+                            f"softR={soft_payload['soft_recall']:.4f}"
+                        ),
+                        "soft_f1": soft_payload["soft_f1"],
+                        "soft_precision": soft_payload["soft_precision"],
+                        "soft_recall": soft_payload["soft_recall"],
+                        "cluster_probs": soft_payload["cluster_probs"],
+                        "cluster_labels": soft_payload["cluster_labels"],
+                    }
+                    if soft_payload is not None
+                    else {}
+                )}
 
 
     def _cluster_accuracy_binary(self, y_true, y_pred_cluster):
@@ -428,7 +818,7 @@ class GradientAnalyzer:
         return torch.exp(H).item()
 
 
-    def svm_analysis(self, IN_TEST=True, in_test_ratio=0.5):
+    def svm_analysis(self, baseline_model=None, save_model=None, IN_TEST=True, in_test_ratio=0.5):
         """
         perform SVM classification on two gradient sets
         """
@@ -461,6 +851,11 @@ class GradientAnalyzer:
             # print(f'SVM prediction: {ypred}')
             print(f'SVM classification accuracy: {acc:.4f}')
 
+            if save_model is not None:
+                print('Saving SVM model...\n\n')
+                joblib.dump(svm, f'{save_model}_svm')
+
+
             svm = SVC(kernel='linear', random_state=SEED)
             print(f'Using SVM with linear kernel')
             svm.fit(Xtr, ytr)
@@ -472,26 +867,32 @@ class GradientAnalyzer:
             res = {'rbf': {'acc': acc, 'ypred': ypred.tolist()}, 'linear': {'acc': acc_l, 'ypred': ypred_l.tolist()}}
             return res
 
-        else:
+        elif baseline_model is not None:
+            # load baseline model, test on current set
+            print(f"Loading baseline SVM model from {baseline_model} for predicting...\n\n")
+            svm = joblib.load(baseline_model)
+            ypred = svm.predict(X)
+            acc = accuracy_score(Y, ypred)
 
-            svm = SVC(kernel='linear', random_state=SEED)
-            # svm = SVC(kernel='rbf', C=3.0, gamma='scale', random_state=SEED)
-            svm.fit(X, Y)
+            # svm = SVC(kernel='linear', random_state=SEED)
+            # # svm = SVC(kernel='rbf', C=3.0, gamma='scale', random_state=SEED)
+            # svm.fit(X, Y)
 
-            G_true = self.external_true_gradients.numpy()   # (N1, D)
-            G_false = self.external_false_gradients.numpy() # (N0, D)
+            # G_true = self.external_true_gradients.numpy()   # (N1, D)
+            # G_false = self.external_false_gradients.numpy() # (N0, D)
 
-            # Suppose you have:
-            # G_true:  (N1, D)
-            # G_false: (N0, D)
-            Xte = np.concatenate([G_false, G_true], axis=0)
-            Yte = np.concatenate([np.zeros(len(G_false), dtype=int), np.ones(len(G_true), dtype=int)], axis=0)
-            Xte = normalize(Xte, norm="l2")   # shape (N, D)
+            # # Suppose you have:
+            # # G_true:  (N1, D)
+            # # G_false: (N0, D)
+            # Xte = np.concatenate([G_false, G_true], axis=0)
+            # Yte = np.concatenate([np.zeros(len(G_false), dtype=int), np.ones(len(G_true), dtype=int)], axis=0)
+            # Xte = normalize(Xte, norm="l2")   # shape (N, D)
 
-            ypred = svm.predict(Xte)
-            acc = accuracy_score(Yte, ypred)
-            print(f'SVM classification accuracy on external gradient set: {acc:.4f}')    
-            res = {'rbf': {'acc': acc, 'ypred': ypred.tolist()}, 'linear': {'acc': acc_l, 'ypred': ypred_l.tolist()}}
+            # ypred = svm.predict(Xte)
+            # acc = accuracy_score(Yte, ypred)
+            print(f'SVM classification accuracy on external gradient set: {acc:.4f}\n\n') 
+            print(f'SVM prediction on current set: {ypred}\n\n')   
+            res = {'rbf': {'acc': acc, 'ypred': ypred.tolist()}}
             return res
 
 
@@ -855,9 +1256,5 @@ if __name__ == "__main__":
     plt.title(f'Cosine Similarity Analysis to train {to_true}set. Trueset higher: {sum(higher)}/{len(higher)}')
     plt.legend()
     plt.savefig(f'cos_sim_external_sets_to_{to_true}set.png')
-
-
-
-
 
 

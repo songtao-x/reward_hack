@@ -1,0 +1,3 @@
+INFO 02-22 21:54:25 [__init__.py:220] No platform detected, vLLM is running on UnspecifiedPlatform
+/var/spool/slurmd/job4023518/slurm_script: line 25: 2041732 Killed                  python -m train.eval.arlsat_eval_single --model-dir "/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/train/output/arlsat_d1_soft_sft_gpt/gradient/s0/dpo" --eval-dir "/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/train/eval/data/arlsat_d1_soft_sft_gpt/gradient/s0" --skip-existing
+[2026-02-23T04:54:26.559] error: Detected 1 oom_kill event in StepId=4023518.batch. Some of the step tasks have been OOM Killed.

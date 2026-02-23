@@ -61,7 +61,7 @@ from .trace import get_trace_on_ds
 
 random.seed(224)
 
-MAX_TOKEN = 4096
+MAX_TOKEN = 3072
 
 
 
@@ -127,7 +127,7 @@ def RH_labeling(inference, model_name, cheat=True, arlsat=False):
         gen = inf['gen']
         label = inf['label']
         ans, res = result_processer(response=gen, label=label)
-        print(f'Current gen result detection: {ans}, {label}\n')
+        # print(f'Current gen result detection: {ans}, {label}\n')
         # input()
         if res:
             if counterfactualtest(llm, sampler, res=prompt, label=label, cheat=cheat, arlsat=arlsat):

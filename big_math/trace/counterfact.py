@@ -161,7 +161,7 @@ def counterfactualtest(llm, sampler, res, label, cheat=True, arlsat=False):
     outputs = llm.generate(new_res, sampler)
     output = outputs[0].outputs[0].text
     ans, res = result_processer(output, label)
-    print(f'Counterfactual test result: {ans}, {res}')
+    # print(f'Counterfactual test result: {ans}, {res}')
 
     return res
 

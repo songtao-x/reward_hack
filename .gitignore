@@ -42,11 +42,25 @@ big_math/**/__pycache__/*
 big_math/**/*.log
 big_math/outputs
 big_math/*.png
+big_math/*.pt
 
 code/data
 code/all_backup
 code/Reward-Hacking-main
 
+train/*
+!train/grpo_train.py
+!train/rloo_train.py
+!train/sft_train.py
+!train/labeling.py
+!train/load_data.py
+!train/ds_zero3.json
+train/**/log
+train/**/wandb
+train/**/*.pt
+train/codegen/sh/
+
 **/__pycache__/*
 
 
+.worktrees/

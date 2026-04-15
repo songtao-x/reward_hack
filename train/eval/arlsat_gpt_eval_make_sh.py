@@ -7,12 +7,12 @@ from pathlib import Path
 
 PROJECT_ROOT = Path("/home/songtaow/projects/aip-xiye17/songtaow/reward_hack")
 TRAIN_OUTPUT_ROOT = PROJECT_ROOT / "train/output"
-SH_ROOT = PROJECT_ROOT / "train/eval/sh_eval/arlsat_gpt_eval"
+SH_ROOT = PROJECT_ROOT / "train/eval/sh_eval/arlsat_gpt_eval/full"
 
 
 def discover_jobs(train_output_root: Path):
     jobs = []
-    for dpo_dir in sorted(train_output_root.glob("*/*/s*/dpo")):
+    for dpo_dir in sorted(train_output_root.glob("*/*/s*/sft")):
         if not dpo_dir.is_dir():
             continue
 
@@ -82,14 +82,13 @@ def render_script(group):
             f'echo "=== {group["exp"]}/{group["method"]}/{job["seed"]} ==="',
             f'if [ ! -f "{inference_json}" ]; then',
             f'  echo "Skip (missing inference): {inference_json}"',
-            "  continue",
+            "else",
+            "  python -m train.eval.arlsat_eval_single \\",
+            f'    --model-dir "{model_dir}" \\',
+            f'    --eval-dir "{eval_dir}" \\',
+            "    --skip-existing \\",
+            "    --do-gpt-eval",
             "fi",
-            # Uses current arlsat_eval_single.py path, skips inference and runs GPT eval + accuracy.
-            f'python -m train.eval.arlsat_eval_single \\',
-            f'  --model-dir "{model_dir}" \\',
-            f'  --eval-dir "{eval_dir}" \\',
-            f'  --skip-existing \\',
-            f'  --do-gpt-eval',
             "",
         ]
 

@@ -39,6 +39,52 @@ SEED = 224
 
 MAX_TOKEN = 4096
 
+_CHECKPOINT_RE = re.compile(r"checkpoint-(\d+)$")
+
+
+def _find_latest_checkpoint(output_dir):
+    if not os.path.isdir(output_dir):
+        return None
+
+    latest_step = None
+    latest_path = None
+    for name in os.listdir(output_dir):
+        match = _CHECKPOINT_RE.fullmatch(name)
+        if not match:
+            continue
+        checkpoint_path = os.path.join(output_dir, name)
+        if not os.path.isdir(checkpoint_path):
+            continue
+        step = int(match.group(1))
+        if latest_step is None or step > latest_step:
+            latest_step = step
+            latest_path = checkpoint_path
+    return latest_path
+
+
+def _find_latest_resumable_checkpoint(output_dir):
+    if not os.path.isdir(output_dir):
+        return None
+
+    latest_checkpoint = _find_latest_checkpoint(output_dir)
+    if latest_checkpoint and os.path.exists(os.path.join(latest_checkpoint, "trainer_state.json")):
+        return latest_checkpoint
+
+    checkpoints = []
+    for name in os.listdir(output_dir):
+        match = _CHECKPOINT_RE.fullmatch(name)
+        if not match:
+            continue
+        checkpoint_path = os.path.join(output_dir, name)
+        if not os.path.isdir(checkpoint_path):
+            continue
+        checkpoints.append((int(match.group(1)), checkpoint_path))
+    checkpoints.sort(reverse=True)
+    for _, checkpoint_path in checkpoints:
+        if os.path.exists(os.path.join(checkpoint_path, "trainer_state.json")):
+            return checkpoint_path
+    return None
+
 
 # --- Example: a very simple reward function (replace with your verifier / trace / etc.) ---
 def rloo_reward_func(prompts, completions: list[str], **kwargs) -> List[float]:
@@ -441,7 +487,10 @@ def rloo_train(cfg, ds):
         processing_class=tokenizer,
     )
 
-    trainer.train()
+    resume_from_checkpoint = cfg.rloo_resume_from_checkpoint or None
+    if resume_from_checkpoint:
+        print(f"Resuming RLOO from checkpoint: {resume_from_checkpoint}\n")
+    trainer.train(resume_from_checkpoint=resume_from_checkpoint)
     trainer.save_model()
 
 
@@ -471,6 +520,12 @@ def add_rloo_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
         type=str,
         default="/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/train/output/s0/rloo",
         help="Output directory for TRL RLOO checkpoints/logs.",
+    )
+    parser.add_argument(
+        "--rloo_resume_from_checkpoint",
+        type=str,
+        default="",
+        help="Resume TRL RLOO training from this checkpoint directory.",
     )
     parser.add_argument(
         "--rloo_max_steps",
@@ -545,6 +600,11 @@ if __name__ == "__main__":
             step * (n_rl_samples + n_samples) : step * (n_rl_samples + n_samples) + n_rl_samples
         ]
         ds = Dataset.from_list(ds_)
+        if not rloo_cfg.rloo_resume_from_checkpoint:
+            latest_checkpoint = _find_latest_resumable_checkpoint(model_name)
+            if latest_checkpoint:
+                rloo_cfg.rloo_resume_from_checkpoint = latest_checkpoint
+                print(f"Detected existing RLOO checkpoint, auto-resuming from {latest_checkpoint}.\n")
 
         if os.path.exists(model_name + "/model-00001-of-00002.safetensors"):
             print(f"Model dir {model_name} already exists, skip training.\n")

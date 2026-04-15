@@ -1,2 +1,0 @@
-INFO 02-22 21:54:31 [__init__.py:220] No platform detected, vLLM is running on UnspecifiedPlatform
-[2026-02-23T04:54:35.690] error: *** JOB 4023519 ON rack10-01 CANCELLED AT 2026-02-23T04:54:35 DUE to SIGNAL Terminated ***

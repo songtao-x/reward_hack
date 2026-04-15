@@ -1,10 +1,10 @@
-
 import argparse
 import json
 import os
 import random
 import re
 from pathlib import Path
+from typing import Optional, Sequence
 
 from tqdm.auto import tqdm
 
@@ -28,8 +28,16 @@ def _import_vllm():
     return LLM, SamplingParams
 
 
-def load_data_bigmath(cheat=True, k=200, mix=False):
-    from big_math.trace.load_data import load_data  # lazy import (pulls in heavy deps)
+def build_sampling_kwargs(*, temperature: float, top_p: float, max_token: int) -> dict:
+    return {
+        "temperature": temperature,
+        "top_p": top_p,
+        "max_tokens": max_token,
+    }
+
+
+def load_data_bigmath(cheat: bool = True, k: int = 200, mix: bool = False):
+    from big_math.trace.load_data import load_data  # lazy import
 
     ds = load_data(cheat=cheat, mix=mix)
     if k is None or k <= 0:
@@ -37,20 +45,27 @@ def load_data_bigmath(cheat=True, k=200, mix=False):
     return ds[:k]
 
 
-def inference(model_name, ds, output_dir, max_token=MAX_TOKEN, batch_size=4, tensor_parallel_size=4):
+def inference(
+    model_name,
+    ds,
+    output_dir,
+    max_token: int = MAX_TOKEN,
+    batch_size: int = 4,
+    tensor_parallel_size: int = 4,
+    temperature: float = 0.0,
+    top_p: float = 1.0,
+    max_num_seqs: int = 128,
+):
     os.makedirs(output_dir, exist_ok=True)
     result_processer = _import_result_processer()
     LLM, SamplingParams = _import_vllm()
 
-    sampling_params = SamplingParams(
-        temperature=0,
-        top_p=1,
-        max_tokens=max_token,
-    )
+    sampling_params = SamplingParams(**build_sampling_kwargs(temperature=temperature, top_p=top_p, max_token=max_token))
 
     llm = LLM(
         model=model_name,
         tensor_parallel_size=tensor_parallel_size,
+        max_num_seqs=max_num_seqs,
     )
 
     res = []
@@ -82,6 +97,12 @@ def inference(model_name, ds, output_dir, max_token=MAX_TOKEN, batch_size=4, ten
     with open(os.path.join(output_dir, "inference.json"), "w") as f:
         json.dump(res, f, indent=2)
 
+    import gc
+    import torch
+    del llm
+    gc.collect()
+    torch.cuda.empty_cache()
+
     return res
 
 
@@ -99,7 +120,16 @@ def accuracy(output_dir):
     return res
 
 
-def labeling(model_name, output_dir, cheat=True, max_token=4096, tensor_parallel_size=4):
+def labeling(
+    model_name,
+    output_dir,
+    cheat: bool = True,
+    max_token: int = 4096,
+    tensor_parallel_size: int = 4,
+    temperature: float = 0.0,
+    top_p: float = 1.0,
+    max_num_seqs: int = 128,
+):
     result_processer = _import_result_processer()
     LLM, SamplingParams = _import_vllm()
     from big_math.trace.counterfact import counterfactualtest  # lazy import
@@ -107,14 +137,11 @@ def labeling(model_name, output_dir, cheat=True, max_token=4096, tensor_parallel
     with open(os.path.join(output_dir, "inference.json"), "r") as f:
         ds = json.load(f)
 
-    sampling_params = SamplingParams(
-        temperature=0,
-        top_p=1,
-        max_tokens=max_token,
-    )
+    sampling_params = SamplingParams(**build_sampling_kwargs(temperature=temperature, top_p=top_p, max_token=max_token))
     llm = LLM(
         model=model_name,
         tensor_parallel_size=tensor_parallel_size,
+        max_num_seqs=max_num_seqs,
     )
 
     correct = []
@@ -162,6 +189,13 @@ def labeling(model_name, output_dir, cheat=True, max_token=4096, tensor_parallel
     }
     with open(os.path.join(output_dir, "labeling_results.json"), "w") as f:
         json.dump(summary, f, indent=2)
+
+    import gc
+    import torch
+    del llm
+    gc.collect()
+    torch.cuda.empty_cache()
+
     return summary
 
 
@@ -190,6 +224,10 @@ def run_one(
     max_token=4096,
     batch_size=4,
     tensor_parallel_size=4,
+    temperature: float = 0.0,
+    top_p: float = 1.0,
+    dataset: Optional[Sequence[dict]] = None,
+    max_num_seqs: int = 128,
 ):
     eval_dir = _resolve_eval_dir(eval_dir=eval_dir, eval_root=eval_root, method=method, seed=seed)
     os.makedirs(eval_dir, exist_ok=True)
@@ -198,17 +236,20 @@ def run_one(
     if skip_existing and os.path.exists(inference_path):
         print(f"[skip] inference exists: {inference_path}")
     else:
-        test_ds = load_data_bigmath(cheat=cheat, k=max_samples, mix=mix)
-        for i, ex in enumerate(test_ds):
+        eval_ds = list(dataset) if dataset is not None else load_data_bigmath(cheat=cheat, k=max_samples, mix=mix)
+        for i, ex in enumerate(eval_ds):
             ex.setdefault("pid", i)
-        print(f"[run] inference model={model_dir} n={len(test_ds)}")
+        print(f"[run] inference model={model_dir} n={len(eval_ds)}")
         inference(
             model_name=model_dir,
-            ds=test_ds,
+            ds=eval_ds,
             output_dir=eval_dir,
             max_token=max_token,
             batch_size=batch_size,
             tensor_parallel_size=tensor_parallel_size,
+            temperature=temperature,
+            top_p=top_p,
+            max_num_seqs=max_num_seqs,
         )
 
     acc = accuracy(output_dir=eval_dir)
@@ -223,6 +264,9 @@ def run_one(
             cheat=cheat,
             max_token=max_token,
             tensor_parallel_size=tensor_parallel_size,
+            temperature=temperature,
+            top_p=top_p,
+            max_num_seqs=max_num_seqs,
         )
         print(f"[label] {label_res}")
 
@@ -271,6 +315,8 @@ def run_many(
     max_token=4096,
     batch_size=4,
     tensor_parallel_size=4,
+    temperature: float = 0.0,
+    top_p: float = 1.0,
 ):
     jobs = discover_jobs(output_root=output_root, method=method)
     if include:
@@ -285,7 +331,7 @@ def run_many(
 
     results = []
     for job in jobs:
-        print(f"\n=== {job['method']}/{job['seed']} ===")
+        print(f"\n=== {job[method]}/{job[seed]} ===")
         out = run_one(
             job["model_dir"],
             eval_root=str(eval_root),
@@ -299,6 +345,8 @@ def run_many(
             max_token=max_token,
             batch_size=batch_size,
             tensor_parallel_size=tensor_parallel_size,
+            temperature=temperature,
+            top_p=top_p,
         )
         results.append({**job, **out})
 
@@ -318,39 +366,25 @@ def main():
     parser.add_argument("--model-dir", default="", help="Run a single model dir (e.g., .../gradient/s0/sft)")
     parser.add_argument("--eval-dir", default="", help="Eval output dir for single-model mode")
     parser.add_argument("--output-root", default=default_output_root, help="Train output root containing gradient/trace")
-    parser.add_argument("--eval-root", default=default_eval_root, help="Eval root for batch mode")
-    parser.add_argument("--method", choices=["gradient", "trace", "all"], default="all")
-    parser.add_argument("--include", default="", help="Only run jobs whose model path contains this substring")
-    parser.add_argument("--exclude", default="", help="Skip jobs whose model path contains this substring")
-    parser.add_argument("--max-samples", type=int, default=200, help="Number of BigMath test samples (<=0 means all)")
-    parser.add_argument("--batch-size", type=int, default=4)
-    parser.add_argument("--max-token", type=int, default=4096)
-    parser.add_argument("--tensor-parallel-size", type=int, default=4)
+    parser.add_argument("--eval-root", default=default_eval_root, help="Eval output root")
+    parser.add_argument("--method", default="all", choices=["all", "gradient", "trace"])
+    parser.add_argument("--cheat", action="store_true")
+    parser.add_argument("--mix", action="store_true")
+    parser.add_argument("--max-samples", type=int, default=200)
     parser.add_argument("--skip-existing", action="store_true")
-    parser.add_argument("--do-labeling", action="store_true", help="Run counterfactual labeling on correct generations")
-    parser.add_argument("--mix", action="store_true", help="Use mixed BigMath dataset variant")
-    parser.add_argument("--no-cheat", action="store_true", help="Use non-cheat BigMath prompts")
+    parser.add_argument("--do-labeling", action="store_true")
+    parser.add_argument("--max-token", type=int, default=4096)
+    parser.add_argument("--batch-size", type=int, default=4)
+    parser.add_argument("--tensor-parallel-size", type=int, default=4)
+    parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--top-p", type=float, default=1.0)
     args = parser.parse_args()
 
-    cheat = not args.no_cheat
-
     if args.model_dir:
-        seed = None
-        if not args.eval_dir:
-            m = re.search(r"/(gradient|trace)/(s\d+)/sft/?$", os.path.expanduser(args.model_dir))
-            if m:
-                if args.method == "all":
-                    args.method = m.group(1)
-                seed = m.group(2)
-            if args.method == "all" or not seed:
-                raise ValueError("--eval-dir is required when --model-dir is provided unless model-dir matches .../<method>/sX/sft and --method is set")
         run_one(
-            model_dir=os.path.expanduser(args.model_dir),
-            eval_dir=os.path.expanduser(args.eval_dir) if args.eval_dir else None,
-            eval_root=args.eval_root if not args.eval_dir else None,
-            method=args.method if args.method != "all" else None,
-            seed=seed,
-            cheat=cheat,
+            args.model_dir,
+            eval_dir=args.eval_dir,
+            cheat=args.cheat,
             max_samples=args.max_samples,
             mix=args.mix,
             skip_existing=args.skip_existing,
@@ -358,26 +392,26 @@ def main():
             max_token=args.max_token,
             batch_size=args.batch_size,
             tensor_parallel_size=args.tensor_parallel_size,
+            temperature=args.temperature,
+            top_p=args.top_p,
         )
-        return
-
-    run_many(
-        output_root=args.output_root,
-        eval_root=args.eval_root,
-        method=args.method,
-        include=args.include,
-        exclude=args.exclude,
-        cheat=cheat,
-        max_samples=args.max_samples,
-        mix=args.mix,
-        skip_existing=args.skip_existing,
-        do_labeling=args.do_labeling,
-        max_token=args.max_token,
-        batch_size=args.batch_size,
-        tensor_parallel_size=args.tensor_parallel_size,
-    )
+    else:
+        run_many(
+            output_root=args.output_root,
+            eval_root=args.eval_root,
+            method=args.method,
+            cheat=args.cheat,
+            max_samples=args.max_samples,
+            mix=args.mix,
+            skip_existing=args.skip_existing,
+            do_labeling=args.do_labeling,
+            max_token=args.max_token,
+            batch_size=args.batch_size,
+            tensor_parallel_size=args.tensor_parallel_size,
+            temperature=args.temperature,
+            top_p=args.top_p,
+        )
 
 
 if __name__ == "__main__":
     main()
-            

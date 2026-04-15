@@ -9,21 +9,15 @@ build dpo training set:
 """
 
 
-import re
 import os
-import random
 import argparse
 import json
-from typing import List, Dict, Any
-from dataclasses import dataclass
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 import torch
-from datasets import load_dataset,Dataset
-from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
-from trl import GRPOConfig, GRPOTrainer, DPOConfig, DPOTrainer
-from utils_.data_process import result_processer
-from vllm import LLM, SamplingParams
+from datasets import Dataset
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from trl import DPOConfig, DPOTrainer
 
 
 # ----------------------------
@@ -95,16 +89,21 @@ def dpo_train(cfg, ds):
     model = AutoModelForCausalLM.from_pretrained(model_dir, torch_dtype="auto", device_map="auto")
     ref_model = AutoModelForCausalLM.from_pretrained(base_model_dir, torch_dtype="auto", device_map="auto")
     tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=True)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
 
-    # adjust accum steps
-    N = len(ds)
-    base = cfg.dpo_accumulation_step  # default 8
-    if N > 16:
-        accum_steps = base          # 8
-    elif 8 < N <= 16:
-        accum_steps = max(1, base // 2)  # 4
+    # In tuning mode, use the requested accumulation step exactly.
+    if cfg.dpo_mode == "dpo_params_tune":
+        accum_steps = cfg.dpo_accumulation_step
     else:
-        accum_steps = max(1, base // 4)  # 2
+        N = len(ds)
+        base = cfg.dpo_accumulation_step  # default 8
+        if N > 16:
+            accum_steps = base
+        elif 8 < N <= 16:
+            accum_steps = max(1, base // 2)
+        else:
+            accum_steps = max(1, base // 4)
 
     dpo_cfg = DPOConfig(
         output_dir=cfg.dpo_output_dir,
@@ -126,7 +125,8 @@ def dpo_train(cfg, ds):
         # logging / saving
         logging_steps=cfg.dpo_logging_steps,
         save_steps=cfg.dpo_save_steps,
-        save_total_limit=1,
+        save_total_limit=cfg.dpo_save_total_limit,
+        save_strategy="no",
 
         # --- DPO-specific ---
         beta=cfg.dpo_beta,
@@ -148,12 +148,30 @@ def dpo_train(cfg, ds):
     dpo_trainer.save_model()
 
 
+def _resolve_dpo_output_paths(cfg) -> Tuple[str, str, str]:
+    step_root = os.path.join(cfg.dpo_output_dir, cfg.labeling_method, f"s{cfg.step}")
+
+    if cfg.dpo_mode == "dpo_params_tune":
+        if not cfg.dpo_tune_tag:
+            raise ValueError("--dpo_tune_tag is required when --dpo_mode dpo_params_tune is used.")
+        tagged_root = os.path.join(step_root, cfg.dpo_tune_tag)
+        return step_root, tagged_root, os.path.join(tagged_root, "dpo")
+
+    return step_root, step_root, os.path.join(step_root, "dpo")
+
+
 def add_dpo_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     parser.add_argument("--step", type=int, default=0, help="Current training step, used for naming and loading.")
+    parser.add_argument(
+        "--dpo_mode",
+        default="standard",
+        choices=["standard", "dpo_params_tune"],
+        help="DPO pipeline mode. 'dpo_params_tune' reuses step data but writes the DPO model into a parameter-tagged subdirectory.",
+    )
 
     # model args
     parser.add_argument("--dpo_output_dir", type=str, default="/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/train/output/arlsat")
-    parser.add_argument("--dpo_model_dir", type=str, default="/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/train/output/arlsat/gradient/s0/grpo")
+    parser.add_argument("--dpo_model_dir", type=str, default="")
     parser.add_argument("--base_model_dir", type=str, default="Qwen/Qwen3-4B")
 
     # training args
@@ -162,7 +180,7 @@ def add_dpo_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     # parser.add_argument("--dpo_lr", type=float, default=1e-5)
     parser.add_argument("--dpo_epochs", type=int, default=1)
     parser.add_argument("--dpo_lr", type=float, default=2e-6)
-    parser.add_argument("--warmup_ratio", default=0.1)
+    parser.add_argument("--warmup_ratio", type=float, default=0.1)
 
     parser.add_argument("--dpo_batch_size_per_device", type=int, default=1)
     # parser.add_argument("--dpo_accumulation_step", type=int, default=4)
@@ -171,6 +189,7 @@ def add_dpo_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     # logging args
     parser.add_argument("--dpo_logging_steps", type=int, default=1)
     parser.add_argument("--dpo_save_steps", type=int, default=2)
+    parser.add_argument("--dpo_save_total_limit", type=int, default=1)
 
     parser.add_argument("--dpo_beta", type=float, default=0.1)
 
@@ -183,6 +202,18 @@ def add_dpo_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     # cluster method for gradient analysis
     parser.add_argument("--cluster_method", type=str, default="kmeans", 
                         choices=["kmeans", "gmm"], help="clustering method for gradient analysis")
+    parser.add_argument(
+        "--dpo_trainset_path",
+        type=str,
+        default="",
+        help="Optional labeled DPO trainset path. If set, skip deriving the default step path and train directly from this file.",
+    )
+    parser.add_argument(
+        "--dpo_tune_tag",
+        type=str,
+        default="",
+        help="Optional parameter tag appended to the step directory when --dpo_mode dpo_params_tune is used.",
+    )
 
     return parser
 
@@ -192,30 +223,45 @@ if __name__ == "__main__":
     add_dpo_args(parser)
     args = parser.parse_args()
 
-    # basic settings
-    step = args.step
-    n_samples = 16
-    n_grpo_samples = 16
-    
-    output_dir = f"{args.dpo_output_dir}/{args.labeling_method}/s{step}"
-    model_name = f"{args.dpo_output_dir}/{args.labeling_method}/s{step}/grpo"
+    step_root, model_output_root, args.dpo_output_dir = _resolve_dpo_output_paths(args)
 
-    args.dpo_output_dir = output_dir + '/dpo'
+    if args.dpo_model_dir:
+        model_name = args.dpo_model_dir
+    elif args.dpo_trainset_path:
+        grpo_model_dir = os.path.join(step_root, "grpo")
+        model_name = grpo_model_dir if os.path.exists(grpo_model_dir) else args.base_model_dir
+    else:
+        model_name = os.path.join(step_root, "grpo")
     args.dpo_model_dir = model_name
 
-    # load dpo trainset
-    print("Running DPO training...\n")
-    print(f'Current labeling method: {args.labeling_method}')
+    if args.dpo_trainset_path:
+        pairs_path = args.dpo_trainset_path
+    else:
+        pairs_path = os.path.join(step_root, args.labeling_method, "dpo_trainset.json")
 
-    with open(os.path.join(output_dir, args.labeling_method, 'dpo_trainset.json'), 'r') as f:
+    print("Running DPO training...\n")
+    print(f"Current labeling method: {args.labeling_method}")
+    print(f"Using step data dir: {step_root}\n")
+    if model_output_root != step_root:
+        print(f"Using tuned model dir: {args.dpo_output_dir}\n")
+    print(f"DPO trainset path: {pairs_path}")
+    print(f"Policy model dir: {args.dpo_model_dir}")
+    print(f"Reference model dir: {args.base_model_dir}")
+
+    if not os.path.exists(pairs_path):
+        raise FileNotFoundError(f"Missing DPO trainset: {pairs_path}")
+
+    with open(pairs_path, "r") as f:
         dpo_trainset = json.load(f)
-        dpo_trainset = Dataset.from_list(dpo_trainset)
-    
-    # dpo training
-    if os.path.exists(args.dpo_output_dir + '/model-00001-of-00002.safetensors'):
+
+    if len(dpo_trainset) == 0:
+        print(f"Empty DPO trainset at {pairs_path}; skipping DPO training.")
+        raise SystemExit(0)
+
+    dpo_trainset = Dataset.from_list(dpo_trainset)
+
+    if os.path.exists(os.path.join(args.dpo_output_dir, "model-00001-of-00002.safetensors")):
         print(f"Found existing DPO model at {args.dpo_output_dir}, skipping DPO training...")
     else:
         dpo_train(cfg=args, ds=dpo_trainset)
-
-
 

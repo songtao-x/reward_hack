@@ -24,6 +24,65 @@ if ARLSAT_DIR not in sys.path:
 from train.grpo_train import gradient_labeling, trace_labeling  # noqa: E402
 
 
+def _load_json_if_exists(path: str):
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"WARNING: failed to load json {path}: {e}")
+        return None
+
+
+def _dump_json(path: str, payload):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as f:
+        json.dump(payload, f, indent=2)
+
+
+def _sampling_partial_paths(save_dir: str):
+    return (
+        os.path.join(save_dir, "samples.partial.json"),
+        os.path.join(save_dir, "all_samples.partial.json"),
+    )
+
+
+def _save_sampling_partial(save_dir: str, records, all_records):
+    samples_partial_path, all_partial_path = _sampling_partial_paths(save_dir)
+    _dump_json(samples_partial_path, records)
+    _dump_json(all_partial_path, all_records)
+
+
+def _load_sampling_partial(save_dir: str, ds_len: int):
+    samples_partial_path, all_partial_path = _sampling_partial_paths(save_dir)
+    records = _load_json_if_exists(samples_partial_path)
+    all_records = _load_json_if_exists(all_partial_path)
+
+    if not isinstance(records, list):
+        records = []
+    if not isinstance(all_records, list):
+        all_records = []
+
+    if len(all_records) > ds_len:
+        print(
+            f"WARNING: partial sampling length {len(all_records)} > dataset length {ds_len}; "
+            "ignoring partial sampling files."
+        )
+        return [], [], 0
+
+    if len(records) != len(all_records):
+        m = min(len(records), len(all_records))
+        print(
+            f"WARNING: partial sampling mismatch (records={len(records)}, all_records={len(all_records)}); "
+            f"truncating to {m}."
+        )
+        records = records[:m]
+        all_records = all_records[:m]
+
+    return records, all_records, len(all_records)
+
+
 def build_prompt(question: str, style: str = "plain") -> str:
     if style == "plain":
         return (
@@ -88,30 +147,60 @@ def sample_correct_rollouts(
     ds: List[Dict[str, Any]],
     save_dir: str,
     reward_url: str,
+    base_model: str = "Qwen/Qwen2.5-3B-Instruct",
     k: int = 8,
     k_max: int = 32,
     batch_size: int = 8,
-    temp: float = 0.7,
-    top_p: float = 0.9,
-    max_tokens: int = 384,
-    tensor_parallel_size: int = 1,
+    temp: float = 0,
+    top_p: float = 1,
+    max_tokens: int = 3072,
+    tensor_parallel_size: int = 4,
     reward_timeout_s: int = 120,
+    resume: bool = True,
+    save_every_prompts: int = 8,
 ) -> List[Dict[str, Any]]:
     os.makedirs(save_dir, exist_ok=True)
-    llm = LLM(model=model_name, tensor_parallel_size=tensor_parallel_size)
+    final_samples_path = os.path.join(save_dir, "samples.json")
+    final_all_samples_path = os.path.join(save_dir, "all_samples.json")
+
+    if resume and os.path.exists(final_samples_path) and os.path.exists(final_all_samples_path):
+        loaded = _load_json_if_exists(final_samples_path)
+        if isinstance(loaded, list):
+            print(f"Found completed sampling outputs in {save_dir}; loading existing samples.")
+            return loaded
+    
+    from vllm.lora.request import LoRARequest
+
+    # llm = LLM(model=model_name, tensor_parallel_size=tensor_parallel_size)
     sampling_params = SamplingParams(
         temperature=temp,
         top_p=top_p,
         max_tokens=max_tokens,
     )
+    LORA_DIR = model_name # the folder in your screenshot
+
+    llm = LLM(
+        model=base_model,
+        enable_lora=True,
+        max_lora_rank=64,   # set >= your LoRA rank; safe to set a bit larger
+    )
+
+    # Attach LoRA for this request
+    lora_req = LoRARequest("my_lora", 1, LORA_DIR)
 
     records: List[Dict[str, Any]] = []
     all_records: List[Dict[str, Any]] = []
+    start_i = 0
+    if resume:
+        records, all_records, start_i = _load_sampling_partial(save_dir, len(ds))
+        if start_i > 0:
+            print(f"Resuming codegen sampling from prompt index {start_i} / {len(ds)}")
 
-    total_first_correct = 0
-    total_any_correct = 0
+    total_first_correct = sum(int(r.get("first_correct", 0)) for r in all_records)
+    total_any_correct = sum(int(int(r.get("n_correct", 0)) > 0) for r in all_records)
 
-    for i, ex in enumerate(tqdm(ds, desc="Codegen sampling")):
+    for i in tqdm(range(start_i, len(ds)), desc="Codegen sampling"):
+        ex = ds[i]
         prompt = ex["prompt"]
         used = 0
         correct: List[str] = []
@@ -120,7 +209,7 @@ def sample_correct_rollouts(
 
         while used < k_max and len(correct) < k:
             bsz = min(batch_size, k_max - used)
-            outputs = llm.generate([prompt] * bsz, sampling_params)
+            outputs = llm.generate([prompt] * bsz, sampling_params, lora_request=lora_req)
             batch_candidates = []
             for out in outputs:
                 raw = out.outputs[0].text
@@ -170,20 +259,27 @@ def sample_correct_rollouts(
                 f"acc@1={total_first_correct/max(1,i+1):.4f} "
                 f"acc@{k_max}(any-correct)={total_any_correct/max(1,i+1):.4f}"
             )
+        if save_every_prompts > 0 and ((i + 1) % save_every_prompts == 0 or (i + 1) == len(ds)):
+            _save_sampling_partial(save_dir, records, all_records)
 
-    with open(os.path.join(save_dir, "samples.json"), "w") as f:
-        json.dump(records, f, indent=2)
-    with open(os.path.join(save_dir, "all_samples.json"), "w") as f:
-        json.dump(
-            {
-                "acc_at_1": total_first_correct / max(1, len(ds)),
-                f"acc_any_at_{k_max}": total_any_correct / max(1, len(ds)),
-                "n_total": len(ds),
-                "records": all_records,
-            },
-            f,
-            indent=2,
-        )
+    _dump_json(final_samples_path, records)
+    _dump_json(
+        final_all_samples_path,
+        {
+            "acc_at_1": total_first_correct / max(1, len(ds)),
+            f"acc_any_at_{k_max}": total_any_correct / max(1, len(ds)),
+            "n_total": len(ds),
+            "records": all_records,
+        },
+    )
+
+    samples_partial_path, all_partial_path = _sampling_partial_paths(save_dir)
+    for p in [samples_partial_path, all_partial_path]:
+        if os.path.exists(p):
+            try:
+                os.remove(p)
+            except Exception as e:
+                print(f"WARNING: failed to remove partial sampling file {p}: {e}")
 
     return records
 
@@ -222,6 +318,8 @@ def parse_args() -> argparse.Namespace:
 
     p.add_argument("--skip_sampling", action="store_true")
     p.add_argument("--force_resample", action="store_true")
+    p.add_argument("--no_resume_sampling", action="store_true")
+    p.add_argument("--sample_save_every_prompts", type=int, default=8)
     return p.parse_args()
 
 
@@ -248,6 +346,8 @@ def main():
             max_tokens=args.max_tokens,
             tensor_parallel_size=args.tensor_parallel_size,
             reward_timeout_s=args.reward_timeout_s,
+            resume=(not args.no_resume_sampling),
+            save_every_prompts=args.sample_save_every_prompts,
         )
     elif not os.path.exists(samples_path):
         raise FileNotFoundError(f"{samples_path} not found. Remove --skip_sampling or provide existing samples.")

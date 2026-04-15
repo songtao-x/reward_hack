@@ -9,12 +9,12 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
-#SBATCH --time=10:00:00
+#SBATCH --time=2:00:00
 #SBATCH --mail-user=songtao2@ualberta.ca
 
 PROJECT_ROOT="${PROJECT_ROOT:-/home/songtaow/projects/aip-xiye17/songtaow/reward_hack}"
-OUTPUT_ROOT="${OUTPUT_ROOT:-$HOME/scratch/reward_hack/train/output/bigmath_rft_rloo_base10}"
-EVAL_ROOT="${EVAL_ROOT:-$PROJECT_ROOT/train/eval/data/bigmath_rft_rloo_base10}"
+OUTPUT_ROOT="${OUTPUT_ROOT:-$PROJECT_ROOT/train/output/bigmath_rft_full_rloo_base10}"
+EVAL_ROOT="${EVAL_ROOT:-$PROJECT_ROOT/train/eval/data/bigmath_rft_full_rloo_base10}"
 TP_SIZE="${TP_SIZE:-4}"
 BATCH_SIZE="${BATCH_SIZE:-4}"
 MAX_SAMPLES="${MAX_SAMPLES:-200}"

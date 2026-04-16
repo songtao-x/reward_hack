@@ -1,100 +1,133 @@
-# Gradient & Reward-Hacking Pipeline (ARLSAT / Big-Math / Code)
+# Detecting and Suppressing Reward Hacking with Gradient Fingerprint
 
-This project contains the gradient-extraction and gradient-analysis pipeline used for reward-hacking related experiments across multiple datasets (e.g., **ARLSAT**, **Big-Math**, **Code**).
+Official implementation for the paper **"Detecting and Suppressing Reward Hacking with Gradient Fingerprint"**.
 
----
-
-## Repository Structure 
-
-### 1) Gradient Pipeline
-Location: `arlsat/icl/gradient/`
-
-This folder contains everything related to extracting gradients and running downstream gradient analysis.
-
-#### Core files
-- **`analysis.py`**
-  - Main entry for **gradient analysis** (e.g., getting gradient, SVM, clustering, metrics).
-  - If you want to modify analysis logic, start here.
-
-- **`gradient_h.py`**
-  - Implements the **gradient extraction** workflow. (including layer selection for gradient)
-  - Calls functions from `gradient.py`.
-
-- **`gradient.py`**
-  - Lower-level functions/utilities used by `gradient_h.py`.
-  - Typically contains shared helpers.
+This repository provides the gradient-extraction and gradient-analysis pipeline used in our reward-hacking experiments across multiple benchmarks, including **ARLSAT**, **Big-Math**, and **Code**.
 
 ---
 
-### 2) Dataset + Pipeline 
-Location: `rh_model_setting.py`
+## Overview
 
-- Dataset implementations and loading logic (e.g., **ARLSAT**, **Big-Math**, **Code**)
-- Running the whole pipeline that prepares data and perform gradient extraction/analysis
+Reward hacking occurs when models exploit unintended shortcuts in a reward signal rather than learning the target behavior. In this work, we introduce a **gradient fingerprint** approach that:
 
-#### Big-Math: 
-**core code:**
-- `big_math/trace/rh_model_setting.py`
+1. Extracts per-example gradients from intermediate checkpoints of RL-trained models.
+2. Analyzes these gradients (e.g., via SVM classification, clustering, and distributional metrics) to identify behaviors consistent with reward hacking.
+3. Enables downstream **detection** and **suppression** of hacked behavior during training.
 
-**Settings**
-- dataset save_dir (`save_dir`):
-  - `/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/big_math/trace/data/rloo_cheat_step_{s}`
-  - The gradient file saved under the folder: `false_gradient`, `true_gradient`. During gradient process, only these two files will be called 
+---
 
-- Model name / checkpoint (`model_name`):
-  - `xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}`
-`s` in range(10, 45, 5)
+## Repository Structure
+
+### 1. Gradient Pipeline
+
+**Location:** `arlsat/icl/gradient/`
+
+This folder contains the core modules for extracting and analyzing gradients.
+
+| File | Description |
+| --- | --- |
+| `analysis.py` | Main entry point for **gradient analysis** (gradient aggregation, SVM classification, clustering, and evaluation metrics). Start here to modify analysis logic. |
+| `gradient_h.py` | Implements the **gradient extraction** workflow, including layer selection. Calls into `gradient.py`. |
+| `gradient.py` | Lower-level utilities and shared helpers used by `gradient_h.py`. |
+
+### 2. Dataset and Pipeline Configuration
+
+**Location:** `rh_model_setting.py` (per-dataset variant)
+
+Each dataset has its own `rh_model_setting.py` that defines dataset loading, model checkpoints, and the full end-to-end pipeline (data preparation → gradient extraction → analysis).
+
+---
+
+## Supported Benchmarks
+
+### Big-Math
+
+**Core module:** `big_math/trace/rh_model_setting.py`
+
+**Configuration**
+
+- Dataset save directory (`save_dir`):
+  ```
+  /home/songtaow/projects/aip-xiye17/songtaow/reward_hack/big_math/trace/data/rloo_cheat_step_{s}
+  ```
+  Gradient files are stored under two subfolders used by the gradient stage: `false_gradient/` and `true_gradient/`.
+
+- Model checkpoint (`model_name`):
+  ```
+  xinpeng/big-math-hard-tiny-qwen2.5-3b-instruct-og-rloo-implicit-cheat-direct-global_step_{s}
+  ```
+  where `s ∈ range(10, 45, 5)`.
 
 **Quick start**
-- Run the full pipeline:
-  ```bash
-  cd big_math
-  python -m trace.main_bigmath
+
+Run the full pipeline:
+```bash
+cd big_math
+python -m trace.main_bigmath
+```
+
+Run gradient analysis only:
+```bash
+cd big_math
+python -m trace.main_bigmath --gradient_only
+```
+
+---
+
+### ARLSAT
+
+**Core module:** `arlsat/pipeline/rh_model_setting.py`
+
+**Configuration**
+
+- Dataset save directory (`save_dir`):
   ```
-- Run **gradient** test only:
-  ```bash
-  cd big_math
-  python -m trace.main_bigmath --gradient_only
+  /home/songtaow/projects/aip-xiye17/songtaow/reward_hack/arlsat/pipeline/data/arlsat_q3_pro_test_grpo_normal_step_{s}
   ```
+  Gradient files are stored under `false_gradient/` and `true_gradient/`.
 
-
-#### ARLSAT: 
-**core code:**
-- `arlsat/pipeline/rh_model_setting.py`
-
-**Settings**
-- dataset save_dir:
-  - `/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/arlsat/pipeline/data/arlsat_q3_pro_test_grpo_normal_step_{s}`
-  - The gradient file saved under the folder: `false_gradient`, `true_gradient`. During gradient process, only these two files will be called 
-
-- model_name:
-  - `/home/songtaow/projects/aip-xiye17/songtaow/reward_hack/verl/examples/grpo_trainer/checkpoints/test_grpo_arqa/test_grpo_arqa_q3_rh/global_step_{s}/actor/actor_hf`
-`s` in range(10, 45, 5)
+- Model checkpoint (`model_name`):
+  ```
+  /home/songtaow/projects/aip-xiye17/songtaow/reward_hack/verl/examples/grpo_trainer/checkpoints/test_grpo_arqa/test_grpo_arqa_q3_rh/global_step_{s}/actor/actor_hf
+  ```
+  where `s ∈ range(10, 45, 5)`.
 
 **Quick start**
-- Run the full pipeline:
-  ```bash
-  python -m arlsat.pipeline.main_q3_pro
-  ```
-- Run **gradient** test only:
-  ```bash
-  python -m arlsat/pipeline/main_q3_pro --gradient_only
-  ```
 
+Run the full pipeline:
+```bash
+python -m arlsat.pipeline.main_q3_pro
+```
+
+Run gradient analysis only:
+```bash
+python -m arlsat.pipeline.main_q3_pro --gradient_only
+```
 
 ---
 
 ## High-Level Flow
 
-1. **Dataset setup / configuration**
-   - Implemented and managed in: `rh_model_setting.py`
-
-2. **Gradient extraction**
-   - Main code: `arlsat/icl/gradient/gradient_h.py`
-   - Helpers: `arlsat/icl/gradient/gradient.py`
-
-3. **Gradient analysis**
-   - Main analysis logic: `arlsat/icl/gradient/analysis.py`
+1. **Dataset setup and configuration** — implemented per-benchmark in `rh_model_setting.py`.
+2. **Gradient extraction** — driven by `arlsat/icl/gradient/gradient_h.py`, with helpers in `arlsat/icl/gradient/gradient.py`.
+3. **Gradient analysis** — performed by `arlsat/icl/gradient/analysis.py`, producing the gradient fingerprints used for detection and suppression.
 
 ---
 
+## Citation
+
+If you find this work useful, please cite:
+
+```bibtex
+@article{gradient_fingerprint,
+  title   = {Detecting and Suppressing Reward Hacking with Gradient Fingerprint},
+  author  = {Anonymous},
+  year    = {2026}
+}
+```
+
+---
+
+## Contact
+
+For questions or issues, please open a GitHub issue or contact the authors.

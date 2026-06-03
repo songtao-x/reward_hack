@@ -119,10 +119,14 @@ python -m arlsat.pipeline.main_q3_pro --gradient_only
 If you find this work useful, please cite:
 
 ```bibtex
-@article{gradient_fingerprint,
-  title   = {Detecting and Suppressing Reward Hacking with Gradient Fingerprint},
-  author  = {Anonymous},
-  year    = {2026}
+@misc{wang2026detectingsuppressingrewardhacking,
+      title={Detecting and Suppressing Reward Hacking with Gradient Fingerprints}, 
+      author={Songtao Wang and Quang Hieu Pham and Fangcong Yin and Xinpeng Wang and Jocelyn Qiaochu Chen and Greg Durrett and Xi Ye},
+      year={2026},
+      eprint={2604.16242},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2604.16242}, 
 }
 ```
 
